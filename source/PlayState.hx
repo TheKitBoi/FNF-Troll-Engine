@@ -38,7 +38,6 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
-
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -49,9 +48,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
-
 	var halloweenLevel:Bool = false;
-
 	private var vocals:FlxSound;
 
 	private var dad:Character;

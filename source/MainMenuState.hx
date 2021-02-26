@@ -19,11 +19,11 @@ using StringTools;
 class MainMenuState extends MusicBeatState
 {
 	var curSelected:Int = 0;
-
+	public static var notPlaying:Bool;
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'editor', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
@@ -130,7 +130,7 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'donate')
+				if (optionShit[curSelected] == 'didntask')
 				{
 					#if linux
 					Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
@@ -166,13 +166,18 @@ class MainMenuState extends MusicBeatState
 								switch (daChoice)
 								{
 									case 'story mode':
+										notPlaying = false;
 										FlxG.switchState(new StoryMenuState());
 										trace("Story Menu Selected");
 									case 'freeplay':
 										FlxG.switchState(new FreeplayState());
 
 										trace("Freeplay Menu Selected");
-
+									case 'editor':
+										notPlaying = true;
+										FlxG.switchState(new ChartingState());
+										
+										trace("editor selected");
 									case 'options':
 										FlxTransitionableState.skipNextTransIn = true;
 										FlxTransitionableState.skipNextTransOut = true;
