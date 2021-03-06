@@ -48,7 +48,7 @@ class TitleState extends MusicBeatState
 		#end
 		#if (target.threaded)
 		sys.thread.Thread.create(() -> rpc());
-		Sys.getChar(true);
+		//Sys.getChar(true);
 	    #end
 		PlayerSettings.init();
 

@@ -12,7 +12,7 @@ class Test
             onDisconnected : onDisconnected
         });
             while(true) {
-                Sys.sleep(1);
+                Sys.sleep(5);
                 DiscordRpc.process();
             }
         DiscordRpc.shutdown();
