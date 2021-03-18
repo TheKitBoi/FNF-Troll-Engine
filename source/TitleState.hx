@@ -23,8 +23,10 @@ import flixel.util.FlxTimer;
 import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
+#if !js
 import sys.thread.Thread;
 import Discord.Test.rpc;
+#end
 using StringTools;
 
 class TitleState extends MusicBeatState
@@ -43,6 +45,8 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		trace(FlxG.width);
+		trace(FlxG.height);
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
