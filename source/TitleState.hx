@@ -27,10 +27,7 @@ import flixel.util.FlxTimer;
 import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
-#if !js
-import sys.thread.Thread;
-import Discord.Test.rpc;
-#end
+
 using StringTools;
 
 class TitleState extends MusicBeatState
@@ -49,19 +46,10 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		trace(FlxG.width);
-		trace(FlxG.height);
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
-<<<<<<< HEAD
-		#if (target.threaded)
-		sys.thread.Thread.create(() -> rpc());
-		//Sys.getChar(true);
-	    #end
-=======
 
->>>>>>> 8057b29f05477783408bcb55bd5b2984d33dd2ef
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
