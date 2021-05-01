@@ -10,7 +10,7 @@ import flixel.input.actions.FlxActionSet;
 import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
-
+import OptionsMenu.OptionsMenu.cDat;
 #if (haxe >= "4.0.0")
 enum abstract Action(String) to String from String
 {
@@ -317,6 +317,7 @@ class Controls extends FlxActionSet
 	{
 		var actions = new FlxActionManager();
 		FlxG.inputs.add(actions);
+		
 	}
 
 	/**
@@ -489,6 +490,22 @@ class Controls extends FlxActionSet
 
 	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
 	{
+		var rB:FlxKey = FlxKey.RIGHT;
+		var lB:FlxKey = FlxKey.LEFT;
+		var uB:FlxKey = FlxKey.UP;
+		var dB:FlxKey = FlxKey.DOWN;
+		switch(cDat){
+			case 0:
+				rB = FlxKey.RIGHT;
+				lB = FlxKey.LEFT;
+				uB = FlxKey.UP;
+				dB = FlxKey.DOWN;
+			case 1:
+				rB = K;
+				lB = D;
+				uB = J;
+				dB = F;
+		}
 		if (reset)
 			removeKeyboard();
 
@@ -498,10 +515,10 @@ class Controls extends FlxActionSet
 		switch (scheme)
 		{
 			case Solo:
-				inline bindKeys(Control.UP, [W, FlxKey.UP]);
-				inline bindKeys(Control.DOWN, [S, FlxKey.DOWN]);
-				inline bindKeys(Control.LEFT, [A, FlxKey.LEFT]);
-				inline bindKeys(Control.RIGHT, [D, FlxKey.RIGHT]);
+				inline bindKeys(Control.UP, [W, FlxKey.UP, uB]);
+				inline bindKeys(Control.DOWN, [S, FlxKey.DOWN, dB]);
+				inline bindKeys(Control.LEFT, [A, FlxKey.LEFT, lB]);
+				inline bindKeys(Control.RIGHT, [D, FlxKey.RIGHT, rB]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);

@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxSave;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -27,6 +28,7 @@ import flixel.util.FlxTimer;
 import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
+import datetime.DateTime;
 
 using StringTools;
 
@@ -39,7 +41,6 @@ class TitleState extends MusicBeatState
 	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
-
 	var curWacky:Array<String> = [];
 
 	var wackyImage:FlxSprite;
@@ -128,8 +129,14 @@ class TitleState extends MusicBeatState
 			// music.loadStream(Paths.music('freakyMenu'));
 			// FlxG.sound.list.add(music);
 			// music.play();
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
-
+			var now = DateTime.now();
+			trace(now.getHour());
+			if(now.getHour() >= 18) {
+				FlxG.sound.playMusic(Paths.music('freakyNight'), 0); 
+			}
+			else {
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+			}
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
 		}
 
@@ -282,20 +289,17 @@ class TitleState extends MusicBeatState
 			transitioning = true;
 			// FlxG.sound.music.stop();
 
-			new FlxTimer().start(2, function(tmr:FlxTimer)
+			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
 				// Check if version is outdated
-
-				var version:String = "v" + Application.current.meta.get('version');
-
-				if (version.trim() != NGio.GAME_VER_NUMS.trim() && !OutdatedSubState.leftState)
+				/* will fix later
+				if (FlxG.width == 1280 || !FlxG.width == 1920) {
+					FlxG.switchState(new ScreenSubState());
+				}
+				*/
+				if (1==1)
 				{
-					FlxG.switchState(new OutdatedSubState());
-					trace('OLD VERSION!');
-					trace('old ver');
-					trace(version.trim());
-					trace('cur ver');
-					trace(NGio.GAME_VER_NUMS.trim());
+					FlxG.switchState(new MainMenuState());
 				}
 				else
 				{
@@ -374,7 +378,7 @@ class TitleState extends MusicBeatState
 			case 5:
 				createCoolText(['In association', 'with']);
 			case 7:
-				addMoreText('newgrounds');
+				addMoreText('your mom');
 				ngSpr.visible = true;
 			// credTextShit.text += '\nNewgrounds';
 			case 8:

@@ -1,5 +1,7 @@
 package;
-
+#if js
+import js.html.audio.ChannelMergerNode;
+#end
 import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -12,12 +14,13 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-
 class PauseSubState extends MusicBeatSubstate
 {
+	public static var pracMode:Bool = false;
+	public static var skipped:Bool;
+	public static var practiceMode:FlxText;
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
-
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Charting Menu', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -51,16 +54,29 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
 
+		practiceMode = new FlxText(20, 15 + 64, 0, "", 32);
+		practiceMode.text = "Practice Mode Toggled";
+		practiceMode.scrollFactor.set();
+		practiceMode.setFormat(Paths.font('vcr.ttf'), 32);
+		practiceMode.updateHitbox();
+		add(practiceMode);
+		
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
-
+		practiceMode.alpha = 0;
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
-
+		practiceMode.x = FlxG.width - (practiceMode.width + 20);
+		var opa:Int;
+		if (pracMode==true){
+			opa = 1;
+		} else{
+			opa = 0;
+		}
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-
+		FlxTween.tween(practiceMode, {alpha : opa, y: practiceMode.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7}); //alpha : 1,
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
@@ -107,6 +123,22 @@ class PauseSubState extends MusicBeatSubstate
 					close();
 				case "Restart Song":
 					FlxG.resetState();
+				case "Charting Menu":
+					FlxG.switchState(new ChartingState());
+				case "Toggle Practice Mode":
+					if (pracMode==true){
+						practiceMode.alpha = 0;
+						pracMode = false;
+					}else
+					{
+						practiceMode.alpha = 100;
+						pracMode = true;
+					}
+					practice();
+				case "Skip Song":
+					skipped = true;
+					FlxG.resetState();
+					//FlxG.resetState();
 				case "Exit to menu":
 					FlxG.switchState(new MainMenuState());
 			}
@@ -151,5 +183,9 @@ class PauseSubState extends MusicBeatSubstate
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
+	}
+	function practice()
+	{
+
 	}
 }

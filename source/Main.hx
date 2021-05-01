@@ -25,7 +25,7 @@ class Main extends Sprite
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool; // Whether to start the game in fullscreen on desktop targets
-
+	
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
@@ -63,13 +63,22 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		var _gameSave = new flixel.util.FlxSave(); // initialize
+		_gameSave.bind("options");
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
+		framerate = _gameSave.data.framerate;
+		#if desktop
 		var s = getContent("config.json");
 		var config:ConfigData = haxe.Json.parse(s);
 		gameWidth = config.width; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		gameHeight = config.height; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		startFullscreen = config.fullscreen;
+		#else
+		gameWidth = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
+		gameHeight = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
+		startFullscreen = false;
+		#end
 		if (zoom == -1)
 		{
 			var ratioX:Float = stageWidth / gameWidth;

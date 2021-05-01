@@ -1,5 +1,9 @@
 package;
 
+import flixel.math.FlxPoint;
+import flixel.util.FlxTimer;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import Controls.Control;
 import flash.text.TextField;
 import flixel.FlxG;
@@ -11,20 +15,32 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import flixel.util.FlxSave;
 
 class OptionsMenu extends MusicBeatState
 {
+	public static var _gameSave:FlxSave;
+	public static var notice:FlxText;
+	public static var resolution:FlxText;
+	public static var fullscreen:FlxText;
+	public static var curFPS:FlxText;
+	public static var rn:Int;
+	public static var cDat:Int;
 	var selector:FlxText;
 	var curSelected:Int = 0;
-
 	var controlsStrings:Array<String> = [];
-
+	var cockjoke:Int = FlxG.updateFramerate;
 	private var grpControls:FlxTypedGroup<Alphabet>;
 
 	override function create()
 	{
+		
+		//FlxG.save.bind('funkin', 'trollengine');
+		_gameSave = new FlxSave(); // initialize
+		_gameSave.bind("options");
+		
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = ["Framerate", "wip", "Fullscreen", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -32,38 +48,146 @@ class OptionsMenu extends MusicBeatState
 		menuBG.antialiasing = true;
 		add(menuBG);
 
-		/* 
+		notice = new FlxText(20, 15 + 56, 0, "", 32);
+		notice.text = "Use the left and arrow keys to change this option!";
+		notice.scrollFactor.set();
+		notice.setFormat(Paths.font('vcr.ttf'), 32);
+		notice.updateHitbox();
+		notice.screenCenter(X);
+		notice.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(notice);
+		notice.alpha=0;
+
+		curFPS = new FlxText(20, 15 + 16, 0, "", 32);
+		curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
+		curFPS.scrollFactor.set();
+		curFPS.setFormat(Paths.font('vcr.ttf'), 32);
+		curFPS.updateHitbox();
+		curFPS.x = FlxG.width - (curFPS.width + 20);
+		curFPS.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(curFPS);
+/*
+		resolution = new FlxText(20, 15 + 48, 0, "", 32);
+		resolution.text = "Control Scheme: " + "arrow keys";
+		resolution.scrollFactor.set();
+		resolution.setFormat(Paths.font('vcr.ttf'), 32);
+		resolution.updateHitbox();
+		resolution.x = FlxG.width - (resolution.width + 20);
+		resolution.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(resolution);
+*/
+		fullscreen = new FlxText(20, 15 + 84, 0, "", 32);
+		fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
+		fullscreen.scrollFactor.set();
+		fullscreen.setFormat(Paths.font('vcr.ttf'), 32);
+		fullscreen.updateHitbox();
+		fullscreen.x = FlxG.width - (fullscreen.width + 20);
+		fullscreen.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(fullscreen);
+
+		
 			grpControls = new FlxTypedGroup<Alphabet>();
 			add(grpControls);
 
 			for (i in 0...controlsStrings.length)
 			{
-				if (controlsStrings[i].indexOf('set') != -1)
-				{
-					var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i].substring(3) + ': ' + controlsStrings[i + 1], true, false);
-					controlLabel.isMenuItem = true;
-					controlLabel.targetY = i;
-					grpControls.add(controlLabel);
-				}
+				var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i], true, false);
+				controlLabel.isMenuItem = true;
+				controlLabel.targetY = i;
+				grpControls.add(controlLabel);
 				// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 			}
-		 */
+		 
 
 		super.create();
 
-		openSubState(new OptionsSubState());
+		//openSubState(new OptionsSubState());
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		/* 
+			switch(curSelected){
+				case 0:
+					if(controls.RIGHT_P) {
+						if(FlxG.drawFramerate < 120) {
+							FlxG.drawFramerate += 20; 
+							FlxG.updateFramerate += 20; 
+							_gameSave.data.framerate = FlxG.drawFramerate;
+							_gameSave.flush();
+						}
+						trace(FlxG.drawFramerate);
+						curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
+					}
+					if(controls.LEFT_P) {
+						if(FlxG.drawFramerate > 20) {
+							FlxG.drawFramerate -= 20; 
+							FlxG.updateFramerate -= 20; 
+							_gameSave.data.framerate = FlxG.drawFramerate;
+							_gameSave.flush();
+						}
+						trace(FlxG.drawFramerate);
+						curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
+					}
+				case 1:
+					if(controls.RIGHT_P) {
+						cDat++;
+						trace(cDat);
+						resolution.text = "Current Resolution: ";
+					}
+					if(controls.LEFT_P) {
+						cDat--;
+						trace(cDat);
+						resolution.text = "Current Resolution: ";
+					}
+					/* scrapped stuff, maybe work on later
+					if(controls.RIGHT_P) {
+						rn++;
+						trace(resW[rn]);
+						FlxG.resizeGame(resW[rn], resH[rn]);
+						FlxG.resizeWindow(resW[rn], resH[rn]);
+						FlxG.cameras.reset();
+						FlxG.camera.setSize(resW[rn], resH[rn]);
+						resolution.text = "Current Resolution: " + resW[rn] + "x" + resH[rn];
+					}
+					if(controls.LEFT_P) {
+						rn--;
+						FlxG.resizeGame(resW[rn], resH[rn]);
+						FlxG.resizeWindow(resW[rn], resH[rn]);
+						FlxG.cameras.reset();
+						FlxG.camera.setSize(resW[rn], resH[rn]);
+						resolution.text = "Current Resolution: " + resW[rn] + "x" + resH[rn];
+					}
+					*/
+				case 2:
+					if(controls.ACCEPT) {
+						FlxG.fullscreen = !FlxG.fullscreen;
+						_gameSave.data.fullscreen = FlxG.fullscreen;
+						_gameSave.flush();
+						fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
+					}
+					
+			}
 			if (controls.ACCEPT)
 			{
-				changeBinding();
+				switch(curSelected){
+					case 0:
+						{
+						FlxTween.tween(notice, {alpha: 1}, 1, {
+							ease: FlxEase.quartInOut, 
+							onComplete: function(twn:FlxTween)
+								{
+									new FlxTimer().start(2, function(timer:FlxTimer){
+										if (timer.finished) {
+											FlxTween.tween(notice, {alpha: 0}, 1, {ease: FlxEase.quartInOut});
+										}
+									});
+								}
+						});
+					}
+				}
 			}
-
 			if (isSettingControl)
 				waitingInput();
 			else
@@ -75,7 +199,7 @@ class OptionsMenu extends MusicBeatState
 				if (controls.DOWN_P)
 					changeSelection(1);
 			}
-		 */
+		 
 	}
 
 	function waitingInput():Void
@@ -99,11 +223,6 @@ class OptionsMenu extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		#if !switch
-		NGio.logEvent('Fresh');
-		#end
-
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		curSelected += change;
 
