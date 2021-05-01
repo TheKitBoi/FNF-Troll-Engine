@@ -1,3 +1,6 @@
+package;
+
+import Sys.sleep;
 import discord_rpc.DiscordRpc;
 
 using StringTools;
@@ -25,6 +28,11 @@ class DiscordClient
 		DiscordRpc.shutdown();
 	}
 
+	public static function shutdown()
+	{
+		DiscordRpc.shutdown();
+	}
+	
 	static function onReady()
 	{
 		DiscordRpc.presence({
@@ -74,8 +82,6 @@ class DiscordClient
             endTimestamp : Std.int(endTimestamp / 1000)
 		});
 
-    public static function onDisconnected(_code : Int, _message : String)
-    {
-        trace('Disconnected! $_code : $_message');
-    }
+		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
+	}
 }

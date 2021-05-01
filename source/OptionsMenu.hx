@@ -40,7 +40,7 @@ class OptionsMenu extends MusicBeatState
 		_gameSave.bind("options");
 		
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = ["Framerate", "wip", "Fullscreen", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -66,16 +66,16 @@ class OptionsMenu extends MusicBeatState
 		curFPS.x = FlxG.width - (curFPS.width + 20);
 		curFPS.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(curFPS);
-/*
+
 		resolution = new FlxText(20, 15 + 48, 0, "", 32);
-		resolution.text = "Control Scheme: " + "arrow keys";
+		resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
 		resolution.scrollFactor.set();
 		resolution.setFormat(Paths.font('vcr.ttf'), 32);
 		resolution.updateHitbox();
 		resolution.x = FlxG.width - (resolution.width + 20);
 		resolution.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(resolution);
-*/
+
 		fullscreen = new FlxText(20, 15 + 84, 0, "", 32);
 		fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
 		fullscreen.scrollFactor.set();
@@ -186,6 +186,11 @@ class OptionsMenu extends MusicBeatState
 								}
 						});
 					}
+					case 1:
+						FlxG.autoPause = !FlxG.autoPause;
+						_gameSave.data.pauseonunfocus = FlxG.autoPause;
+						_gameSave.flush();
+						resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
 				}
 			}
 			if (isSettingControl)
