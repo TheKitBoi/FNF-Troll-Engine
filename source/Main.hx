@@ -68,7 +68,7 @@ class Main extends Sprite
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 		framerate = _gameSave.data.framerate;
-		FlxG.autoPause = _gameSave.data.pauseonunfocus;
+
 		#if desktop
 		var s = getContent("config.json");
 		var config:ConfigData = haxe.Json.parse(s);
