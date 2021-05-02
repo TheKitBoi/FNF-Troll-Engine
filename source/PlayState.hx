@@ -49,6 +49,7 @@ using StringTools;
 class PlayState extends MusicBeatState
 {
 	public static var missedNotes:Int;
+	public static var downscroll:Bool = false;
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
@@ -135,6 +136,9 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		var _gameSave = new FlxSave(); // initialize
+		_gameSave.bind("options");
+		downscroll = _gameSave.data.downscroll;
 		var isDebug:Bool = false;
 		missedNotes = 0;
 		#if debug
@@ -688,7 +692,8 @@ class PlayState extends MusicBeatState
 		doof.finishThing = startCountdown;
 
 		Conductor.songPosition = -5000;
-		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
+		if(downscroll) strumLine = new FlxSprite(0, FlxG.height - 150).makeGraphic(FlxG.width, 10); 
+		else strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
@@ -721,7 +726,8 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		if(downscroll)healthBarBG = new FlxSprite(0, FlxG.height * 0.1).loadGraphic(Paths.image('healthBar'));
+		else healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -1156,8 +1162,8 @@ class PlayState extends MusicBeatState
 		for (i in 0...4)
 		{
 			// FlxG.log.add(i);
-			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
-
+			var babyArrow:FlxSprite = new FlxSprite(0, 0); //y was strumLine.y
+			//babyArrow.screenCenter(X);
 			switch (curStage)
 			{
 				case 'school' | 'schoolEvil':
@@ -1235,7 +1241,15 @@ class PlayState extends MusicBeatState
 
 			if (!isStoryMode)
 			{
-				babyArrow.y -= 10;
+				if (downscroll) {
+					babyArrow.y += 550; // 10
+					//strumLine.y += 74;
+					//add(strumLine);
+				}
+				else {
+					babyArrow.y = strumLine.y;
+					babyArrow.y -= 10;
+				}
 				babyArrow.alpha = 0;
 				FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
 			}
@@ -1652,8 +1666,12 @@ class PlayState extends MusicBeatState
 					daNote.visible = true;
 					daNote.active = true;
 				}
+				if(downscroll) daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (-0.45 * FlxMath.roundDecimal(SONG.speed, 2))); //thanks to the contributors of kade engine and the funkin android port for not making me destroy my pc in rage!
+				else daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
-				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
+				//daNote.y = (strumLine.y - 1000 * (0.45 / FlxMath.roundDecimal(SONG.speed, 2)));
+
+				//daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
 				// i am so fucking sorry for this if condition
 				if (daNote.isSustainNote
@@ -1702,8 +1720,8 @@ class PlayState extends MusicBeatState
 
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
-
-				if (daNote.y < -daNote.height)
+				
+				if (daNote.y < -daNote.height && !downscroll || (daNote.y >= strumLine.y + 106) && downscroll)
 				{
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{

@@ -24,6 +24,7 @@ class OptionsMenu extends MusicBeatState
 	public static var resolution:FlxText;
 	public static var fullscreen:FlxText;
 	public static var curFPS:FlxText;
+	public static var downscroll:FlxText;
 	public static var rn:Int;
 	public static var cDat:Int;
 	var selector:FlxText;
@@ -40,7 +41,7 @@ class OptionsMenu extends MusicBeatState
 		_gameSave.bind("options");
 		
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -48,7 +49,7 @@ class OptionsMenu extends MusicBeatState
 		menuBG.antialiasing = true;
 		add(menuBG);
 
-		notice = new FlxText(20, 15 + 56, 0, "", 32);
+		notice = new FlxText(20, FlxG.height * 0.83, 0, "", 32);
 		notice.text = "Use the left and arrow keys to change this option!";
 		notice.scrollFactor.set();
 		notice.setFormat(Paths.font('vcr.ttf'), 32);
@@ -58,7 +59,7 @@ class OptionsMenu extends MusicBeatState
 		add(notice);
 		notice.alpha=0;
 
-		curFPS = new FlxText(20, 15 + 16, 0, "", 32);
+		curFPS = new FlxText(20, 15 + 0, 0, "", 32);
 		curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
 		curFPS.scrollFactor.set();
 		curFPS.setFormat(Paths.font('vcr.ttf'), 32);
@@ -67,7 +68,7 @@ class OptionsMenu extends MusicBeatState
 		curFPS.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(curFPS);
 
-		resolution = new FlxText(20, 15 + 48, 0, "", 32);
+		resolution = new FlxText(20, 15 + 64, 0, "", 32);
 		resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
 		resolution.scrollFactor.set();
 		resolution.setFormat(Paths.font('vcr.ttf'), 32);
@@ -76,7 +77,7 @@ class OptionsMenu extends MusicBeatState
 		resolution.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(resolution);
 
-		fullscreen = new FlxText(20, 15 + 84, 0, "", 32);
+		fullscreen = new FlxText(20, 15 + 128, 0, "", 32);
 		fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
 		fullscreen.scrollFactor.set();
 		fullscreen.setFormat(Paths.font('vcr.ttf'), 32);
@@ -84,6 +85,15 @@ class OptionsMenu extends MusicBeatState
 		fullscreen.x = FlxG.width - (fullscreen.width + 20);
 		fullscreen.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(fullscreen);
+
+		downscroll = new FlxText(20, 15 + 196, 0, "", 32);
+		downscroll.text = "Downscroll: " + _gameSave.data.downscroll;
+		downscroll.scrollFactor.set();
+		downscroll.setFormat(Paths.font('vcr.ttf'), 32);
+		downscroll.updateHitbox();
+		downscroll.x = FlxG.width - (fullscreen.width + 20);
+		downscroll.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(downscroll);
 
 		
 			grpControls = new FlxTypedGroup<Alphabet>();
@@ -191,6 +201,11 @@ class OptionsMenu extends MusicBeatState
 						_gameSave.data.pauseonunfocus = FlxG.autoPause;
 						_gameSave.flush();
 						resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
+					case 3:
+						PlayState.downscroll = !PlayState.downscroll;
+						_gameSave.data.downscroll = PlayState.downscroll;
+						_gameSave.flush();
+						downscroll.text = "Downscroll: " + PlayState.downscroll;
 				}
 			}
 			if (isSettingControl)

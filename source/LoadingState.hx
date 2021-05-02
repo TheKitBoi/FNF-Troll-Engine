@@ -44,7 +44,19 @@ class LoadingState extends MusicBeatState
 		logo.updateHitbox();
 		// logoBl.screenCenter();
 		// logoBl.color = FlxColor.BLACK;
-
+		var ldBG = new FlxSprite(0, 0).loadGraphic(Paths.image('loadyBG'));
+		var loading = new FlxSprite(0, FlxG.height * 0.5).loadGraphic(Paths.image('loadingLoader'));
+		loading.screenCenter(X);
+		var motherfunkers = new FlxSprite(0, 0).loadGraphic(Paths.image('loadingFunkers'));
+		motherfunkers.setGraphicSize(Std.int(FlxG.width * 0.5), Std.int(FlxG.height * 1.1));
+		motherfunkers.screenCenter(Y);
+		loading.x += FlxG.width * 0.14;
+		motherfunkers.x -= FlxG.width * 0.14;
+		//bgColor = 0xcaff4d;
+		add(ldBG);
+		add(motherfunkers);
+		add(loading);
+		/* this is pussy ass shit, get out!
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -52,7 +64,7 @@ class LoadingState extends MusicBeatState
 		gfDance.antialiasing = true;
 		add(gfDance);
 		add(logo);
-		
+		*/
 		initSongsManifest().onComplete
 		(
 			function (lib)
