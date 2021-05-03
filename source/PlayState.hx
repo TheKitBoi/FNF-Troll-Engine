@@ -1180,6 +1180,15 @@ class PlayState extends MusicBeatState
 		{
 			// FlxG.log.add(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, 0); //y was strumLine.y
+			if (downscroll) {
+				babyArrow.y += 550; // 10
+				//strumLine.y += 74;
+				//add(strumLine);
+			}
+			else {
+				babyArrow.y = strumLine.y;
+				babyArrow.y -= 10;
+			}
 			//babyArrow.screenCenter(X);
 			switch (curStage)
 			{
@@ -1258,19 +1267,9 @@ class PlayState extends MusicBeatState
 
 			if (!isStoryMode)
 			{
-				if (downscroll) {
-					babyArrow.y += 550; // 10
-					//strumLine.y += 74;
-					//add(strumLine);
-				}
-				else {
-					babyArrow.y = strumLine.y;
-					babyArrow.y -= 10;
-				}
 				babyArrow.alpha = 0;
 				FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
 			}
-
 			babyArrow.ID = i;
 
 			if (player == 1)
