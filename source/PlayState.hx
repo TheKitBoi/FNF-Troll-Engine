@@ -82,6 +82,7 @@ class PlayState extends MusicBeatState
 	private var combo:Int = 0;
 
 	private var healthBarBG:FlxSprite;
+	private var progressBG:FlxSprite;
 	private var healthBar:FlxBar;
 
 	private var generatedMusic:Bool = false;
@@ -104,6 +105,8 @@ class PlayState extends MusicBeatState
 	var limo:FlxSprite;
 	var grpLimoDancers:FlxTypedGroup<BackgroundDancer>;
 	var fastCar:FlxSprite;
+
+	public var progress:Float;
 
 	var upperBoppers:FlxSprite;
 	var bottomBoppers:FlxSprite;
@@ -725,6 +728,18 @@ class PlayState extends MusicBeatState
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		FlxG.fixedTimestep = false;
+
+		if(downscroll)progressBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		else progressBG = new FlxSprite(0, FlxG.height - FlxG.height + 10).loadGraphic(Paths.image('healthBar'));
+		progressBG.screenCenter(X);
+		progressBG.scrollFactor.set();
+		add(progressBG);
+
+		var pgBar = new FlxBar(progressBG.x + 4, progressBG.y + 4, LEFT_TO_RIGHT, Std.int(progressBG.width - 8), Std.int(progressBG.height - 8), this,
+		'progress', 0, FlxG.sound.music.length);
+		pgBar.scrollFactor.set();
+		// healthBar
+	    add(pgBar);
 
 		if(downscroll)healthBarBG = new FlxSprite(0, FlxG.height * 0.1).loadGraphic(Paths.image('healthBar'));
 		else healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
@@ -1368,7 +1383,7 @@ class PlayState extends MusicBeatState
 		#if !debug
 		perfectMode = false;
 		#end
-
+		progress = Conductor.songPosition;
 		if (FlxG.keys.justPressed.NINE)
 		{
 			if (iconP1.animation.curAnim.name == 'bf-old')
