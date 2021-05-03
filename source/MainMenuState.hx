@@ -141,6 +141,10 @@ class MainMenuState extends MusicBeatState
 			{
 				FlxG.switchState(new TitleState());
 			}
+			if (FlxG.keys.justPressed.FOUR)
+				{
+					FlxG.switchState(new ChatState());
+				}
 			if (FlxG.keys.justPressed.THREE) FlxG.sound.play(Paths.sound('ok'));
 			if (controls.ACCEPT)
 			{
