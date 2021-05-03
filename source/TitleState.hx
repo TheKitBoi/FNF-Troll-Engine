@@ -130,7 +130,7 @@ class TitleState extends MusicBeatState
 			// music.loadStream(Paths.music('freakyMenu'));
 			// FlxG.sound.list.add(music);
 			// music.play();
-			var now = new Date();
+			var now = Date.now();
 			trace(now.getHours());
 			if(now.getHours() >= 18) {
 				FlxG.sound.playMusic(Paths.music('freakyNight'), 0); 
