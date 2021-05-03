@@ -729,7 +729,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		if(downscroll)progressBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		if(downscroll)progressBG = new FlxSprite(0, FlxG.height * 0.95).loadGraphic(Paths.image('healthBar'));
 		else progressBG = new FlxSprite(0, FlxG.height - FlxG.height + 10).loadGraphic(Paths.image('healthBar'));
 		progressBG.screenCenter(X);
 		progressBG.scrollFactor.set();
@@ -778,6 +778,8 @@ class PlayState extends MusicBeatState
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
+		progressBG.cameras = [camHUD];
+		pgBar.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		
