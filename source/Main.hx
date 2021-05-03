@@ -67,8 +67,8 @@ class Main extends Sprite
 		_gameSave.bind("options");
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
-		framerate = _gameSave.data.framerate;
-
+		if( _gameSave.data.framerate != null) framerate = _gameSave.data.framerate;
+		else framerate = 60;
 		#if desktop
 		var s = getContent("config.json");
 		var config:ConfigData = haxe.Json.parse(s);

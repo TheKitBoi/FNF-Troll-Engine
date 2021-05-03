@@ -141,16 +141,6 @@ class OptionsMenu extends MusicBeatState
 						curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
 					}
 				case 1:
-					if(controls.RIGHT_P) {
-						cDat++;
-						trace(cDat);
-						resolution.text = "Current Resolution: ";
-					}
-					if(controls.LEFT_P) {
-						cDat--;
-						trace(cDat);
-						resolution.text = "Current Resolution: ";
-					}
 					/* scrapped stuff, maybe work on later
 					if(controls.RIGHT_P) {
 						rn++;

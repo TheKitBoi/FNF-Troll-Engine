@@ -49,7 +49,7 @@ class TitleState extends MusicBeatState
 	{
 		var _gameSave = new flixel.util.FlxSave(); // initialize
 		_gameSave.bind("options");
-		FlxG.autoPause = _gameSave.data.pauseonunfocus;
+		if( _gameSave.data.pauseonunfocus != null) FlxG.autoPause = _gameSave.data.pauseonunfocus;
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
