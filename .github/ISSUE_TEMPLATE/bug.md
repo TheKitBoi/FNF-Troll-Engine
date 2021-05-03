@@ -3,10 +3,13 @@ name: Bug Report
 about: Report a bug or critical performance issue
 title: 'Bug Report: '
 labels: bug
+assignees: ''
+
 ---
+
 #### Please check for duplicates or similar issues, as well performing simple troubleshooting steps (such as clearing cookies, clearing AppData, trying another browser) before submitting an issue.
 ### If you are playing the game in a browser, what site are you playing it from?
-[Newgrounds](https://www.newgrounds.com/portal/view/770371) or [Itch.io](https://ninja-muffin24.itch.io/funkin)? Specify below.
+[General Infinity](https://fnf.general-infinity.tech/) or some third party site? Specify below.
 
 ### If you are playing the game in a browser, what browser are you using?
 Chrome (or a Chromium based browser, i.e. Edge, Opera, etc.), Firefox, or Safari? Specify blow.
