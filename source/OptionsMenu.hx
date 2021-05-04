@@ -192,6 +192,7 @@ class OptionsMenu extends MusicBeatState
 			}
 			if (controls.ACCEPT)
 			{
+				FlxG.sound.play(Paths.sound('confirmMenu'));
 				switch(curSelected){
 					case 0:
 						{
@@ -273,7 +274,7 @@ class OptionsMenu extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 		curSelected += change;
 
 		if (curSelected < 0)
