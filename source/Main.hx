@@ -7,15 +7,17 @@ import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import Config.data;
 #if !js
 import sys.io.File.getContent;
 #end //thank you now shut up visual studio code
+/*
 typedef ConfigData = {
 	var width:Int;
 	var height:Int;
 	var fullscreen:Bool;
 }
-
+*/
 class Main extends Sprite
 {
 	var gameWidth:Int; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -70,11 +72,11 @@ class Main extends Sprite
 		if( _gameSave.data.framerate != null) framerate = _gameSave.data.framerate;
 		else framerate = 60;
 		#if desktop
-		var s = getContent("config.json");
-		var config:ConfigData = haxe.Json.parse(s);
-		gameWidth = config.width; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
-		gameHeight = config.height; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-		startFullscreen = config.fullscreen;
+		//var s = getContent("config.json");
+		//var config:ConfigData = haxe.Json.parse(s);
+		gameWidth = data.width; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
+		gameHeight = data.height; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
+		startFullscreen = data.fullscreen;
 		#else
 		gameWidth = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 		gameHeight = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).

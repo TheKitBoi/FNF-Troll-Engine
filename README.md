@@ -1,14 +1,12 @@
-# Friday Night Funkin
+# TrollEngine
 
-This is the repository for Friday Night Funkin, a game originally made for Ludum Dare 47 "Stuck In a Loop".
+This is the repository for TrollEngine, a fork of ninjamuffin's Friday Night Funkin.
 
-Play the Ludum Dare prototype here: https://ninja-muffin24.itch.io/friday-night-funkin
-Play the Newgrounds one here: https://www.newgrounds.com/portal/view/770371
-Support the project on the itch.io page: https://ninja-muffin24.itch.io/funkin
+Play the web version: https://fnf.general-infinity.tech
 
 ## Credits / shoutouts
-
-- [ninjamuffin99 (me!)](https://twitter.com/ninja_muffin99) - Programmer
+- bit of trolling (me!) - Programmer of the fork
+- [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programmer of the original game
 - [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Art
 - [Kawaisprite](https://twitter.com/kawaisprite) - Musician
 
@@ -18,9 +16,9 @@ This game was made with love to Newgrounds and it's community. Extra love to Tom
 
 THESE INSTRUCTIONS ARE FOR COMPILING THE GAME'S SOURCE CODE!!!
 
-IF YOU WANT TO JUST DOWNLOAD AND INSTALL AND PLAY THE GAME NORMALLY, GO TO ITCH.IO TO DOWNLOAD THE GAME FOR PC, MAC, AND LINUX!!
+IF YOU WANT TO JUST DOWNLOAD AND INSTALL AND PLAY THE GAME NORMALLY, GO TO THE GAMEBANANA PAGE TO DOWNLOAD THE GAME!!
 
-https://ninja-muffin24.itch.io/friday-night-funkin
+https://gamebanana.com/mods/166622
 
 IF YOU WANT TO COMPILE THE GAME YOURSELF, CONTINUE READING!!!
 
@@ -37,6 +35,7 @@ flixel-addons
 flixel-ui
 hscript
 newgrounds
+udprotean (required for FNFNet)
 ```
 So for each of those type `haxelib install [library]` so shit like `haxelib install newgrounds`
 
@@ -70,7 +69,15 @@ class APIStuff
 ```
 
 and you should be good to go there.
+### Compiling FNFNet
+In the fnfnet/ folder there is the server for FNFNet.
 
+All you need to do is run this command:
+```sh
+haxe build.hxml
+```
+
+The server will be listening on port 9000, and you can use the game to connect to it using the chat debug menu. (number 4 key on the titlestate!)
 ### Compiling game
 
 Once you have all those installed, it's pretty easy to compile the game. You just need to run 'lime test html5 -debug' in the root of the project to build and run the HTML5 version. (command prompt navigation guide can be found here: [https://ninjamuffin99.newgrounds.com/news/post/1090480](https://ninjamuffin99.newgrounds.com/news/post/1090480))
