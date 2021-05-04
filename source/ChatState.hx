@@ -23,9 +23,6 @@ import flixel.util.FlxSave;
 class ChatState extends MusicBeatState
 {  
     var txtbox:FlxInputText;
-    #if !js
-    public static var sock:sys.net.Socket;
-    #end
 	override function create()
 	{
         var chatTexts = new FlxTypedGroup<FlxText>();
@@ -37,12 +34,6 @@ class ChatState extends MusicBeatState
         chatTexts.add(chatText);
         chatText.scrollFactor.set();
         chatText.antialiasing = true;
-
-        #if !js
-        sock = new sys.net.Socket();
-        sock.connect(new sys.net.Host("192.168.1.100"),5000);
-        sock.write("dababy");
-        #end
 
         txtbox = new FlxInputText(200, 700, FlxG.width, "Type your message here...");
         txtbox.screenCenter(X);
@@ -66,7 +57,6 @@ class ChatState extends MusicBeatState
 	{
         //var l = sock.input.readLine();
         super.update(elapsed);
-        sock.write("dababy");
         if(FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenuState());
         if(FlxG.keys.justPressed.ENTER) trace(txtbox.text);
 	}

@@ -1,5 +1,6 @@
 package;
 
+import Controls;
 import flixel.util.FlxSave;
 #if desktop
 import Discord.DiscordClient;
@@ -28,7 +29,7 @@ import flixel.util.FlxTimer;
 import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
-
+import Controls.KeyboardScheme;
 using StringTools;
 
 class TitleState extends MusicBeatState
@@ -49,6 +50,7 @@ class TitleState extends MusicBeatState
 		var _gameSave = new flixel.util.FlxSave(); // initialize
 		_gameSave.bind("options");
 		if( _gameSave.data.pauseonunfocus != null) FlxG.autoPause = _gameSave.data.pauseonunfocus;
+
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end

@@ -44,6 +44,7 @@ import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 import PauseSubState.pracMode;
+import Controls.KeyboardScheme;
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -142,6 +143,16 @@ class PlayState extends MusicBeatState
 		var _gameSave = new FlxSave(); // initialize
 		_gameSave.bind("options");
 		downscroll = _gameSave.data.downscroll;
+
+		switch(_gameSave.data.ks){
+			case null:
+				
+			case "WASD":
+				controls.setKeyboardScheme(KeyboardScheme.Solo);
+			case "DFJK":
+				controls.setKeyboardScheme(KeyboardScheme.Custom);
+		}
+
 		var isDebug:Bool = false;
 		missedNotes = 0;
 		#if debug

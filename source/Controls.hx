@@ -490,6 +490,7 @@ class Controls extends FlxActionSet
 
 	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
 	{
+		/*obsolete, may work on it later
 		var rB:FlxKey = FlxKey.RIGHT;
 		var lB:FlxKey = FlxKey.LEFT;
 		var uB:FlxKey = FlxKey.UP;
@@ -506,6 +507,7 @@ class Controls extends FlxActionSet
 				uB = J;
 				dB = F;
 		}
+		*/
 		if (reset)
 			removeKeyboard();
 
@@ -515,14 +517,14 @@ class Controls extends FlxActionSet
 		switch (scheme)
 		{
 			case Solo:
-				inline bindKeys(Control.UP, [W, FlxKey.UP, uB]);
-				inline bindKeys(Control.DOWN, [S, FlxKey.DOWN, dB]);
-				inline bindKeys(Control.LEFT, [A, FlxKey.LEFT, lB]);
-				inline bindKeys(Control.RIGHT, [D, FlxKey.RIGHT, rB]);
+				inline bindKeys(Control.UP, [W, FlxKey.UP]);
+				inline bindKeys(Control.DOWN, [S, FlxKey.DOWN]);
+				inline bindKeys(Control.LEFT, [A, FlxKey.LEFT]);
+				inline bindKeys(Control.RIGHT, [D, FlxKey.RIGHT]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
-				inline bindKeys(Control.RESET, [R]);
+				inline bindKeys(Control.RESET, [R]);// nothing, or is it?
 			case Duo(true):
 				inline bindKeys(Control.UP, [W]);
 				inline bindKeys(Control.DOWN, [S]);
@@ -542,7 +544,15 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.PAUSE, [ENTER]);
 				inline bindKeys(Control.RESET, [BACKSPACE]);
 			case None: // nothing
-			case Custom: // nothing
+			case Custom: 
+				inline bindKeys(Control.UP, [J, FlxKey.UP]);
+				inline bindKeys(Control.DOWN, [F, FlxKey.DOWN]);
+				inline bindKeys(Control.LEFT, [D, FlxKey.LEFT]);
+				inline bindKeys(Control.RIGHT, [K, FlxKey.RIGHT]);
+				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
+				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
+				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
+				inline bindKeys(Control.RESET, [R]);
 		}
 		#else
 		switch (scheme)

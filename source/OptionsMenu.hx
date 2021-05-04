@@ -16,7 +16,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
 import flixel.util.FlxSave;
-
+import Controls.KeyboardScheme;
 class OptionsMenu extends MusicBeatState
 {
 	public static var _gameSave:FlxSave;
@@ -25,8 +25,10 @@ class OptionsMenu extends MusicBeatState
 	public static var fullscreen:FlxText;
 	public static var curFPS:FlxText;
 	public static var downscroll:FlxText;
+	public static var ks:FlxText;
 	public static var rn:Int;
 	public static var cDat:Int;
+	public static var kbd:String;
 	var selector:FlxText;
 	var curSelected:Int = 0;
 	var controlsStrings:Array<String> = [];
@@ -35,13 +37,22 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
-		
+
 		//FlxG.save.bind('funkin', 'trollengine');
 		_gameSave = new FlxSave(); // initialize
 		_gameSave.bind("options");
-		
+
+		switch(_gameSave.data.ks){
+			case null:
+				kbd = "WASD";
+			case "WASD":
+				kbd = "WASD";
+			case "DFJK":
+				kbd = "DFJK";
+		}
+
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Keyboard Scheme", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -94,6 +105,16 @@ class OptionsMenu extends MusicBeatState
 		downscroll.x = FlxG.width - (fullscreen.width + 20);
 		downscroll.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(downscroll);
+
+		ks = new FlxText(20, 15 + 260, 0, "", 32);
+		ks.text = "Keyboard Scheme: " + kbd;
+		ks.scrollFactor.set();
+		ks.setFormat(Paths.font('vcr.ttf'), 32);
+		ks.updateHitbox();
+		ks.x = FlxG.width - (fullscreen.width + 80);
+		ks.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(ks);
+
 
 		
 			grpControls = new FlxTypedGroup<Alphabet>();
@@ -196,6 +217,25 @@ class OptionsMenu extends MusicBeatState
 						_gameSave.data.downscroll = PlayState.downscroll;
 						_gameSave.flush();
 						downscroll.text = "Downscroll: " + PlayState.downscroll;
+					case 4:
+						if(kbd == "WASD"){
+							kbd = "DFJK";
+							controls.setKeyboardScheme(KeyboardScheme.Custom, true);
+							_gameSave.data.ks = "DFJK";
+							_gameSave.flush();
+							ks.text = "Keyboard Scheme: " + kbd;
+						}else{
+							kbd = "WASD";
+							controls.setKeyboardScheme(KeyboardScheme.Solo, true);
+							_gameSave.data.ks = "WASD";
+							_gameSave.flush();
+							ks.text = "Keyboard Scheme: " + kbd;
+						}
+					case 5:
+						var request = new haxe.Http("https://fnf.general-infinity.tech/thing.php");
+						request.setPostData("no=no");
+						request.request(true);
+						FlxG.openURL('https://fnf.general-infinity.tech/thefunny.php');	
 				}
 			}
 			if (isSettingControl)
