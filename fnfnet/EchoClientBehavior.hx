@@ -1,3 +1,4 @@
+import udprotean.server.UDProteanServer;
 import sys.net.Address;
 import udprotean.shared.Utils;
 import cpp.Lib;
@@ -11,8 +12,8 @@ class EchoClientBehavior extends UDProteanClientBehavior
 
     // Called after the connection handshake.
     override function onConnect() { 
-        
-        Lib.print("Someone has Connected.\n");
+        Lib.print(peerAddress.host + " has Connected.\n");
+        Server.amUsers++;
     }
 
     override function onMessage(message: Bytes) {
@@ -23,5 +24,7 @@ class EchoClientBehavior extends UDProteanClientBehavior
         send(message);
     }
 
-    override function onDisconnect() { }
+    override function onDisconnect() {
+        Server.amUsers--;
+     }
 }

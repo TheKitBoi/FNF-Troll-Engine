@@ -2,8 +2,11 @@ package;
 import cpp.Lib;
 import udprotean.server.UDProteanServer;
 import udprotean.server.UDProteanClientBehavior;
+import sys.net.Host;
 
 class Server {
+	public static var amUsers:Int;
+
 	public static function main() {
 		var server = new UDProteanServer("0.0.0.0", 9000, EchoClientBehavior);
 
@@ -11,11 +14,20 @@ class Server {
 		Lib.print("Server has started up!\n");
 		while (true)
 		{
-    // Synchronously read and process incoming datagrams.
+			/*
+		switch(Sys.stdin().readLine()){
+			case "stop":
+				Lib.print("Server is shutting down!\n");
+				server.stop();
+				Sys.exit(0);
+			case "list":
+				Lib.print("There are " + amUsers + " connected right now.\n");
+
+
+		}*/
     	server.update();
 		}
 
-		server.stop();
 	}
 }
 

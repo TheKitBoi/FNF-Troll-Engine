@@ -18,25 +18,28 @@ class ChatState extends MusicBeatState
 
     var txtbox:FlxInputText;
 
+    public static var beentoChat:Bool;
     public static var messages:FlxText;
 	public static var chatText:FlxText;
 
     override function create()
 	{
+        beentoChat = true;
         FlxG.mouse.visible = true;
+        FlxG.autoPause = false;
         client = new NetClient(data.addr, data.port);
-        client.connect();
+        try{ client.connect(); } catch(err:Any) { trace(err); }
         var chatTexts = new FlxTypedGroup<FlxText>();
 		add(chatTexts);
 
-        chatText = new FlxText(FlxG.width * 0.01, 0, 0, "Loading...", 32);
+        chatText = new FlxText(FlxG.width * 0.01, 0, 0, "Loading...\n", 32);
         chatText.ID = 1;
         //chatText.screenCenter(X);
         chatTexts.add(chatText);
         chatText.scrollFactor.set();
         chatText.antialiasing = true;
 
-        txtbox = new FlxInputText(200, 700, FlxG.width, "Type your message here...");
+        txtbox = new FlxInputText(200, 700, FlxG.width);
         txtbox.screenCenter(X);
         txtbox.background = true;
         txtbox.backgroundColor = FlxColor.WHITE;
@@ -61,7 +64,7 @@ class ChatState extends MusicBeatState
         //var l = sock.input.readLine();
         super.update(elapsed);
         if(FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenuState());
-        if(FlxG.keys.justPressed.ENTER) {
+        if(FlxG.keys.justPressed.ENTER && txtbox.text != "") {
             client.send(Bytes.ofString(txtbox.text), true); //Bytes.ofString(txtbox.text)
             txtbox.text = "";
             txtbox.caretIndex = 0;
