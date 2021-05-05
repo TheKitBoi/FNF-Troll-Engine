@@ -48,9 +48,9 @@ class MainMenuState extends MusicBeatState
 
 		if (!FlxG.sound.music.playing)
 		{
-			var now = datetime.DateTime.now();
-			trace(now.getHour());
-			if(now.getHour() >= 18) {
+			var now = Date.now();
+			trace(now.getHours());
+			if(now.getHours() >= 18) {
 				FlxG.sound.playMusic(Paths.music('freakyNight')); 
 			}
 			else {
@@ -123,7 +123,8 @@ class MainMenuState extends MusicBeatState
 		if(ChatState.beentoChat){
 			ChatState.beentoChat = false;
 			FlxG.mouse.visible = false;
-			FlxG.autoPause = _gameSave.data.pauseonunfocus;
+			if(_gameSave.data.pauseonunfocus != null) FlxG.autoPause = _gameSave.data.pauseonunfocus;
+			else FlxG.autoPause = true;
 		}
 		if (FlxG.sound.music.volume < 0.8)
 		{
