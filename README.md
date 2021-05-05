@@ -35,7 +35,7 @@ flixel-addons
 flixel-ui
 hscript
 newgrounds
-udprotean (required for FNFNet)
+extension-networking (required for FNFNet)
 ```
 So for each of those type `haxelib install [library]` so shit like `haxelib install newgrounds`
 
@@ -74,8 +74,11 @@ In the fnfnet/ folder there is the server for FNFNet.
 
 All you need to do is run this command:
 ```sh
-haxe build.hxml
+lime build windows
 ```
+You can of course, change the platform to the one you wish (like Linux)
+
+Make sure FNFNet is launched in the terminal! Else you will not have control over the server!
 
 The server will be listening on port 9000, and you can use the game to connect to it using the chat debug menu. (number 4 key on the titlestate!)
 ### Compiling game
