@@ -43,11 +43,17 @@ class ChatState extends MusicBeatState
         var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
 
         
-        client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) {  
-            if(event.data.chathist != null) chatText.text = event.data.chathist;
-            else chatText.text = chatText.text + event.data.message + "\n";
-        });
-
+        client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
+            
+            if(event.data.chathist != null) {
+                chatText.text = event.data.chathist;
+                chatText.y += event.data.axY; 
+            }
+            else{
+                chatText.text = chatText.text + event.data.message + "\n";
+            } 
+            if(event.data.message != null) chatText.y -= 20; 
+        }); //event.data.axY;
           
         client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             if(_gameSave.data.username != null) username = _gameSave.data.username
@@ -61,10 +67,16 @@ class ChatState extends MusicBeatState
 
         client.start();
 
+        txtbox = new FlxInputText(200, 702.5, FlxG.width);
+        txtbox.screenCenter(X);
+        txtbox.background = true;
+        txtbox.backgroundColor = FlxColor.WHITE;
+        txtbox.borderColor = 0xFFFFFFFF;
+        
         var chatTexts = new FlxTypedGroup<FlxText>();
 		add(chatTexts);
-
-        chatText = new FlxText(FlxG.width * 0.01, 0, 0, "Connecting...\n", 16);
+        
+        chatText = new FlxText(FlxG.width * 0.01, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
         chatText.ID = 1;
         //chatText.screenCenter(X);
         chatTexts.add(chatText);
@@ -72,11 +84,7 @@ class ChatState extends MusicBeatState
         chatText.antialiasing = true;
         chatText.autoSize = true;
 
-        txtbox = new FlxInputText(200, 700, FlxG.width);
-        txtbox.screenCenter(X);
-        txtbox.background = true;
-        txtbox.backgroundColor = FlxColor.WHITE;
-        txtbox.borderColor = 0xFFFFFFFF;
+        //FlxG.watch.addQuick("dababy Y", chatText.y);
 
         usnbox = new FlxInputText(200, 700, 100);
         usnbox.screenCenter(XY);

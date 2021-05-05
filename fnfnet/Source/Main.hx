@@ -6,6 +6,8 @@ import networking.utils.NetworkMode;
 
 class Main {
     public static var amUsers:Int;
+    public static var theY:Float;
+
     public static var chatHistory:String;
     public static var thefullassmessage:String;
 
@@ -15,11 +17,11 @@ class Main {
             port: 9000,
             max_connections: 10
         });
-
+        theY += 0.1;
         cpp.Lib.print("Server has started up!\n>");
         
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
-            server.clients[Network.sessions.length - 1].send({ chathist: chatHistory });
+            server.clients[Network.sessions.length - 1].send({ chathist: chatHistory, axY: theY });
             cpp.Lib.print("User has connected!\n");
           });
           
@@ -28,6 +30,7 @@ class Main {
           });
 
           server.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) {
+            if(event.data.message != null) theY -= 20;
             thefullassmessage = "<" + event.data.name + "> " + event.data.message;
             cpp.Lib.print(thefullassmessage + "\n");
             chatHistory += thefullassmessage + "\n";
@@ -46,14 +49,19 @@ class Main {
                     cpp.Lib.print("There are " + Network.sessions.length + " connected right now.\n>");
                   case "test":
                     cpp.Lib.print("The server is working properly.\n");
+                    cpp.Lib.print(theY + "\n");
                   case "save":
                     sys.io.File.saveContent("ChatHistory.txt", chatHistory);
                     cpp.Lib.print("Saved the chat history to ChatHistory.txt!\n");
                   case "fetch":
                     chatHistory = sys.io.File.getContent("ChatHistory.txt");
                     cpp.Lib.print("Fetched the previous chat history!\n");
+                  case "clear":
+                    chatHistory = "";
+                    theY = 0;
+                    cpp.Lib.print("Cleared the chat history!\n");   
                   case "help":
-                    cpp.Lib.print("list - list all online users\ntest - check if the server works properly\nsave - save the current chat history to a text file\nfetch - fetch the previous chat history\n");  
+                    cpp.Lib.print("list - list all online users\ntest - check if the server works properly\nsave - save the current chat history to a text file\nfetch - fetch the previous chat history\nclear - clears the chat history\n");  
                   default:
                     cpp.Lib.print("Unknown command. Type help for list of available commands.\n>");	
               }
