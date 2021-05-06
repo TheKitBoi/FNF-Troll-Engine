@@ -1,6 +1,5 @@
 package;
 
-import flixel.system.FlxSound;
 import flixel.math.FlxPoint;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;
@@ -17,7 +16,7 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 import Controls.Control;
 
-class ScriptSubState extends MusicBeatSubstate
+class ScriptState extends MusicBeatState
 {
 	var selector:FlxText;
 	var curSelected:Int = 0;
@@ -26,22 +25,18 @@ class ScriptSubState extends MusicBeatSubstate
 	var parser = new hscript.Parser();
 	var interp = new hscript.Interp();
 	public static var menuBG:FlxSprite;
-	var pauseMusic:FlxSound;
-	
-	public function new()
+
+	override function create()
 	{
-		super();
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
-		pauseMusic.volume = 0;
-		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
-		FlxG.sound.list.add(pauseMusic);
-
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0;
-		bg.scrollFactor.set();
-		add(bg);
-
+		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		menuBG.color = FlxColor.GREEN;
+		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+		menuBG.updateHitbox();
+		menuBG.screenCenter();
+		menuBG.antialiasing = true;
+		add(menuBG);
+			
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
 		controlsStrings = sys.FileSystem.readDirectory("assets/scripts");
@@ -53,18 +48,13 @@ class ScriptSubState extends MusicBeatSubstate
 			grpControls.add(controlLabel);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
-		
-		changeSelection();
+		 
 
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+		super.create();
 	}
 
 	override function update(elapsed:Float)
 	{
-		if (pauseMusic.volume < 0.5)
-			pauseMusic.volume += 0.01 * elapsed;
-
 		super.update(elapsed);
 
 			switch(curSelected){}
@@ -80,7 +70,7 @@ class ScriptSubState extends MusicBeatSubstate
 			else
 			{
 				if (controls.BACK)
-					close();
+					FlxG.switchState(new OptionsMenu());
 				if (controls.UP_P)
 					changeSelection(-1);
 				if (controls.DOWN_P)
@@ -107,13 +97,6 @@ class ScriptSubState extends MusicBeatSubstate
 			isSettingControl = true;
 		}
 	}
-
-	override function destroy()
-		{
-			pauseMusic.destroy();
-	
-			super.destroy();
-		}
 
 	function changeSelection(change:Int = 0)
 	{

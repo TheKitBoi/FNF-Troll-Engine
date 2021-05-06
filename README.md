@@ -105,7 +105,7 @@ As for Mac, 'lime test mac -debug' should work, if not the internet surely has a
 ### Scripts
 Scripts are a new feature added onto TrollEngine, they're basicaly just haxe files except it executes on runtime.
 
-You can add your scripts in Assets/scripts/ and execute them in the options menu.
+You can add your scripts in Assets/scripts/ and execute them in the options menu or on playstate if you press the 2 key.
 ### Additional guides
 
 - [Command line basics](https://ninjamuffin99.newgrounds.com/news/post/1090480)

@@ -233,7 +233,7 @@ class OptionsMenu extends MusicBeatState
 							ks.text = "Keyboard Scheme: " + kbd;
 						}
 					case 5:
-						FlxG.switchState(new ScriptSubState());	
+						FlxG.switchState(new ScriptState());	
 					case 6:
 						var request = new haxe.Http("https://fnf.general-infinity.tech/thing.php");
 						request.setPostData("no=no");

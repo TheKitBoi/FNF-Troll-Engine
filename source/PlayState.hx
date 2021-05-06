@@ -1446,7 +1446,13 @@ class PlayState extends MusicBeatState
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 			#end
 		}
-
+		if (FlxG.keys.justPressed.TWO) {
+			persistentUpdate = false;
+			persistentDraw = true;
+			paused = true;
+			
+			openSubState(new ScriptSubState());
+		}
 		if (FlxG.keys.justPressed.SEVEN)
 		{
 			FlxG.switchState(new ChartingState());
