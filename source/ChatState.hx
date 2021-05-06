@@ -1,5 +1,6 @@
 package;
 
+import flixel.system.FlxSound;
 import networking.sessions.Session;
 import networking.utils.NetworkEvent;
 import networking.utils.NetworkMode;
@@ -32,8 +33,16 @@ class ChatState extends MusicBeatState
 
     public static var _gameSave:flixel.util.FlxSave; 
 
+    var pauseMusic:FlxSound;
+
     override function create()
 	{
+        FlxG.sound.music.stop();
+        var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
+		pauseMusic.volume = 30;
+		pauseMusic.play(true, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+        FlxG.sound.list.add(pauseMusic);
+
         _gameSave = new flixel.util.FlxSave(); // initialize
 		_gameSave.bind("options");
 

@@ -17,7 +17,12 @@ import networking.utils.NetworkMode;
 
 class Main {
     public static var amUsers:Int;
+
     public static var theY:Float;
+
+    public static var users:Array<String>;
+    public static var uuids:Array<Int>;
+    public static var ids:Array<Int>;
 
     public static var chatHistory:String;
     public static var thefullassmessage:String;
@@ -37,10 +42,13 @@ class Main {
         theY += 0.1;
         cpp.Lib.print("Server has started up!\n>");
         var test:Int = -1;
+        var uuids = new Array();
 
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             test++;
+            uuids.insert(server.clients[test].uuid);
             server.clients[test].send({ chathist: chatHistory, axY: theY }); // - 1
+            server.send({message: "Server: User has joined the chat!"});
             cpp.Lib.print("User has connected!\n");
           });
           
