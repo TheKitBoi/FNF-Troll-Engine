@@ -66,7 +66,7 @@ class Main {
                     server.stop();
                     Sys.exit(0);
                   case "list":
-                    cpp.Lib.print("There are " + test + " connected right now.\n>");
+                    cpp.Lib.print("There are " + (test + 1) + " connected right now.\n>");
                   case "test":
                     cpp.Lib.print("The server is working properly.\n");
                     cpp.Lib.print(theY + "\n");
