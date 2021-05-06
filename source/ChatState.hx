@@ -50,7 +50,7 @@ class ChatState extends MusicBeatState
         FlxG.mouse.visible = true;
         FlxG.autoPause = false;
 
-        if(_gameSave.data.username != null) username = _gameSave.data.username
+        if(_gameSave.data.username != null) username = _gameSave.data.username;
         else username = "guest" + FlxG.random.int(0, 9999); 
 
         var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
@@ -70,10 +70,17 @@ class ChatState extends MusicBeatState
           
         client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             chatText.text = "";
+            chatText.y = txtbox.y - 23;
         });
 
         client.addEventListener(NetworkEvent.SERVER_FULL, function(event: NetworkEvent) {
-            chatText.text = "Server is full! Try joining later!";
+            chatText.text = "Server is full! Try joining later!\n";
+            chatText.y = txtbox.y - 23;
+        });
+
+        client.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
+            chatText.text = "You have been disconnected from the server!\n";
+            chatText.y = txtbox.y - 23;
         });
 
         client.start();
@@ -144,7 +151,8 @@ class ChatState extends MusicBeatState
         isUsN = !isUsN;
         if(usnbox.text != ""){
             username = usnbox.text;
-            _gameSave.data.username = usnbox;
+            _gameSave.data.username = usnbox.text;
+            _gameSave.flush();
         }
     }
 }

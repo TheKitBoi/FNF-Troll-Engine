@@ -3,7 +3,7 @@ package;
 import networking.Network;
 import networking.utils.NetworkEvent;
 import networking.utils.NetworkMode;
-
+import Config.data;
 /////////////////////////////////////////
 //
 //      FNFNet
@@ -35,9 +35,9 @@ class Main {
       }
       #end
         var server = Network.registerSession(NetworkMode.SERVER, { 
-            ip: '0.0.0.0',
-            port: 9000,
-            max_connections: 10
+            ip: data.addr,
+            port: data.port,
+            max_connections: data.maxcons
         });
         theY += 0.1;
         cpp.Lib.print("Server has started up!\n>");
@@ -46,15 +46,21 @@ class Main {
 
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             test++;
-            uuids.insert(server.clients[test].uuid);
+            uuids.insert(test, server.clients[test].uuid);
             server.clients[test].send({ chathist: chatHistory, axY: theY }); // - 1
             server.send({message: "Server: User has joined the chat!"});
+            chatHistory += "Server: User has joined the chat!" + "\n";
             cpp.Lib.print("User has connected!\n");
+            theY -= 20;
           });
           
           server.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
+            
             test--;
             cpp.Lib.print("User has disconnected!\n");
+            server.send({message: "Server: User has disconnected from the chat."});
+            chatHistory += "Server: User has disconnected from the chat." + "\n";
+            theY -= 20;
           });
 
           server.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) {
@@ -70,6 +76,9 @@ class Main {
               while(true)
                 switch(Sys.stdin().readLine()){
                   case "stop":
+                    for(client in server.clients) {
+                      server.disconnectClient(client);
+                    }
                     cpp.Lib.print("Server is shutting down!\n");
                     server.stop();
                     Sys.exit(0);
@@ -84,6 +93,11 @@ class Main {
                   case "fetch":
                     chatHistory = sys.io.File.getContent("ChatHistory.txt");
                     cpp.Lib.print("Fetched the previous chat history!\n");
+                  case "say":
+                    var r = ~/^say /gm;
+                    var stuff = Sys.stdin().readLine();
+                    r.replace(stuff, "");
+                    server.send({message: "Server: " + stuff});
                   case "clear":
                     chatHistory = "";
                     theY = 0;

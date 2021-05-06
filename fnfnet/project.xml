@@ -10,5 +10,5 @@
 	<haxelib name="extension-networking"/>
 	<window hidden="true"/>
 	<assets path="Assets" rename="assets" />
-	
+	<assets path="config.json"/>
 </project>
