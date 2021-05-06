@@ -4,6 +4,17 @@ import networking.Network;
 import networking.utils.NetworkEvent;
 import networking.utils.NetworkMode;
 
+/////////////////////////////////////////
+//
+//      FNFNet
+//        Created by bit of trolling
+//      Legend:
+//      test - amount of users
+//      theY - y position of chatText
+//      
+//
+/////////////////////////////////////////
+
 class Main {
     public static var amUsers:Int;
     public static var theY:Float;
@@ -19,13 +30,16 @@ class Main {
         });
         theY += 0.1;
         cpp.Lib.print("Server has started up!\n>");
-        
+        var test:Int = -1;
+
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
-            server.clients[Network.sessions.length - 1].send({ chathist: chatHistory, axY: theY });
+            test++;
+            server.clients[test].send({ chathist: chatHistory, axY: theY }); // - 1
             cpp.Lib.print("User has connected!\n");
           });
           
           server.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
+            test--;
             cpp.Lib.print("User has disconnected!\n");
           });
 
@@ -46,7 +60,7 @@ class Main {
                     server.stop();
                     Sys.exit(0);
                   case "list":
-                    cpp.Lib.print("There are " + Network.sessions.length + " connected right now.\n>");
+                    cpp.Lib.print("There are " + test + " connected right now.\n>");
                   case "test":
                     cpp.Lib.print("The server is working properly.\n");
                     cpp.Lib.print(theY + "\n");
