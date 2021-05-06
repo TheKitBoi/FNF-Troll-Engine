@@ -23,6 +23,12 @@ class Main {
     public static var thefullassmessage:String;
 
     public static function main(){
+      #if linux
+      var output = new sys.io.Process("ls", []).stdout.readAll().toString();
+      if (output=="root" && Sys.args()[0] != "--root") {
+        cpp.Lib.print("Warning: You are running the server as root, which is strongly discouraged!\nOnly run this server as root if you know what you are doing!\nIf you want to run this as root anyway, pass the --root parameter.\n");
+      }
+      #end
         var server = Network.registerSession(NetworkMode.SERVER, { 
             ip: '0.0.0.0',
             port: 9000,
