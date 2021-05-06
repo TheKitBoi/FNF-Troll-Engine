@@ -1,5 +1,6 @@
 package;
 
+import sys.io.File;
 #if desktop
 import Discord.DiscordClient;
 #end

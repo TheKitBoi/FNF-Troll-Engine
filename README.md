@@ -102,7 +102,10 @@ To run it from your desktop (Windows, Mac, Linux) it can be a bit more involved.
 
 This will install about 22GB of crap, but once that is done you can open up a command line in the project's directory and run `lime test windows -debug`. Once that command finishes (it takes forever even on a higher end PC), you can run FNF from the .exe file under export\release\windows\bin
 As for Mac, 'lime test mac -debug' should work, if not the internet surely has a guide on how to compile Haxe stuff for Mac.
+### Scripts
+Scripts are a new feature added onto TrollEngine, they're basicaly just haxe files except it executes on runtime.
 
+You can add your scripts in Assets/scripts/ and execute them in the options menu.
 ### Additional guides
 
 - [Command line basics](https://ninjamuffin99.newgrounds.com/news/post/1090480)
