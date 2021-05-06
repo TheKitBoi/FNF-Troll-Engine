@@ -14,13 +14,18 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import Controls.KeyboardScheme;
+
 class PauseSubState extends MusicBeatSubstate
 {
 	public static var pracMode:Bool = false;
 	public static var skipped:Bool;
 	public static var practiceMode:FlxText;
+	public static var cS:FlxText;
+	public static var kbd:String;
+
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Charting Menu', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Charting Menu', 'Control Scheme', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -28,6 +33,17 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
+		var _gameSave = new flixel.util.FlxSave(); // initialize
+		_gameSave.bind("options");
+
+		switch(_gameSave.data.ks){
+			case null:
+				kbd = "WASD";
+			case "WASD":
+				kbd = "WASD";
+			case "DFJK":
+				kbd = "DFJK";
+		}
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 0;
@@ -54,7 +70,14 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.updateHitbox();
 		add(levelDifficulty);
 
-		practiceMode = new FlxText(20, 15 + 64, 0, "", 32);
+		cS = new FlxText(20, 15 + 64, 0, "", 32);
+		cS.text = "Control Scheme: " + kbd;
+		cS.scrollFactor.set();
+		cS.setFormat(Paths.font('vcr.ttf'), 32);
+		cS.updateHitbox();
+		add(cS);
+
+		practiceMode = new FlxText(20, 15 + 96, 0, "", 32);
 		practiceMode.text = "Practice Mode Toggled";
 		practiceMode.scrollFactor.set();
 		practiceMode.setFormat(Paths.font('vcr.ttf'), 32);
@@ -64,9 +87,13 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.alpha = 0;
 		levelInfo.alpha = 0;
 		practiceMode.alpha = 0;
+		cS.alpha = 0;
+
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 		practiceMode.x = FlxG.width - (practiceMode.width + 20);
+		cS.x = FlxG.width - (cS.width + 20);
+
 		var opa:Int;
 		if (pracMode==true){
 			opa = 1;
@@ -76,7 +103,8 @@ class PauseSubState extends MusicBeatSubstate
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
-		FlxTween.tween(practiceMode, {alpha : opa, y: practiceMode.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7}); //alpha : 1,
+		FlxTween.tween(cS, {alpha : 1, y: cS.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7}); //alpha : 1,
+		FlxTween.tween(practiceMode, {alpha : opa, y: practiceMode.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.9}); //alpha : 1,	
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
@@ -125,6 +153,16 @@ class PauseSubState extends MusicBeatSubstate
 					FlxG.resetState();
 				case "Charting Menu":
 					FlxG.switchState(new ChartingState());
+				case "Control Scheme":
+					if(kbd=="WASD"){
+						kbd = "DFJK";
+						controls.setKeyboardScheme(Custom, true);
+						cS.text = "Control Scheme: " + kbd;
+					}else{
+						kbd = "WASD";
+						controls.setKeyboardScheme(Solo, true);
+						cS.text = "Control Scheme: " + kbd;
+					}
 				case "Toggle Practice Mode":
 					if (pracMode==true){
 						practiceMode.alpha = 0;

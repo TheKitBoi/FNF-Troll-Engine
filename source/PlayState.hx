@@ -1151,6 +1151,9 @@ class PlayState extends MusicBeatState
 
 					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
 					sustainNote.scrollFactor.set();
+					if(downscroll) {
+						sustainNote.flipY = true;
+					}
 					unspawnNotes.push(sustainNote);
 
 					sustainNote.mustPress = gottaHitNote;

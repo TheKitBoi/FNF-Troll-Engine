@@ -17,14 +17,19 @@ import networking.utils.NetworkMode;
 
 class Main {
     public static var amUsers:Int;
+
     public static var theY:Float;
+
+    public static var users:Array<String>;
+    public static var uuids:Array<Int>;
+    public static var ids:Array<Int>;
 
     public static var chatHistory:String;
     public static var thefullassmessage:String;
 
     public static function main(){
       #if linux
-      var output = new sys.io.Process("ls", []).stdout.readAll().toString();
+      var output = new sys.io.Process("whoami", []).stdout.readAll().toString();
       if (output=="root" && Sys.args()[0] != "--root") {
         cpp.Lib.print("Warning: You are running the server as root, which is strongly discouraged!\nOnly run this server as root if you know what you are doing!\nIf you want to run this as root anyway, pass the --root parameter.\n");
       }
@@ -37,10 +42,13 @@ class Main {
         theY += 0.1;
         cpp.Lib.print("Server has started up!\n>");
         var test:Int = -1;
+        var uuids = new Array();
 
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             test++;
+            uuids.insert(server.clients[test].uuid);
             server.clients[test].send({ chathist: chatHistory, axY: theY }); // - 1
+            server.send({message: "Server: User has joined the chat!"});
             cpp.Lib.print("User has connected!\n");
           });
           
