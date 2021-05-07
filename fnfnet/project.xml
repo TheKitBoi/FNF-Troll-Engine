@@ -8,7 +8,11 @@
 	
 	<haxelib name="openfl" />
 	<haxelib name="extension-networking"/>
+
 	<window hidden="true"/>
+
 	<assets path="Assets" rename="assets" />
 	<assets path="config.json"/>
+	<assets path="motd.txt"/>
+	<assets path="rules.txt"/>
 </project>

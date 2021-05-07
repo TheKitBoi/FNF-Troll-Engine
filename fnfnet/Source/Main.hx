@@ -34,6 +34,9 @@ class Main {
         cpp.Lib.print("Warning: You are running the server as root, which is strongly discouraged!\nOnly run this server as root if you know what you are doing!\nIf you want to run this as root anyway, pass the --root parameter.\n");
       }
       #end
+      var motd = sys.io.File.getContent("motd.txt");
+      var rules = sys.io.File.getContent("rules.txt");
+      
         var server = Network.registerSession(NetworkMode.SERVER, { 
             ip: data.addr,
             port: data.port,
@@ -47,7 +50,7 @@ class Main {
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             test++;
             uuids.insert(test, server.clients[test].uuid);
-            server.clients[test].send({ chathist: chatHistory, axY: theY }); // - 1
+            server.clients[test].send({ chathist: chatHistory, axY: theY, motd: motd, rules: rules}); // - 1
             server.send({message: "Server: User has joined the chat!"});
             chatHistory += "Server: User has joined the chat!" + "\n";
             cpp.Lib.print("User has connected!\n");

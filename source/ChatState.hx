@@ -1,5 +1,7 @@
 package;
 
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUITabMenu;
 import flixel.system.FlxSound;
 import networking.sessions.Session;
 import networking.utils.NetworkEvent;
@@ -18,18 +20,20 @@ import Config.data;
 class ChatState extends MusicBeatState
 {  
     public static var client:Session;
+    var UI_box:FlxUITabMenu;
 
     var txtbox:FlxInputText;
     public static var usnbox:FlxInputText;
 
     public static var isUsN:Bool;
+    public static var beentoChat:Bool;
+
 
     public static var username:String;
 
-    public static var beentoChat:Bool;
-
     public static var messages:FlxText;
 	public static var chatText:FlxText;
+    public static var MOTD:FlxText;
 
     public static var _gameSave:flixel.util.FlxSave; 
 
@@ -37,6 +41,7 @@ class ChatState extends MusicBeatState
 
     override function create()
 	{
+
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 30;
@@ -55,11 +60,23 @@ class ChatState extends MusicBeatState
 
         var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
 
-        
+        UI_box = new FlxUITabMenu(null, [
+            {name: "MOTD", label: 'MOTD'},
+            {name: "Rules", label: 'Rules'},
+        ], true);
+
+		UI_box.resize(400, 400);
+		UI_box.screenCenter(XY);
+        UI_box.selected_tab = 0;
+
+        MOTD = new FlxText(UI_box.x, UI_box.y + 50, "dummy", 16);
+
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
             
             if(event.data.chathist != null) {
                 chatText.text = event.data.chathist;
+                MOTD.text = event.data.motd;
+                var rules = event.data.motd;
                 chatText.y += event.data.axY; 
             }
             else{
@@ -123,12 +140,18 @@ class ChatState extends MusicBeatState
         menuBG.updateHitbox();
         menuBG.screenCenter();
         menuBG.antialiasing = true;
+        
+		var tab_group_motd = new FlxUI(null, UI_box);
+		tab_group_motd.name = "MOTD";
+
         add(menuBG);
         add(txtbox);
         add(chatText);
         add(usnbox);
         add(nameButton);
-
+        add(UI_box);
+        add(MOTD);
+        tab_group_motd.add(MOTD);
 		super.create();
 	}
 
