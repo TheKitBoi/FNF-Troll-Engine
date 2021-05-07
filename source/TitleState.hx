@@ -105,6 +105,10 @@ class TitleState extends MusicBeatState
 			DiscordClient.shutdown();
 		 });
 		#end
+
+		#if debug
+		flixel.addons.studio.FlxStudio.create();
+		#end
 	}
 
 	var logoBl:FlxSprite;

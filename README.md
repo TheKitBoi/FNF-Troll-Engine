@@ -36,6 +36,7 @@ flixel-ui
 hscript
 newgrounds
 extension-networking (required for FNFNet)
+flixel-studio (optional, only required for debug)
 ```
 So for each of those type `haxelib install [library]` so shit like `haxelib install newgrounds`
 
