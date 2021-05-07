@@ -34,9 +34,11 @@ class ChatState extends MusicBeatState
     public static var messages:FlxText;
 	public static var chatText:FlxText;
     public static var MOTD:FlxText;
+    public static var rules:FlxText;
 
     public static var _gameSave:flixel.util.FlxSave; 
 
+    public var okButton:flixel.ui.FlxButton;
     var pauseMusic:FlxSound;
 
     override function create()
@@ -51,6 +53,10 @@ class ChatState extends MusicBeatState
         _gameSave = new flixel.util.FlxSave(); // initialize
 		_gameSave.bind("options");
 
+        var userlist = new FlxText(FlxG.width - 50, 0, "Users online:\n", 10);
+        userlist.borderSize = 1;
+        userlist.borderColor = FlxColor.BLACK;
+
         beentoChat = true;
         FlxG.mouse.visible = true;
         FlxG.autoPause = false;
@@ -61,22 +67,29 @@ class ChatState extends MusicBeatState
         var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
 
         UI_box = new FlxUITabMenu(null, [
-            {name: "MOTD", label: 'MOTD'},
-            {name: "Rules", label: 'Rules'},
+            {name: "tab1", label: 'MOTD'},
+            {name: "tab2", label: 'Rules'},
         ], true);
 
 		UI_box.resize(400, 400);
 		UI_box.screenCenter(XY);
         UI_box.selected_tab = 0;
 
-        MOTD = new FlxText(UI_box.x, UI_box.y + 50, "dummy", 16);
+        MOTD = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
+        rules = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
+        okButton = new flixel.ui.FlxButton(-280, 130, "Ok", function()
+            {
+                FlxG.sound.play(Paths.sound('scrollMenu'));
+                remove(UI_box);
+                this.okButton.visible = false;
+            });
 
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
             
             if(event.data.chathist != null) {
                 chatText.text = event.data.chathist;
                 MOTD.text = event.data.motd;
-                var rules = event.data.motd;
+                rules.text = event.data.rules;
                 chatText.y += event.data.axY; 
             }
             else{
@@ -86,6 +99,8 @@ class ChatState extends MusicBeatState
         }); //event.data.axY;
           
         client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
+            add(UI_box);
+            add(okButton);
             chatText.text = "";
             chatText.y = txtbox.y - 23;
         });
@@ -102,7 +117,7 @@ class ChatState extends MusicBeatState
 
         client.start();
 
-        txtbox = new FlxInputText(200, 702.5, FlxG.width);
+        txtbox = new FlxInputText(200, 704.5, FlxG.width);
         txtbox.screenCenter(X);
         txtbox.background = true;
         txtbox.backgroundColor = FlxColor.WHITE;
@@ -111,7 +126,7 @@ class ChatState extends MusicBeatState
         var chatTexts = new FlxTypedGroup<FlxText>();
 		add(chatTexts);
         
-        chatText = new FlxText(FlxG.width * 0.01, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
+        chatText = new FlxText(FlxG.width * 0.1, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
         chatText.ID = 1;
         //chatText.screenCenter(X);
         chatTexts.add(chatText);
@@ -133,7 +148,7 @@ class ChatState extends MusicBeatState
                 changeUsername();
             });
 
-                
+        okButton.screenCenter(XY);
         var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         menuBG.color = 0xFFea71fd;
         menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -142,16 +157,25 @@ class ChatState extends MusicBeatState
         menuBG.antialiasing = true;
         
 		var tab_group_motd = new FlxUI(null, UI_box);
-		tab_group_motd.name = "MOTD";
+		tab_group_motd.name = "tab1";
+
+        var tab_group_rules = new FlxUI(null, UI_box);
+		tab_group_rules.name = "tab2";
 
         add(menuBG);
         add(txtbox);
         add(chatText);
         add(usnbox);
         add(nameButton);
-        add(UI_box);
-        add(MOTD);
+        add(userlist);
+
         tab_group_motd.add(MOTD);
+
+        tab_group_rules.add(rules);
+
+        UI_box.addGroup(tab_group_motd);
+        UI_box.addGroup(tab_group_rules);
+
 		super.create();
 	}
 
