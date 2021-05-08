@@ -79,7 +79,7 @@ class OptionsMenu extends MusicBeatState
 		curFPS.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(curFPS);
 
-		resolution = new FlxText(20, 15 + 64, 0, "", 32);
+		resolution = new FlxText(20, 15 + 32, 0, "", 32);
 		resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
 		resolution.scrollFactor.set();
 		resolution.setFormat(Paths.font('vcr.ttf'), 32);
@@ -88,7 +88,7 @@ class OptionsMenu extends MusicBeatState
 		resolution.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(resolution);
 
-		fullscreen = new FlxText(20, 15 + 128, 0, "", 32);
+		fullscreen = new FlxText(20, 15 + 64, 0, "", 32);
 		fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
 		fullscreen.scrollFactor.set();
 		fullscreen.setFormat(Paths.font('vcr.ttf'), 32);
@@ -97,7 +97,7 @@ class OptionsMenu extends MusicBeatState
 		fullscreen.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(fullscreen);
 
-		downscroll = new FlxText(20, 15 + 196, 0, "", 32);
+		downscroll = new FlxText(20, 15 + 96, 0, "", 32);
 		downscroll.text = "Downscroll: " + _gameSave.data.downscroll;
 		downscroll.scrollFactor.set();
 		downscroll.setFormat(Paths.font('vcr.ttf'), 32);
@@ -106,7 +106,7 @@ class OptionsMenu extends MusicBeatState
 		downscroll.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(downscroll);
 
-		ks = new FlxText(20, 15 + 260, 0, "", 32);
+		ks = new FlxText(20, 15 + 128, 0, "", 32);
 		ks.text = "Keyboard Scheme: " + kbd;
 		ks.scrollFactor.set();
 		ks.setFormat(Paths.font('vcr.ttf'), 32);

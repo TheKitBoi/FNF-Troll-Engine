@@ -53,7 +53,7 @@ class ChatState extends MusicBeatState
         _gameSave = new flixel.util.FlxSave(); // initialize
 		_gameSave.bind("options");
 
-        var userlist = new FlxText(FlxG.width - 50, 0, "Users online:\n", 10);
+        var userlist = new FlxText(FlxG.width - 150, 0, "Users online:\n", 10);
         userlist.borderSize = 1;
         userlist.borderColor = FlxColor.BLACK;
 
@@ -92,10 +92,21 @@ class ChatState extends MusicBeatState
                 rules.text = event.data.rules;
                 chatText.y += event.data.axY; 
             }
-            else{
+
+            if(event.data.message != null){
+                FlxG.sound.play(Paths.sound("sentmessage"));
                 chatText.text = chatText.text + event.data.message + "\n";
-            } 
-            if(event.data.message != null) chatText.y -= 20; 
+                chatText.y -= 20;
+            }
+
+            if(event.data.uslist != null){
+                userlist.text = "Users online:\n";
+                var users:Array<String> = event.data.uslist;
+                for(i in 0...users.length){
+                    userlist.text += users[i] + "\n";
+                }
+            }
+            //if(event.data.message != null) chatText.y -= 20; 
         }); //event.data.axY;
           
         client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
@@ -103,6 +114,7 @@ class ChatState extends MusicBeatState
             add(okButton);
             chatText.text = "";
             chatText.y = txtbox.y - 23;
+            client.send({nen: username});
         });
 
         client.addEventListener(NetworkEvent.SERVER_FULL, function(event: NetworkEvent) {
@@ -126,7 +138,7 @@ class ChatState extends MusicBeatState
         var chatTexts = new FlxTypedGroup<FlxText>();
 		add(chatTexts);
         
-        chatText = new FlxText(FlxG.width * 0.1, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
+        chatText = new FlxText(FlxG.width * 0.05, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
         chatText.ID = 1;
         //chatText.screenCenter(X);
         chatTexts.add(chatText);
