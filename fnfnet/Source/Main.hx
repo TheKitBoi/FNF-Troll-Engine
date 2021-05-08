@@ -61,7 +61,7 @@ class Main {
           });
           
           server.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
-            users.splice(uuids.indexOf(event.client.uuid), 1));
+            users.splice(uuids.indexOf(event.client.uuid), 1);
             uuids.remove(event.client.uuid);
             test--;
             cpp.Lib.print("User has disconnected!\n");
