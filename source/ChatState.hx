@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.system.FlxSound;
@@ -97,6 +98,8 @@ class ChatState extends MusicBeatState
                 FlxG.sound.play(Paths.sound("sentmessage"));
                 chatText.text = chatText.text + event.data.message + "\n";
                 chatText.y -= 20;
+                //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
+
             }
 
             if(event.data.uslist != null){
@@ -145,7 +148,6 @@ class ChatState extends MusicBeatState
         chatText.scrollFactor.set();
         chatText.antialiasing = true;
         chatText.autoSize = true;
-
         //FlxG.watch.addQuick("dababy Y", chatText.y);
 
         usnbox = new FlxInputText(200, 700, 100);

@@ -4,6 +4,8 @@ import networking.Network;
 import networking.utils.NetworkEvent;
 import networking.utils.NetworkMode;
 import Config.data;
+
+using StringTools;
 /////////////////////////////////////////
 //
 //      FNFNet
@@ -22,7 +24,7 @@ class Main {
 
     public static var users:Array<String>;
     public static var uuids:Array<String>;
-    public static var ids:Array<Int>;
+    public static var hasAdmin:Array<Bool>;
 
     public static var chatHistory:String;
     public static var thefullassmessage:String;
@@ -37,6 +39,7 @@ class Main {
 
       users = [];
       uuids = [];
+      hasAdmin = [];
 
       var motd = sys.io.File.getContent("motd.txt");
       var rules = sys.io.File.getContent("rules.txt");
@@ -53,6 +56,7 @@ class Main {
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             test++;
             uuids.push(server.clients[test].uuid);
+            hasAdmin.push(false);
             server.clients[test].send({ chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users}); // - 1
             server.send({message: "Server: User has joined the chat!"});
             chatHistory += "Server: User has joined the chat!" + "\n";
@@ -62,6 +66,7 @@ class Main {
           
           server.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
             users.splice(uuids.indexOf(event.client.uuid), 1);
+            hasAdmin.splice(uuids.indexOf(event.client.uuid), 1);
             uuids.remove(event.client.uuid);
             test--;
             cpp.Lib.print("User has disconnected!\n");
@@ -117,6 +122,14 @@ class Main {
                     var stuff = Sys.stdin().readLine();
                     r.replace(stuff, "");
                     server.send({message: "Server: " + stuff});
+                  case "op":
+                    cpp.Lib.print("Who do you want to give admin?\n");
+                    var victim = Sys.stdin().readLine();
+                    if(users.indexOf(victim) == -1) cpp.Lib.print("Could not find user in the list!\n");
+                    if(users.indexOf(victim) >= 0){
+                      hasAdmin[users.indexOf(victim)] = true;
+                      server.clients[users.indexOf(victim)].send({message: "You are now an admin.\n"});
+                    }
                   case "clear":
                     chatHistory = "";
                     theY = 0;
