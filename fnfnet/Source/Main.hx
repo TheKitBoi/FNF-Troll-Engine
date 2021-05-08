@@ -53,7 +53,7 @@ class Main {
         server.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             test++;
             uuids.push(server.clients[test].uuid);
-            server.clients[test].send({ chathist: chatHistory, axY: theY, motd: motd, rules: rules}); // - 1
+            server.clients[test].send({ chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users}); // - 1
             server.send({message: "Server: User has joined the chat!"});
             chatHistory += "Server: User has joined the chat!" + "\n";
             cpp.Lib.print("User has connected!\n");

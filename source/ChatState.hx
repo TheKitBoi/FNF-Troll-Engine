@@ -77,7 +77,7 @@ class ChatState extends MusicBeatState
 
         MOTD = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
         rules = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
-        okButton = new flixel.ui.FlxButton(-280, 130, "Ok", function()
+        okButton = new flixel.ui.FlxButton(-280, 340, "Ok", function()
             {
                 FlxG.sound.play(Paths.sound('scrollMenu'));
                 remove(UI_box);
@@ -161,6 +161,8 @@ class ChatState extends MusicBeatState
             });
 
         okButton.screenCenter(XY);
+        okButton.y += 150;
+
         var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         menuBG.color = 0xFFea71fd;
         menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
