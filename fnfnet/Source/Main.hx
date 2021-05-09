@@ -106,7 +106,10 @@ class Main extends FreeplayServer {
                       server.disconnectClient(server.clients[users.indexOf(victim)]);
                     }
                   case "list":
-                    cpp.Lib.print("There are " + (test + 1) + " connected right now.\n>");
+                    cpp.Lib.print("There are " + (test + 1) + " connected right now.\n");
+                    for(i in 0...users.length){
+                      cpp.Lib.println(users[i]);
+                    }
                   case "test":
                     cpp.Lib.print("The server is working properly.\n");
                     cpp.Lib.print(uuids + "\n");
