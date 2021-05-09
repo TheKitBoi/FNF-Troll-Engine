@@ -141,7 +141,7 @@ class ChatState extends MusicBeatState
         var chatTexts = new FlxTypedGroup<FlxText>();
 		add(chatTexts);
         
-        chatText = new FlxText(FlxG.width * 0.05, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
+        chatText = new FlxText(FlxG.width * 0.01, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
         chatText.ID = 1;
         //chatText.screenCenter(X);
         chatTexts.add(chatText);

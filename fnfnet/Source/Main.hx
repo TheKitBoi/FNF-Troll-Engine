@@ -17,7 +17,7 @@ using StringTools;
 //
 /////////////////////////////////////////
 
-class Main {
+class Main extends FreeplayServer {
     public static var amUsers:Int;
 
     public static var theY:Float;
@@ -58,7 +58,7 @@ class Main {
             uuids.push(server.clients[test].uuid);
             hasAdmin.push(false);
             server.clients[test].send({ chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users}); // - 1
-            server.send({message: "Server: User has joined the chat!"});
+            server.send({message: "Server: User has joined the chat!", uslist: users});
             chatHistory += "Server: User has joined the chat!" + "\n";
             cpp.Lib.print("User has connected!\n");
             theY -= 20;

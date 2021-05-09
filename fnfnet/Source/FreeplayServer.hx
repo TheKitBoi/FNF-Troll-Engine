@@ -16,7 +16,7 @@ import Config.data;
 /////////////////////////////////////////
 
 class FreeplayServer {
-    public static function main(){
+    public function create(){
 
         var server = Network.registerSession(NetworkMode.SERVER, { 
             ip: data.addr,

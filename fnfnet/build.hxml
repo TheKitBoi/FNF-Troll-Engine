@@ -1,4 +1,0 @@
--lib extension-networking
--lib openfl
---cpp bin/ Server.hx
--m Server
