@@ -29,6 +29,7 @@ class OptionsMenu extends MusicBeatState
 	public static var rn:Int;
 	public static var cDat:Int;
 	public static var kbd:String;
+	var cockJoke = new FlxTypedGroup<FlxText>();
 	var selector:FlxText;
 	var curSelected:Int = 0;
 	var controlsStrings:Array<String> = [];
@@ -60,6 +61,8 @@ class OptionsMenu extends MusicBeatState
 		menuBG.antialiasing = true;
 		add(menuBG);
 
+		initSettings(true);
+
 		notice = new FlxText(20, FlxG.height * 0.83, 0, "", 32);
 		notice.text = "Use the left and arrow keys to change this option!";
 		notice.scrollFactor.set();
@@ -68,55 +71,7 @@ class OptionsMenu extends MusicBeatState
 		notice.screenCenter(X);
 		notice.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		add(notice);
-		notice.alpha=0;
 
-		curFPS = new FlxText(20, 15 + 0, 0, "", 32);
-		curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
-		curFPS.scrollFactor.set();
-		curFPS.setFormat(Paths.font('vcr.ttf'), 32);
-		curFPS.updateHitbox();
-		curFPS.x = FlxG.width - (curFPS.width + 20);
-		curFPS.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-		add(curFPS);
-
-		resolution = new FlxText(20, 15 + 32, 0, "", 32);
-		resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
-		resolution.scrollFactor.set();
-		resolution.setFormat(Paths.font('vcr.ttf'), 32);
-		resolution.updateHitbox();
-		resolution.x = FlxG.width - (resolution.width + 20);
-		resolution.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-		add(resolution);
-
-		fullscreen = new FlxText(20, 15 + 64, 0, "", 32);
-		fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
-		fullscreen.scrollFactor.set();
-		fullscreen.setFormat(Paths.font('vcr.ttf'), 32);
-		fullscreen.updateHitbox();
-		fullscreen.x = FlxG.width - (fullscreen.width + 20);
-		fullscreen.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-		add(fullscreen);
-
-		downscroll = new FlxText(20, 15 + 96, 0, "", 32);
-		downscroll.text = "Downscroll: " + _gameSave.data.downscroll;
-		downscroll.scrollFactor.set();
-		downscroll.setFormat(Paths.font('vcr.ttf'), 32);
-		downscroll.updateHitbox();
-		downscroll.x = FlxG.width - (fullscreen.width + 20);
-		downscroll.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-		add(downscroll);
-
-		ks = new FlxText(20, 15 + 128, 0, "", 32);
-		ks.text = "Keyboard Scheme: " + kbd;
-		ks.scrollFactor.set();
-		ks.setFormat(Paths.font('vcr.ttf'), 32);
-		ks.updateHitbox();
-		ks.x = FlxG.width - (fullscreen.width + 80);
-		ks.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-		add(ks);
-
-
-		
 			grpControls = new FlxTypedGroup<Alphabet>();
 			add(grpControls);
 
@@ -147,9 +102,8 @@ class OptionsMenu extends MusicBeatState
 							FlxG.updateFramerate += 20; 
 							_gameSave.data.framerate = FlxG.drawFramerate;
 							_gameSave.flush();
+							initSettings(false, 0, "Current Framerate: " + FlxG.drawFramerate);
 						}
-						trace(FlxG.drawFramerate);
-						curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
 					}
 					if(controls.LEFT_P) {
 						if(FlxG.drawFramerate > 20) {
@@ -157,38 +111,9 @@ class OptionsMenu extends MusicBeatState
 							FlxG.updateFramerate -= 20; 
 							_gameSave.data.framerate = FlxG.drawFramerate;
 							_gameSave.flush();
+							initSettings(false, 0, "Current Framerate: " + FlxG.drawFramerate);
 						}
-						trace(FlxG.drawFramerate);
-						curFPS.text = "Current Framerate: " + FlxG.drawFramerate;
-					}
-				case 1:
-					/* scrapped stuff, maybe work on later
-					if(controls.RIGHT_P) {
-						rn++;
-						trace(resW[rn]);
-						FlxG.resizeGame(resW[rn], resH[rn]);
-						FlxG.resizeWindow(resW[rn], resH[rn]);
-						FlxG.cameras.reset();
-						FlxG.camera.setSize(resW[rn], resH[rn]);
-						resolution.text = "Current Resolution: " + resW[rn] + "x" + resH[rn];
-					}
-					if(controls.LEFT_P) {
-						rn--;
-						FlxG.resizeGame(resW[rn], resH[rn]);
-						FlxG.resizeWindow(resW[rn], resH[rn]);
-						FlxG.cameras.reset();
-						FlxG.camera.setSize(resW[rn], resH[rn]);
-						resolution.text = "Current Resolution: " + resW[rn] + "x" + resH[rn];
-					}
-					*/
-				case 2:
-					if(controls.ACCEPT) {
-						FlxG.fullscreen = !FlxG.fullscreen;
-						_gameSave.data.fullscreen = FlxG.fullscreen;
-						_gameSave.flush();
-						fullscreen.text = "Fullscreen: " + FlxG.fullscreen;
-					}
-					
+					}					
 			}
 			if (controls.ACCEPT)
 			{
@@ -212,25 +137,32 @@ class OptionsMenu extends MusicBeatState
 						FlxG.autoPause = !FlxG.autoPause;
 						_gameSave.data.pauseonunfocus = FlxG.autoPause;
 						_gameSave.flush();
-						resolution.text = "Pause on Unfocus: " + FlxG.autoPause;
+						initSettings(false, 1, "Pause on Unfocus: " + FlxG.autoPause);
+					case 2:
+						if(controls.ACCEPT) {
+							FlxG.fullscreen = !FlxG.fullscreen;
+							_gameSave.data.fullscreen = FlxG.fullscreen;
+							_gameSave.flush();
+							initSettings(false, 2, "Fullscreen: " + FlxG.fullscreen);
+						}
 					case 3:
 						PlayState.downscroll = !PlayState.downscroll;
 						_gameSave.data.downscroll = PlayState.downscroll;
 						_gameSave.flush();
-						downscroll.text = "Downscroll: " + PlayState.downscroll;
+						initSettings(false, 3, "Downscroll: " + PlayState.downscroll);
 					case 4:
 						if(kbd == "WASD"){
 							kbd = "DFJK";
 							controls.setKeyboardScheme(KeyboardScheme.Custom, true);
 							_gameSave.data.ks = "DFJK";
 							_gameSave.flush();
-							ks.text = "Keyboard Scheme: " + kbd;
+							initSettings(false, 4, "Keyboard Scheme: " + kbd);
 						}else{
 							kbd = "WASD";
 							controls.setKeyboardScheme(KeyboardScheme.Solo, true);
 							_gameSave.data.ks = "WASD";
 							_gameSave.flush();
-							ks.text = "Keyboard Scheme: " + kbd;
+							initSettings(false, 4, "Keyboard Scheme: " + kbd);
 						}
 					case 5:
 						FlxG.switchState(new ScriptState());	
@@ -254,7 +186,29 @@ class OptionsMenu extends MusicBeatState
 			}
 		 
 	}
+	function initSettings(noreset, ?thingit, ?text):Void
+		{
+			if(!noreset){
+				cockJoke.members[thingit].text = Std.string(text);
+			}
+			if(noreset){
+				add(cockJoke);
+				var curStuff:Array<String> = ["Current Framerate: ", "Pause on Unfocus: ", "Fullscreen: ", "Downscroll: ", "Keyboard Scheme: "];
+				var curVars:Array<String> = [Std.string(FlxG.updateFramerate), Std.string(FlxG.autoPause), Std.string(FlxG.fullscreen), Std.string(_gameSave.data.downscroll), kbd];
 
+				for (i in 0...curStuff.length)
+				{
+					var dababy = new FlxText(20, 15 + (i * 32), 0, curStuff[i] + curVars[i], 32);
+					dababy.scrollFactor.set();
+					dababy.setFormat(Paths.font('vcr.ttf'), 32);
+					dababy.updateHitbox();
+					dababy.x = FlxG.width - (dababy.width + 20);
+					dababy.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+					cockJoke.add(dababy);
+				// LESS GOO !!
+				}
+			}
+		}
 	function waitingInput():Void
 	{
 		if (FlxG.keys.getIsDown().length > 0)
