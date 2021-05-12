@@ -37,8 +37,6 @@ class ChatState extends MusicBeatState
     public static var MOTD:FlxText;
     public static var rules:FlxText;
 
-    public static var _gameSave:flixel.util.FlxSave; 
-
     public var okButton:flixel.ui.FlxButton;
     var pauseMusic:FlxSound;
 
@@ -51,9 +49,6 @@ class ChatState extends MusicBeatState
 		pauseMusic.play(true, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
         FlxG.sound.list.add(pauseMusic);
 
-        _gameSave = new flixel.util.FlxSave(); // initialize
-		_gameSave.bind("options");
-
         var userlist = new FlxText(FlxG.width - 150, 0, "Users online:\n", 10);
         userlist.borderSize = 1;
         userlist.borderColor = FlxColor.BLACK;
@@ -62,7 +57,7 @@ class ChatState extends MusicBeatState
         FlxG.mouse.visible = true;
         FlxG.autoPause = false;
 
-        if(_gameSave.data.username != null) username = _gameSave.data.username;
+        if(FlxG.save.data.username != null) username = FlxG.save.data.username;
         else username = "guest" + FlxG.random.int(0, 9999); 
 
         var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
@@ -214,8 +209,8 @@ class ChatState extends MusicBeatState
         isUsN = !isUsN;
         if(usnbox.text != ""){
             username = usnbox.text;
-            _gameSave.data.username = usnbox.text;
-            _gameSave.flush();
+            FlxG.save.data.username = usnbox.text;
+            FlxG.save.flush();
         }
     }
 }

@@ -34,11 +34,8 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
-	public static var _gameSave:flixel.util.FlxSave;
 	override function create()
 	{
-		_gameSave = new flixel.util.FlxSave(); // initialize
-		_gameSave.bind("options");
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -125,7 +122,7 @@ class MainMenuState extends MusicBeatState
 		if(ChatState.beentoChat){
 			ChatState.beentoChat = false;
 			FlxG.mouse.visible = false;
-			if(_gameSave.data.pauseonunfocus != null) FlxG.autoPause = _gameSave.data.pauseonunfocus;
+			if(FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 			else FlxG.autoPause = true;
 		}
 		if (FlxG.sound.music.volume < 0.8)

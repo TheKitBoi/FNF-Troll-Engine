@@ -47,9 +47,11 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		var _gameSave = new flixel.util.FlxSave(); // initialize
-		_gameSave.bind("options");
-		if( _gameSave.data.pauseonunfocus != null) FlxG.autoPause = _gameSave.data.pauseonunfocus;
+		if( FlxG.save.data.framerate != null) {
+			FlxG.updateFramerate = FlxG.save.data.framerate;
+			FlxG.drawFramerate = FlxG.save.data.framerate;
+		}
+		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});

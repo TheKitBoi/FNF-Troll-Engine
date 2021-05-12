@@ -19,7 +19,6 @@ import flixel.util.FlxSave;
 import Controls.KeyboardScheme;
 class OptionsMenu extends MusicBeatState
 {
-	public static var _gameSave:FlxSave;
 	public static var notice:FlxText;
 	public static var resolution:FlxText;
 	public static var fullscreen:FlxText;
@@ -39,11 +38,7 @@ class OptionsMenu extends MusicBeatState
 	override function create()
 	{
 
-		//FlxG.save.bind('funkin', 'trollengine');
-		_gameSave = new FlxSave(); // initialize
-		_gameSave.bind("options");
-
-		switch(_gameSave.data.ks){
+		switch(FlxG.save.data.ks){
 			case null:
 				kbd = "WASD";
 			case "WASD":
@@ -53,7 +48,7 @@ class OptionsMenu extends MusicBeatState
 		}
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Keyboard Scheme", "Scripts", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Keyboard Scheme", "Scripts", "Kade Input", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -100,8 +95,8 @@ class OptionsMenu extends MusicBeatState
 						if(FlxG.drawFramerate < 120) {
 							FlxG.drawFramerate += 20; 
 							FlxG.updateFramerate += 20; 
-							_gameSave.data.framerate = FlxG.drawFramerate;
-							_gameSave.flush();
+							FlxG.save.data.framerate = FlxG.drawFramerate;
+							FlxG.save.flush();
 							initSettings(false, 0, "Current Framerate: " + FlxG.drawFramerate);
 						}
 					}
@@ -109,8 +104,8 @@ class OptionsMenu extends MusicBeatState
 						if(FlxG.drawFramerate > 20) {
 							FlxG.drawFramerate -= 20; 
 							FlxG.updateFramerate -= 20; 
-							_gameSave.data.framerate = FlxG.drawFramerate;
-							_gameSave.flush();
+							FlxG.save.data.framerate = FlxG.drawFramerate;
+							FlxG.save.flush();
 							initSettings(false, 0, "Current Framerate: " + FlxG.drawFramerate);
 						}
 					}					
@@ -135,38 +130,43 @@ class OptionsMenu extends MusicBeatState
 					}
 					case 1:
 						FlxG.autoPause = !FlxG.autoPause;
-						_gameSave.data.pauseonunfocus = FlxG.autoPause;
-						_gameSave.flush();
+						FlxG.save.data.pauseonunfocus = FlxG.autoPause;
+						FlxG.save.flush();
 						initSettings(false, 1, "Pause on Unfocus: " + FlxG.autoPause);
 					case 2:
 						if(controls.ACCEPT) {
 							FlxG.fullscreen = !FlxG.fullscreen;
-							_gameSave.data.fullscreen = FlxG.fullscreen;
-							_gameSave.flush();
+							FlxG.save.data.fullscreen = FlxG.fullscreen;
+							FlxG.save.flush();
 							initSettings(false, 2, "Fullscreen: " + FlxG.fullscreen);
 						}
 					case 3:
 						PlayState.downscroll = !PlayState.downscroll;
-						_gameSave.data.downscroll = PlayState.downscroll;
-						_gameSave.flush();
+						FlxG.save.data.downscroll = PlayState.downscroll;
+						FlxG.save.flush();
 						initSettings(false, 3, "Downscroll: " + PlayState.downscroll);
 					case 4:
 						if(kbd == "WASD"){
 							kbd = "DFJK";
 							controls.setKeyboardScheme(KeyboardScheme.Custom, true);
-							_gameSave.data.ks = "DFJK";
-							_gameSave.flush();
+							FlxG.save.data.ks = "DFJK";
+							FlxG.save.flush();
 							initSettings(false, 4, "Keyboard Scheme: " + kbd);
 						}else{
 							kbd = "WASD";
 							controls.setKeyboardScheme(KeyboardScheme.Solo, true);
-							_gameSave.data.ks = "WASD";
-							_gameSave.flush();
+							FlxG.save.data.ks = "WASD";
+							FlxG.save.flush();
 							initSettings(false, 4, "Keyboard Scheme: " + kbd);
 						}
 					case 5:
 						FlxG.switchState(new ScriptState());	
 					case 6:
+						if(FlxG.save.data.kadeinput != null)FlxG.save.data.kadeinput = !FlxG.save.data.kadeinput;
+						else FlxG.save.data.kadeinput = true;
+						FlxG.save.flush();
+						initSettings(false, 5, "Kade Input: " + FlxG.save.data.kadeinput);
+					case 7:
 						var request = new haxe.Http("https://fnf.general-infinity.tech/thing.php");
 						request.setPostData("no=no");
 						request.request(true);
@@ -193,8 +193,8 @@ class OptionsMenu extends MusicBeatState
 			}
 			if(noreset){
 				add(cockJoke);
-				var curStuff:Array<String> = ["Current Framerate: ", "Pause on Unfocus: ", "Fullscreen: ", "Downscroll: ", "Keyboard Scheme: "];
-				var curVars:Array<String> = [Std.string(FlxG.updateFramerate), Std.string(FlxG.autoPause), Std.string(FlxG.fullscreen), Std.string(_gameSave.data.downscroll), kbd];
+				var curStuff:Array<String> = ["Current Framerate: ", "Pause on Unfocus: ", "Fullscreen: ", "Downscroll: ", "Keyboard Scheme: ", "Kade Input: "];
+				var curVars:Array<String> = [Std.string(FlxG.updateFramerate), Std.string(FlxG.autoPause), Std.string(FlxG.fullscreen), Std.string(FlxG.save.data.downscroll), kbd, Std.string(FlxG.save.data.kadeinput)];
 
 				for (i in 0...curStuff.length)
 				{

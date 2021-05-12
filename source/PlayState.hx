@@ -120,6 +120,7 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
 	var missTxt:FlxText;
+	var noteDiff:Float;
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
@@ -140,11 +141,9 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
-		var _gameSave = new FlxSave(); // initialize
-		_gameSave.bind("options");
-		downscroll = _gameSave.data.downscroll;
+		downscroll = FlxG.save.data.downscroll;
 
-		switch(_gameSave.data.ks){
+		switch(FlxG.save.data.ks){
 			case null:
 				
 			case "WASD":
@@ -2216,7 +2215,7 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		if (!boyfriend.stunned)
+		if (!boyfriend.stunned && noteDiff > Conductor.safeZoneOffset * 1)
 		{
 			health -= 0.04;
 			if (combo > 5 && gf.animOffsets.exists('sad'))
