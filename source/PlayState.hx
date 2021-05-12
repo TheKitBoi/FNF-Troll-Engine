@@ -1760,7 +1760,9 @@ class PlayState extends MusicBeatState
 				{
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
+						missedNotes++;
 						health -= 0.0475;
+						combo = 0;
 						vocals.volume = 0;
 					}
 
@@ -2215,8 +2217,11 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		if (!boyfriend.stunned && noteDiff > Conductor.safeZoneOffset * 1)
+		if (!boyfriend.stunned)
 		{
+			if(noteDiff < Conductor.safeZoneOffset * 1 && FlxG.save.data.kadeinput){
+				return;
+			}
 			health -= 0.04;
 			if (combo > 5 && gf.animOffsets.exists('sad'))
 			{
