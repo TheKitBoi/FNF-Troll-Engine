@@ -1,0 +1,15 @@
+{
+  "name": "fnfnet",
+  "version": "1.0.0",
+  "description": "The server backend for FNFNet",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "author": "bit of trolling",
+  "license": "ISC",
+  "dependencies": {
+    "colyseus": "^0.14.13",
+    "express": "^4.17.1"
+  }
+}
