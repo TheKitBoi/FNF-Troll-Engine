@@ -850,13 +850,6 @@ class PlayState extends MusicBeatState
 					startCountdown();
 			}
 		}
-		/*
-														remove(blackScreen);
-												dad.alpha = 100;
-												boyfriend.alpha = 100;
-												camHUD.visible = true;
-												schoolIntro(doof);
-												*/
 		else
 		{
 			switch (curSong.toLowerCase())
