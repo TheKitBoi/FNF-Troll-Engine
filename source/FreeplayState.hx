@@ -22,9 +22,10 @@ class FreeplayState extends MusicBeatState
 	var selector:FlxText;
 	var curSelected:Int = 0;
 	var curDifficulty:Int = 1;
-
+	public static var cutscene:Bool = false;
 	var scoreText:FlxText;
 	var diffText:FlxText;
+	var cutText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
@@ -117,13 +118,17 @@ class FreeplayState extends MusicBeatState
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		// scoreText.alignment = RIGHT;
 
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
+		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), 112, 0xFF000000);
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
 		add(diffText);
+
+		cutText = new FlxText(scoreText.x, diffText.y + 36, 0, "", 24);
+		cutText.font = scoreText.font;
+		add(cutText);
 
 		add(scoreText);
 
@@ -195,7 +200,7 @@ class FreeplayState extends MusicBeatState
 			lerpScore = intendedScore;
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
-
+		cutText.text = "Watch Cutscene (C): " + cutscene;
 		var upP = controls.UP_P;
 		var downP = controls.DOWN_P;
 		var accepted = controls.ACCEPT;
@@ -208,7 +213,10 @@ class FreeplayState extends MusicBeatState
 		{
 			changeSelection(1);
 		}
-
+		if (FlxG.keys.justPressed.C) {
+			cutscene = !cutscene;
+			cutText.text = "Watch Cutscene (C): " + cutscene;
+		}
 		if (controls.LEFT_P)
 			changeDiff(-1);
 		if (controls.RIGHT_P)

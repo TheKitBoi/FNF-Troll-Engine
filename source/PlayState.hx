@@ -803,7 +803,7 @@ class PlayState extends MusicBeatState
 		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
 
-		if (isStoryMode || isDebug)
+		if (isStoryMode || FreeplayState.cutscene)
 		{
 			if(PauseSubState.PauseSubState.skipped) {
 				PauseSubState.skipped = false;
