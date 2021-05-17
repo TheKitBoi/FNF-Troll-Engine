@@ -705,10 +705,10 @@ class PlayState extends MusicBeatState
 		doof.finishThing = startCountdown;
 
 		Conductor.songPosition = -5000;
-		if(downscroll) strumLine = new FlxSprite(0, FlxG.height - 150).makeGraphic(FlxG.width, 10); 
+		if(downscroll) strumLine = new FlxSprite(0, FlxG.height - 180).makeGraphic(FlxG.width, 10);  // 180
 		else strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
-
+		//add(strumLine);
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
 		add(strumLineNotes);
 

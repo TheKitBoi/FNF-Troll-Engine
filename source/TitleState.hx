@@ -47,10 +47,6 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		if( FlxG.save.data.framerate != null) {
-			FlxG.updateFramerate = FlxG.save.data.framerate;
-			FlxG.drawFramerate = FlxG.save.data.framerate;
-		}
 		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 
 		#if polymod

@@ -1,14 +1,15 @@
 package;
 
 import flixel.FlxGame;
+import flixel.FlxG;
 import flixel.FlxState;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import Config.data;
 #if !js
+import Config.data;
 import sys.io.File.getContent;
 #end //thank you now shut up visual studio code
 /*

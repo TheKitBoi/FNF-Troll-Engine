@@ -1,7 +1,7 @@
 package;
 
-import sys.io.File;
 #if desktop
+import sys.io.File;
 import Discord.DiscordClient;
 #end
 import flixel.FlxG;
