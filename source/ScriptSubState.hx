@@ -15,6 +15,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import sys.thread.Thread;
 import Controls.Control;
 
 class ScriptSubState extends MusicBeatSubstate
@@ -73,6 +74,10 @@ class ScriptSubState extends MusicBeatSubstate
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				var program = parser.parseString(sys.io.File.getContent("assets/scripts/" + controlsStrings[curSelected]));
+				interp.variables.set("PlayState",PlayState);
+				interp.variables.set("FlxG",FlxG);
+				interp.variables.set("Sys",Sys);
+				interp.variables.set("Character",Character);
 				interp.execute(program);
 			}
 			if (isSettingControl)

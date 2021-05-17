@@ -148,6 +148,7 @@ class MainMenuState extends MusicBeatState
 			{
 				FlxG.switchState(new TitleState());
 			}
+			if (FlxG.keys.justPressed.SIX) FlxG.openURL("https://www.youtube.com/watch?v=38FnpnflHEg");
 			if (FlxG.keys.justPressed.FOUR)
 				{
 					FlxG.switchState(new ChatState());
