@@ -117,6 +117,7 @@
 	<haxelib name="newgrounds"/>
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
+	<haxelib name="colyseus"/>
 	<haxelib name="extension-networking"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="flixel-studio" if="debug"/>
