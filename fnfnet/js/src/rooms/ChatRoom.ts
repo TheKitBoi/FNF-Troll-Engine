@@ -1,6 +1,11 @@
 import { Room, Client } from "colyseus";
 import { Stuff } from "./schema/Stuff";
+import * as readline from 'readline';
 
+let rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 /////////////////////////////////////////
 //
 //      FNFNet
@@ -13,35 +18,30 @@ import { Stuff } from "./schema/Stuff";
 /////////////////////////////////////////
 var amUsers: number;
 var theY: any;
-var users:Array<String>;
-var uuids:Array<String>;
-var hasAdmin:Array<Boolean>;
+var users:Array<String> = new Array();
+var uuids:Array<String> = new Array();
+var hasAdmin:Array<Boolean> = new Array();
 var chatHistory:String;
 var thefullassmessage:String;
 var test: number;
 export class ChatRoom extends Room<Stuff> {
-  users: any = [];
-  uuids: any = [];
-  hasAdmin: any = [];
+
+  public static stuff: string;
   static chatHistory: string;
   onCreate (options: any) {
     this.setState(new Stuff());
 
     this.onMessage("string", (client, message) => {
-      //
-      // handle "type" message
-      //
+      chatHistory += message + "\n";
     });
-
   }
-
   onJoin (client: Client, options: any) {
     console.log(client.sessionId, "joined!");
     test++;
     uuids.push(client.sessionId);
     hasAdmin.push(false);
-    client.send({ chathist: chatHistory}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
-    server.send({message: "Server: User has joined the chat!", uslist: users});
+    client.send("string", { chatHist: chatHistory, axY: theY}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;
   }

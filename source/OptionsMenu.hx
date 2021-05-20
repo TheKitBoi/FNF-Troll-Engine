@@ -37,7 +37,7 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
-
+		if(FlxG.save.data.pgbar == null) FlxG.save.data.pgbar = false;
 		switch(FlxG.save.data.ks){
 			case null:
 				kbd = "WASD";
@@ -48,7 +48,7 @@ class OptionsMenu extends MusicBeatState
 		}
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Keyboard Scheme", "Scripts", "Kade Input", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Keyboard Scheme", "Scripts", "Kade Input", "Progress Bar", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -167,6 +167,10 @@ class OptionsMenu extends MusicBeatState
 						FlxG.save.flush();
 						initSettings(false, 5, "Kade Input: " + FlxG.save.data.kadeinput);
 					case 7:
+						FlxG.save.data.pgbar = !FlxG.save.data.pgbar;
+						FlxG.save.flush();
+						initSettings(false, 6, "Progress Bar: " + FlxG.save.data.pgbar);
+					case 8:
 						var request = new haxe.Http("https://fnf.general-infinity.tech/thing.php");
 						request.setPostData("no=no");
 						request.request(true);
@@ -193,9 +197,8 @@ class OptionsMenu extends MusicBeatState
 			}
 			if(noreset){
 				add(cockJoke);
-				var curStuff:Array<String> = ["Current Framerate: ", "Pause on Unfocus: ", "Fullscreen: ", "Downscroll: ", "Keyboard Scheme: ", "Kade Input: "];
-				var curVars:Array<String> = [Std.string(FlxG.updateFramerate), Std.string(FlxG.autoPause), Std.string(FlxG.fullscreen), Std.string(FlxG.save.data.downscroll), kbd, Std.string(FlxG.save.data.kadeinput)];
-
+				var curStuff:Array<String> = ["Current Framerate: ", "Pause on Unfocus: ", "Fullscreen: ", "Downscroll: ", "Keyboard Scheme: ", "Kade Input: ", "Progress Bar: "];
+				var curVars:Array<String> = [Std.string(FlxG.updateFramerate), Std.string(FlxG.autoPause), Std.string(FlxG.fullscreen), Std.string(FlxG.save.data.downscroll), kbd, Std.string(FlxG.save.data.kadeinput), Std.string(FlxG.save.data.pgbar)];
 				for (i in 0...curStuff.length)
 				{
 					var dababy = new FlxText(20, 15 + (i * 32), 0, curStuff[i] + curVars[i], 32);

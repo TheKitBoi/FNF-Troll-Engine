@@ -1,12 +1,13 @@
 import Arena from "@colyseus/arena";
 import { monitor } from "@colyseus/monitor";
-
 /**
  * Import your Room files
  */
 import { ChatRoom } from "./rooms/ChatRoom";
+import { Stuff } from "./rooms/schema/Stuff";
 
 export default Arena({
+    
     getId: () => "Your Colyseus App",
 
     initializeGameServer: (gameServer) => {
@@ -21,7 +22,12 @@ export default Arena({
         /**
          * Bind your custom express routes here:
          */
+
         app.get("/", (req, res) => {
+            res.send("cuck :smile:");
+        });
+        
+        app.get("/post", (req, res) => {
             res.send("It's time to kick ass and chew bubblegum!");
         });
 

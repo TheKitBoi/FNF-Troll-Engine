@@ -68,16 +68,17 @@ class PlayState extends MusicBeatState
 	private var dodging:Bool;
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
-	private var camFollow:FlxObject;
-
+	public static var camFollow:FlxObject;
+	var parser = new hscript.Parser();
+	var interp = new hscript.Interp();
 	private static var prevCamFollow:FlxObject;
-
+	public static var currentBeat:Int;
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
-
+	private var fs:sys.io.File;
 	private var gfSpeed:Int = 1;
 	private var health:Float = 1;
 	private var combo:Int = 0;
@@ -115,7 +116,7 @@ class PlayState extends MusicBeatState
 
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
-
+	var songtext:FlxText;
 	var talking:Bool = true;
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
@@ -743,14 +744,14 @@ class PlayState extends MusicBeatState
 		else progressBG = new FlxSprite(0, FlxG.height - FlxG.height + 10).loadGraphic(Paths.image('healthBar'));
 		progressBG.screenCenter(X);
 		progressBG.scrollFactor.set();
-		add(progressBG);
+		if(FlxG.save.data.pgbar) add(progressBG);
+
 
 		var pgBar = new FlxBar(progressBG.x + 4, progressBG.y + 4, LEFT_TO_RIGHT, Std.int(progressBG.width - 8), Std.int(progressBG.height - 8), this,
 		'progress', 0, FlxG.sound.music.length);
 		pgBar.scrollFactor.set();
 		// healthBar
-	    add(pgBar);
-
+		if(FlxG.save.data.pgbar) add(pgBar);
 		if(downscroll)healthBarBG = new FlxSprite(0, FlxG.height * 0.1).loadGraphic(Paths.image('healthBar'));
 		else healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
@@ -763,6 +764,13 @@ class PlayState extends MusicBeatState
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		// healthBar
 		add(healthBar);
+
+		var songtext = new FlxText(healthBarBG.x + (healthBarBG.width / 2) - 20, healthBarBG.y, 0, SONG.song, 16);
+		songtext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+		songtext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		songtext.scrollFactor.set();
+		songtext.cameras = [camHUD];
+		add(songtext);
 
 		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
@@ -858,7 +866,25 @@ class PlayState extends MusicBeatState
 					startCountdown();
 			}
 		}
-
+		if(sys.FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/chartscript"))
+			{
+				var program = parser.parseString(sys.io.File.getContent("assets/data/" + SONG.song.toLowerCase() + "/chartscript"));
+				interp.variables.set("PlayState",PlayState);
+				interp.variables.set("FlxG",FlxG);
+				interp.variables.set("Sys",Sys);
+				interp.variables.set("Character",Character);
+				interp.variables.set("FlxSprite",FlxSprite);
+				interp.variables.set("FlxTween",FlxTween);
+				interp.variables.set("FlxEase",FlxEase);
+				interp.variables.set("FlxText",FlxText);
+				interp.variables.set("Alphabet",Alphabet);
+				interp.variables.set("curBeat",curBeat);
+				//interp.variables.set("FlxColor",FlxColor);
+				sys.thread.Thread.create(() -> {
+					try{ interp.execute(program); }
+					catch(e){ trace(e.message); }
+				});
+			}
 		super.create();
 	}
 
@@ -1387,6 +1413,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		currentBeat = curBeat;
 		#if !debug
 		perfectMode = false;
 		#end

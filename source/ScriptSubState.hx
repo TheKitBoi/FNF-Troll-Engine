@@ -78,7 +78,9 @@ class ScriptSubState extends MusicBeatSubstate
 				interp.variables.set("FlxG",FlxG);
 				interp.variables.set("Sys",Sys);
 				interp.variables.set("Character",Character);
-				interp.execute(program);
+				sys.thread.Thread.create(() -> {
+					interp.execute(program);
+				});
 			}
 			if (isSettingControl)
 				waitingInput();

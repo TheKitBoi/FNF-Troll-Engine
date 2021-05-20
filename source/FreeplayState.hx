@@ -12,7 +12,6 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
-
 using StringTools;
 
 class FreeplayState extends MusicBeatState
@@ -239,6 +238,7 @@ class FreeplayState extends MusicBeatState
 
 			PlayState.storyWeek = songs[curSelected].week;
 			trace('CUR WEEK' + PlayState.storyWeek);
+			
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
 	}
