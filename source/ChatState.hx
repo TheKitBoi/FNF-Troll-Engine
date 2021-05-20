@@ -17,8 +17,6 @@ import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import Config.data;
-import io.colyseus.Client;
-import io.colyseus.Room;
 
 class ChatState extends MusicBeatState
 {  
@@ -81,25 +79,7 @@ class ChatState extends MusicBeatState
                 remove(UI_box);
                 this.okButton.visible = false;
             });
-        var coly = new Client('ws://localhost:2567');
-        coly.joinOrCreate("my_room", [], Stuff, function(err, room) {
-            if (err != null) {
-                trace("JOIN ERROR: " + err);
-                return;
-            }
-            chatText.text = room.state.chatHist;
-            chatText.y = txtbox.y - 23;
-            chatText.y += room.state.axY;
-            //client.send({nen: username});
-            trace(room.state.chatHist);
-            room.onMessage("string", function(message) {
-                trace("cdz nuts");
-                FlxG.sound.play(Paths.sound("sentmessage"));
-                chatText.text = chatText.text + message + "\n";
-                chatText.y -= 20;
-            });
-        });
-          /*
+
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
             
             if(event.data.chathist != null) {
@@ -126,7 +106,7 @@ class ChatState extends MusicBeatState
             }
             //if(event.data.message != null) chatText.y -= 20; 
         }); //event.data.axY;
-
+          
         client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             add(UI_box);
             add(okButton);
@@ -134,7 +114,19 @@ class ChatState extends MusicBeatState
             chatText.y = txtbox.y - 23;
             client.send({nen: username});
         });
-        */
+
+        client.addEventListener(NetworkEvent.SERVER_FULL, function(event: NetworkEvent) {
+            chatText.text = "Server is full! Try joining later!\n";
+            chatText.y = txtbox.y - 23;
+        });
+
+        client.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
+            chatText.text = "You have been disconnected from the server!\n";
+            chatText.y = txtbox.y - 23;
+        });
+
+        client.start();
+
         txtbox = new FlxInputText(200, 704.5, FlxG.width);
         txtbox.screenCenter(X);
         txtbox.background = true;
@@ -194,8 +186,7 @@ class ChatState extends MusicBeatState
 
         UI_box.addGroup(tab_group_motd);
         UI_box.addGroup(tab_group_rules);
-        add(UI_box);
-        add(okButton);
+
 		super.create();
 	}
 
