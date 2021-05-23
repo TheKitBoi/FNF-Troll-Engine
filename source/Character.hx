@@ -656,4 +656,11 @@ class Character extends FlxSprite
 	{
 		animOffsets[name] = [x, y];
 	}
+	public function offsetcrap(){ //tight ass little man
+		var offsetList = sys.io.File.getContent(Paths.txt("bfOffsets"));
+		trace(offsetList);
+		for (i in 0...offsetList.length){
+			var r = ~/^(\w+\s){i}/gm;
+		}
+	}
 }

@@ -8,4 +8,6 @@ export class Stuff extends Schema {
   @type("string") chatHist: string = "DICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDEIDKDID";
 
   @type("int32") axY: Number = 0;
+
+  @type("string") leaveMessage: string = "Server: User has disconnected from the chat.";
 }

@@ -151,7 +151,7 @@ class MainMenuState extends MusicBeatState
 			if (FlxG.keys.justPressed.SIX) FlxG.openURL("https://www.youtube.com/watch?v=38FnpnflHEg");
 			if (FlxG.keys.justPressed.FOUR)
 				{
-					FlxG.switchState(new ChatState());
+					FlxG.switchState(new ChatStateNew());
 				}
 			if (FlxG.keys.justPressed.THREE) FlxG.sound.play(Paths.sound('ok'));
 			if (controls.ACCEPT)
@@ -191,8 +191,9 @@ class MainMenuState extends MusicBeatState
 
 										trace("Freeplay Menu Selected");
 									case 'chat':
+										#if !js
 										FlxG.switchState(new ChatState());
-										
+										#end
 										
 									case 'options':
 										FlxG.switchState(new OptionsMenu());

@@ -32,7 +32,8 @@ export class ChatRoom extends Room<Stuff> {
     this.setState(new Stuff());
 
     this.onMessage("string", (client, message) => {
-      chatHistory += message + "\n";
+      console.log(message.message);
+      chatHistory += message.message;
     });
   }
   onJoin (client: Client, options: any) {
@@ -48,6 +49,13 @@ export class ChatRoom extends Room<Stuff> {
 
   onLeave (client: Client, consented: boolean) {
     console.log(client.sessionId, "left!");
+    users.splice(uuids.indexOf(client.sessionId), 1);
+    hasAdmin.splice(uuids.indexOf(client.sessionId));
+    //uuids.remove(client.sessionId);
+    test--;
+    client.send("string", {message: "niggers", uslist: users});
+    chatHistory += "Server: User has disconnected from the chat." + "\n";
+    theY -= 20;
   }
 
   onDispose() {

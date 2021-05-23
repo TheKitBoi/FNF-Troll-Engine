@@ -20,7 +20,7 @@ import Config.data;
 import io.colyseus.Client;
 import io.colyseus.Room;
 
-class ChatState extends MusicBeatState
+class ChatStateNew extends MusicBeatState
 {  
     public static var client:Session;
     var UI_box:FlxUITabMenu;
@@ -30,7 +30,7 @@ class ChatState extends MusicBeatState
 
     public static var isUsN:Bool;
     public static var beentoChat:Bool;
-
+    var coly:Client;
 
     public static var username:String;
 
@@ -44,7 +44,7 @@ class ChatState extends MusicBeatState
 
     override function create()
 	{
-
+        var coly = new Client('ws://localhost:2567');
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 30;
@@ -81,7 +81,7 @@ class ChatState extends MusicBeatState
                 remove(UI_box);
                 this.okButton.visible = false;
             });
-        var coly = new Client('ws://localhost:2567');
+        var timer = new haxe.Timer(5);
         coly.joinOrCreate("my_room", [], Stuff, function(err, room) {
             if (err != null) {
                 trace("JOIN ERROR: " + err);
@@ -97,6 +97,16 @@ class ChatState extends MusicBeatState
                 FlxG.sound.play(Paths.sound("sentmessage"));
                 chatText.text = chatText.text + message + "\n";
                 chatText.y -= 20;
+            });
+            sys.thread.Thread.create(() -> {
+                while(true){
+                    timer.run = function() {}
+                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
+                        room.send("string", {message: txtbox.text});
+                        txtbox.text = "";
+                        txtbox.caretIndex = 0;
+                    }
+                }
             });
         });
           /*
@@ -205,12 +215,6 @@ class ChatState extends MusicBeatState
         if(FlxG.keys.justPressed.ESCAPE) {
             Network.destroySession(Network.sessions[0]);
             FlxG.switchState(new MainMenuState());
-        }
-        if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
-            var session = Network.sessions[0];
-            session.send({message: txtbox.text, name: username}); //Bytes.ofString(txtbox.text)
-            txtbox.text = "";
-            txtbox.caretIndex = 0;
         }
 	}
     public function changeUsername(){
