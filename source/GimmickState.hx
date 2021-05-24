@@ -25,7 +25,10 @@ class GimmickState extends MusicBeatState
 	var parser = new hscript.Parser();
 	var interp = new hscript.Interp();
 	public static var menuBG:FlxSprite;
-
+	
+	//the variables for the gimmick control
+	public static var invisarrow:Bool = false;
+	public static var upsidedown:Bool = false;
 	override function create()
 	{
 
@@ -68,7 +71,13 @@ class GimmickState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('scrollMenu'));
                 switch(controlsStrings[curSelected]){
                     case "Invisible Arrows":
+						invisarrow = !invisarrow;
+						grpControls.members[curSelected].text = grpControls.members[curSelected].text + " " + invisarrow;
                         //PlayState.babyArrow.alpha = 0;
+					case "Upside Down":
+						upsidedown = !upsidedown;
+						grpControls.members[curSelected].text = grpControls.members[curSelected].text + " " + upsidedown;
+                        
                     case "Start":
                         FlxG.switchState(new PlayState());
                 }
