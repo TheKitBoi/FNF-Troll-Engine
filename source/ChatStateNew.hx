@@ -20,6 +20,14 @@ import Config.data;
 import io.colyseus.Client;
 import io.colyseus.Room;
 
+typedef NDT = { // NDT means Nessecary Data Types btw!
+    var message:String;
+    var chatHist:String;
+    var uslist:Array<String>;
+    var motd:String;
+    var rules:String;
+    var axY:Int;
+}
 class ChatStateNew extends MusicBeatState
 {  
     public static var client:Session;
@@ -87,16 +95,40 @@ class ChatStateNew extends MusicBeatState
                 trace("JOIN ERROR: " + err);
                 return;
             }
-            chatText.text = room.state.chatHist;
+            chatText.text = "Connecting...";
             chatText.y = txtbox.y - 23;
-            chatText.y += room.state.axY;
             //client.send({nen: username});
             trace(room.state.chatHist);
             room.onMessage("string", function(message) {
+                /*
                 trace("cdz nuts");
                 FlxG.sound.play(Paths.sound("sentmessage"));
                 chatText.text = chatText.text + message + "\n";
                 chatText.y -= 20;
+                 */
+                trace(message);
+                if(message.chatHist != null) {
+                    chatText.text = message.chatHist;
+                    MOTD.text = message.motd;
+                    rules.text = message.rules;
+                    chatText.y += Std.int(message.axY); 
+                }
+
+                if(message.message != null){
+                    FlxG.sound.play(Paths.sound("sentmessage"));
+                    chatText.text = chatText.text + message.message + "\n";
+                    chatText.y -= 20;
+                    //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
+
+                }
+
+                if(message.uslist != null){
+                    userlist.text = "Users online:\n";
+                    var users:Array<String> = message.uslist;
+                    for(i in 0...users.length){
+                        userlist.text += users[i] + "\n";
+                    }
+                }
             });
             sys.thread.Thread.create(() -> {
                 while(true){

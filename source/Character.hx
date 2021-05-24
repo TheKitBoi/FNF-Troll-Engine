@@ -7,6 +7,12 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
+typedef Offset =
+{
+	name:String,
+	x:Int,
+	y:Int
+}
 class Character extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;

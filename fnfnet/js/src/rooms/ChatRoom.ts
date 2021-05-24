@@ -28,12 +28,14 @@ export class ChatRoom extends Room<Stuff> {
 
   public static stuff: string;
   static chatHistory: string;
+  theY = 0;
   onCreate (options: any) {
     this.setState(new Stuff());
 
     this.onMessage("string", (client, message) => {
       console.log(message.message);
       chatHistory += message.message;
+      client.send("string", { message: message.message});
     });
   }
   onJoin (client: Client, options: any) {
@@ -41,7 +43,7 @@ export class ChatRoom extends Room<Stuff> {
     test++;
     uuids.push(client.sessionId);
     hasAdmin.push(false);
-    client.send("string", { chatHist: chatHistory, axY: theY}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    client.send("string", { chatHist: chatHistory, axY: <string>theY, motd: "hey shitass", rules: "wanna see me be a\n interstellar giganigger?"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;
@@ -53,7 +55,7 @@ export class ChatRoom extends Room<Stuff> {
     hasAdmin.splice(uuids.indexOf(client.sessionId));
     //uuids.remove(client.sessionId);
     test--;
-    client.send("string", {message: "niggers", uslist: users});
+    client.send("string", {uslist: users});
     chatHistory += "Server: User has disconnected from the chat." + "\n";
     theY -= 20;
   }
