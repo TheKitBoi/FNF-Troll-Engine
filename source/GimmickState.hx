@@ -79,7 +79,7 @@ class GimmickState extends MusicBeatState
 						grpControls.members[curSelected].text = grpControls.members[curSelected].text + " " + upsidedown;
                         
                     case "Start":
-                        FlxG.switchState(new PlayState());
+                        LoadingState.loadAndSwitchState(new PlayState());
                 }
 			}
 			if (isSettingControl)
