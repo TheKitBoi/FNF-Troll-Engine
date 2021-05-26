@@ -29,26 +29,34 @@ class GimmickState extends MusicBeatState
 	//the variables for the gimmick control
 	public static var invisarrow:Bool = false;
 	public static var upsidedown:Bool = false;
+	public static var instantdeath:Bool = false;
+	public static var perfectcombo:Bool = false;
 
-	var checkboxArray:Array<FlxSprite> = [];
+	var cockJoke = new FlxTypedGroup<FlxText>();
+	var checkboxArray:FlxTypedGroup<FlxSprite>;
 	override function create()
 	{
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		menuBG.color = FlxColor.fromRGB(127,84,59);
+		menuBG.color = FlxColor.fromRGB(130, 255, 249);
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 		add(menuBG);
-			
+
+		initSettings(true);
+
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
 		controlsStrings = [
             "Invisible Arrows",
             "Upside Down",
+			"Instant Death",
+			"Perfect Combo",
             "Start"
         ];
+		add(checkboxArray);
 		for (i in 0...controlsStrings.length)
 		{
 			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i], true, false);
@@ -56,13 +64,14 @@ class GimmickState extends MusicBeatState
 			controlLabel.targetY = i;
 			grpControls.add(controlLabel);
 
+			/*
 			var icon:FlxSprite = new FlxSprite();
 			icon.frames = Paths.getSparrowAtlas("checkboxThingie");
-			icon.animation.addByPrefix("idle", "static", 24, true);
+			icon.animation.addByPrefix("idle", "Check Box Selected Static", 24, true);
 			icon.animation.play("idle");
 			// using a FlxGroup is too much fuss!
-			checkboxArray.push(icon);
-			add(icon);
+			checkboxArray.add(icon);
+			*/
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
 		 
@@ -82,12 +91,18 @@ class GimmickState extends MusicBeatState
                 switch(controlsStrings[curSelected]){
                     case "Invisible Arrows":
 						invisarrow = !invisarrow;
-						grpControls.members[curSelected].text = grpControls.members[curSelected].text + " " + invisarrow;
+						initSettings(false, 0, "Invisible Arrows: " + Std.string(invisarrow));
                         //PlayState.babyArrow.alpha = 0;
 					case "Upside Down":
 						upsidedown = !upsidedown;
 						grpControls.members[curSelected].text = grpControls.members[curSelected].text + " " + upsidedown;
-                        
+						initSettings(false, 1, "Upside Down: " + Std.string(upsidedown));
+                    case "Instant Death":
+						instantdeath = !instantdeath;
+						initSettings(false, 2, "Instant Death: " + Std.string(instantdeath));
+					case "Perfect Combo":
+						perfectcombo = !perfectcombo;
+						initSettings(false, 3, "Perfect Combo: " + Std.string(perfectcombo));
                     case "Start":
                         LoadingState.loadAndSwitchState(new PlayState());
                 }
@@ -154,4 +169,26 @@ class GimmickState extends MusicBeatState
 			}
 		}
 	}
+	function initSettings(noreset, ?thingit, ?text):Void
+		{
+			if(!noreset){
+				cockJoke.members[thingit].text = Std.string(text);
+			}
+			if(noreset){
+				add(cockJoke);
+				var curStuff:Array<String> = ["Invisible Arrows: ","Upside Down:","Instant Death: ","Perfect Combo: "];
+				var curVars:Array<String> = [Std.string(invisarrow), Std.string(upsidedown), Std.string(instantdeath), Std.string(perfectcombo)];
+				for (i in 0...curStuff.length)
+				{
+					var dababy = new FlxText(20, 15 + (i * 32), 0, curStuff[i] + curVars[i], 32);
+					dababy.scrollFactor.set();
+					dababy.setFormat(Paths.font('vcr.ttf'), 32);
+					dababy.updateHitbox();
+					dababy.x = FlxG.width - (dababy.width + 20);
+					dababy.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+					cockJoke.add(dababy);
+				// LESS GOO !!
+				}
+			}
+		}
 }

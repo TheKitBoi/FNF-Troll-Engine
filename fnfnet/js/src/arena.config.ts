@@ -8,7 +8,7 @@ import { Stuff } from "./rooms/schema/Stuff";
 
 export default Arena({
     
-    getId: () => "Your Colyseus App",
+    getId: () => "FNFNet Server",
 
     initializeGameServer: (gameServer) => {
         /**

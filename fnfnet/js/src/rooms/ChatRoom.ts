@@ -17,7 +17,7 @@ let rl = readline.createInterface({
 //
 /////////////////////////////////////////
 var amUsers: number;
-var theY: any;
+var theY: number = 0;
 var users:Array<String> = new Array();
 var uuids:Array<String> = new Array();
 var hasAdmin:Array<Boolean> = new Array();
@@ -28,13 +28,13 @@ export class ChatRoom extends Room<Stuff> {
 
   public static stuff: string;
   static chatHistory: string;
-  theY = 0;
   onCreate (options: any) {
     this.setState(new Stuff());
 
     this.onMessage("string", (client, message) => {
       console.log(message.message);
-      chatHistory += message.message;
+      chatHistory += message.message + "\n";
+      theY -= 20;
       client.send("string", { message: message.message});
     });
   }
@@ -43,7 +43,8 @@ export class ChatRoom extends Room<Stuff> {
     test++;
     uuids.push(client.sessionId);
     hasAdmin.push(false);
-    client.send("string", { chatHist: chatHistory, axY: <string>theY, motd: "hey shitass", rules: "if you read this it works"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    console.log(theY);
+    client.send("string", { chatHist: chatHistory, axY: theY as string, motd: "hey shitass", rules: "if you read this it works"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;

@@ -38,6 +38,8 @@ class ChatStateNew extends MusicBeatState
 
     public static var isUsN:Bool;
     public static var beentoChat:Bool;
+    var pissing:Bool;
+
     var coly:Client;
 
     public static var username:String;
@@ -107,6 +109,7 @@ class ChatStateNew extends MusicBeatState
                 chatText.y -= 20;
                  */
                 trace(message);
+                pissing = true;
                 if(message.chatHist != null) {
                     chatText.text = message.chatHist;
                     MOTD.text = message.motd;
@@ -133,7 +136,8 @@ class ChatStateNew extends MusicBeatState
             sys.thread.Thread.create(() -> {
                 while(true){
                     timer.run = function() {}
-                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
+                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN && pissing) {
+                        pissing = false;
                         room.send("string", {message: txtbox.text});
                         txtbox.text = "";
                         txtbox.caretIndex = 0;
