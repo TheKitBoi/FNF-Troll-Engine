@@ -1,0 +1,43 @@
+name: Build for Linux
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛒
+        uses: actions/checkout@v2.3.1
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.1.5
+
+      - name: Install Libraries
+        run: |
+          haxelib install lime 7.9.0
+          haxelib install openfl
+          haxelib install flixel
+          haxelib run lime setup flixel
+          haxelib run lime setup
+          haxelib install flixel-tools
+          haxelib install flixel-addons
+          haxelib install flixel-ui
+          haxelib install hscript
+          haxelib install newgrounds
+          haxelib git polymod https://github.com/larsiusprime/polymod.git
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
+          haxelib install extension-networking
+          haxelib install colyseus
+          haxelib list
+      - name: Build Linux release version
+        run: |
+          haxelib run lime build linux -release
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: TrollEngine
+          path: export/release/linux/bin
