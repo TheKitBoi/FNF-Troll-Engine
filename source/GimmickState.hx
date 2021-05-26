@@ -29,11 +29,13 @@ class GimmickState extends MusicBeatState
 	//the variables for the gimmick control
 	public static var invisarrow:Bool = false;
 	public static var upsidedown:Bool = false;
+
+	var checkboxArray:Array<FlxSprite> = [];
 	override function create()
 	{
 
 		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		menuBG.color = FlxColor.GREEN;
+		menuBG.color = FlxColor.fromRGB(127,84,59);
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
@@ -53,6 +55,14 @@ class GimmickState extends MusicBeatState
 			controlLabel.isMenuItem = true;
 			controlLabel.targetY = i;
 			grpControls.add(controlLabel);
+
+			var icon:FlxSprite = new FlxSprite();
+			icon.frames = Paths.getSparrowAtlas("checkboxThingie");
+			icon.animation.addByPrefix("idle", "static", 24, true);
+			icon.animation.play("idle");
+			// using a FlxGroup is too much fuss!
+			checkboxArray.push(icon);
+			add(icon);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
 		 

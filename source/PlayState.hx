@@ -866,6 +866,7 @@ class PlayState extends MusicBeatState
 					startCountdown();
 			}
 		}
+		if(GimmickState.upsidedown) FlxG.camera.angle = 180;
 		if(sys.FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/chartscript"))
 			{
 				var program = parser.parseString(sys.io.File.getContent("assets/data/" + SONG.song.toLowerCase() + "/chartscript"));
@@ -1711,6 +1712,7 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
+				if (GimmickState.invisarrow) FlxTween.tween(daNote, {alpha: 0}, 0.2, {ease: FlxEase.quadInOut});
 				if (daNote.y > FlxG.height)
 				{
 					daNote.active = false;
