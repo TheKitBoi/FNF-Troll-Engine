@@ -1678,7 +1678,7 @@ class PlayState extends MusicBeatState
 		if (health <= 0 && pracMode==false)
 		{
 			if(FlxG.save.data.instres){
-
+				LoadingState.loadAndSwitchState(new PlayState());
 			}else{
 				boyfriend.stunned = true;
 
