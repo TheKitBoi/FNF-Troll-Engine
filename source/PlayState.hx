@@ -1677,23 +1677,27 @@ class PlayState extends MusicBeatState
 		if (GimmickState.instantdeath && missedNotes > 0) health = 0;
 		if (health <= 0 && pracMode==false)
 		{
-			boyfriend.stunned = true;
+			if(FlxG.save.data.instres){
 
-			persistentUpdate = false;
-			persistentDraw = false;
-			paused = true;
+			}else{
+				boyfriend.stunned = true;
 
-			vocals.stop();
-			FlxG.sound.music.stop();
+				persistentUpdate = false;
+				persistentDraw = false;
+				paused = true;
 
-			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				vocals.stop();
+				FlxG.sound.music.stop();
 
-			// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-			
-			#if desktop
-			// Game Over doesn't get his own variable because it's only used here
-			DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			#end
+				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+
+				// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				
+				#if desktop
+				// Game Over doesn't get his own variable because it's only used here
+				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+				#end
+			}
 		}
 
 		if (unspawnNotes[0] != null)
