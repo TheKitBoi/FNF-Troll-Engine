@@ -1,5 +1,6 @@
 import Arena from "@colyseus/arena";
 import { monitor } from "@colyseus/monitor";
+import { BattleRoom } from "./rooms/BattleRoom";
 /**
  * Import your Room files
  */
@@ -14,7 +15,8 @@ export default Arena({
         /**
          * Define your room handlers:
          */
-        gameServer.define('my_room', ChatRoom);
+        gameServer.define('chat', ChatRoom);
+        gameServer.define('battle', BattleRoom);
 
     },
 

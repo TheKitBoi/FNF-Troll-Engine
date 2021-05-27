@@ -44,7 +44,7 @@ export class ChatRoom extends Room<Stuff> {
     uuids.push(client.sessionId);
     hasAdmin.push(false);
     console.log(theY);
-    client.send("string", { chatHist: chatHistory, axY: theY as string, motd: "hey shitass", rules: "if you read this it works"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    client.send("string", { chatHist: chatHistory, axY: theY as unknown as string, motd: "hey shitass", rules: "if you read this it works"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;

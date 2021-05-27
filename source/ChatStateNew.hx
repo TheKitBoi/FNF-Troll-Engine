@@ -1,5 +1,6 @@
 package;
 
+import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
@@ -54,6 +55,13 @@ class ChatStateNew extends MusicBeatState
 
     override function create()
 	{
+        var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+        menuBG.color = 0xFFea71fd;
+        menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+        menuBG.updateHitbox();
+        menuBG.screenCenter();
+        menuBG.antialiasing = true;
+        
         var coly = new Client('ws://localhost:2567');
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
@@ -71,9 +79,7 @@ class ChatStateNew extends MusicBeatState
 
         if(FlxG.save.data.username != null) username = FlxG.save.data.username;
         else username = "guest" + FlxG.random.int(0, 9999); 
-
-        var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
-
+        
         UI_box = new FlxUITabMenu(null, [
             {name: "tab1", label: 'MOTD'},
             {name: "tab2", label: 'Rules'},
@@ -91,8 +97,8 @@ class ChatStateNew extends MusicBeatState
                 remove(UI_box);
                 this.okButton.visible = false;
             });
-        var timer = new haxe.Timer(5);
-        coly.joinOrCreate("my_room", [], Stuff, function(err, room) {
+        var timer = new haxe.Timer(50);
+        coly.joinOrCreate("chat", [], Stuff, function(err, room) {
             if (err != null) {
                 trace("JOIN ERROR: " + err);
                 return;
@@ -213,13 +219,6 @@ class ChatStateNew extends MusicBeatState
 
         okButton.screenCenter(XY);
         okButton.y += 150;
-
-        var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-        menuBG.color = 0xFFea71fd;
-        menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-        menuBG.updateHitbox();
-        menuBG.screenCenter();
-        menuBG.antialiasing = true;
         
 		var tab_group_motd = new FlxUI(null, UI_box);
 		tab_group_motd.name = "tab1";
