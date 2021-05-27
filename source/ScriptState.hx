@@ -28,7 +28,7 @@ class ScriptState extends MusicBeatState
 
 	override function create()
 	{
-
+		#if desktop
 		menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		menuBG.color = FlxColor.GREEN;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -51,10 +51,12 @@ class ScriptState extends MusicBeatState
 		 
 
 		super.create();
+		#end
 	}
 
 	override function update(elapsed:Float)
 	{
+		#if desktop
 		super.update(elapsed);
 
 			switch(curSelected){}
@@ -76,6 +78,7 @@ class ScriptState extends MusicBeatState
 				if (controls.DOWN_P)
 					changeSelection(1);
 			}
+			#end
 		 
 	}
 

@@ -17,7 +17,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+#if desktop
 import Config.data;
+#end
 import io.colyseus.Client;
 import io.colyseus.Room;
 
@@ -139,6 +141,7 @@ class ChatStateNew extends MusicBeatState
                     }
                 }
             });
+            #if desktop
             sys.thread.Thread.create(() -> {
                 while(true){
                     timer.run = function() {}
@@ -150,6 +153,7 @@ class ChatStateNew extends MusicBeatState
                     }
                 }
             });
+            #end
         });
           /*
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 

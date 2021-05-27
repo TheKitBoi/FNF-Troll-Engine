@@ -15,7 +15,9 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+#if desktop
 import sys.thread.Thread;
+#end
 import Controls.Control;
 
 class ScriptSubState extends MusicBeatSubstate
@@ -45,7 +47,9 @@ class ScriptSubState extends MusicBeatSubstate
 
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
+		#if desktop
 		controlsStrings = sys.FileSystem.readDirectory("assets/scripts");
+		#end
 		for (i in 0...controlsStrings.length)
 		{
 			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i], true, false);
@@ -72,6 +76,7 @@ class ScriptSubState extends MusicBeatSubstate
 
 			if (controls.ACCEPT)
 			{
+				#if desktop
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				var program = parser.parseString(sys.io.File.getContent("assets/scripts/" + controlsStrings[curSelected]));
 				interp.variables.set("PlayState",PlayState);
@@ -81,6 +86,7 @@ class ScriptSubState extends MusicBeatSubstate
 				sys.thread.Thread.create(() -> {
 					interp.execute(program);
 				});
+				#end
 			}
 			if (isSettingControl)
 				waitingInput();
