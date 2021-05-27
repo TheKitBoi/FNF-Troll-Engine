@@ -313,7 +313,19 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				flipX = true;
-
+/*
+				var tex = Paths.getSparrowAtlas('Pico_FNF_assetss');
+				frames = tex;
+				animation.addByPrefix('idle', 'Pico Idle Dance', 24, false);
+				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
+				animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
+				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
+				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
+				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+				animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
+				*/
 			case 'bf-christmas':
 				var tex = Paths.getSparrowAtlas('christmas/bfChristmas');
 				frames = tex;

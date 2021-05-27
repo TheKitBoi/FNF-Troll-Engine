@@ -16,7 +16,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+#if desktop
 import Config.data;
+#end
 import io.colyseus.Client;
 import io.colyseus.Room;
 
@@ -72,7 +74,6 @@ class ChatStateNew extends MusicBeatState
         if(FlxG.save.data.username != null) username = FlxG.save.data.username;
         else username = "guest" + FlxG.random.int(0, 9999); 
 
-        var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
 
         UI_box = new FlxUITabMenu(null, [
             {name: "tab1", label: 'MOTD'},
@@ -133,6 +134,7 @@ class ChatStateNew extends MusicBeatState
                     }
                 }
             });
+            #if desktop
             sys.thread.Thread.create(() -> {
                 while(true){
                     timer.run = function() {}
@@ -144,6 +146,7 @@ class ChatStateNew extends MusicBeatState
                     }
                 }
             });
+            #end
         });
           /*
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 

@@ -78,7 +78,9 @@ class PlayState extends MusicBeatState
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
+	#if desktop
 	private var fs:sys.io.File;
+	#end
 	private var gfSpeed:Int = 1;
 	private var health:Float = 1;
 	private var combo:Int = 0;
@@ -867,6 +869,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		if(GimmickState.upsidedown) FlxG.camera.angle = 180;
+		#if desktop
 		if(sys.FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/chartscript"))
 			{
 				var program = parser.parseString(sys.io.File.getContent("assets/data/" + SONG.song.toLowerCase() + "/chartscript"));
@@ -886,6 +889,7 @@ class PlayState extends MusicBeatState
 					catch(e){ trace(e.message); }
 				});
 			}
+		#end
 		super.create();
 	}
 

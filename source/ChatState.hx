@@ -16,8 +16,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+#if desktop
 import Config.data;
-
+#end
 class ChatState extends MusicBeatState
 {  
     public static var client:Session;
@@ -42,7 +43,7 @@ class ChatState extends MusicBeatState
 
     override function create()
 	{
-
+        #if desktop
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 30;
@@ -188,10 +189,12 @@ class ChatState extends MusicBeatState
         UI_box.addGroup(tab_group_rules);
 
 		super.create();
+        #end
 	}
 
 	override function update(elapsed:Float)
 	{
+        #if desktop
         super.update(elapsed);
         if(FlxG.keys.justPressed.ESCAPE) {
             Network.destroySession(Network.sessions[0]);
@@ -203,6 +206,7 @@ class ChatState extends MusicBeatState
             txtbox.text = "";
             txtbox.caretIndex = 0;
         }
+        #end
 	}
     public function changeUsername(){
         usnbox.visible = !usnbox.visible;

@@ -191,7 +191,7 @@ class MainMenuState extends MusicBeatState
 
 										trace("Freeplay Menu Selected");
 									case 'chat':
-										#if !js
+										#if desktop
 										FlxG.switchState(new ChatState());
 										#end
 										
