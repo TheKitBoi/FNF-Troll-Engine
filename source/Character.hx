@@ -1,5 +1,6 @@
 package;
 
+import lime.utils.Assets;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.animation.FlxBaseAnimation;
@@ -311,7 +312,6 @@ class Character extends FlxSprite
 				addOffset('deathConfirm', 37, 69);
 				addOffset('scared', -4);
 				*/
-				offsetcrap();
 				playAnim('idle');
 
 				flipX = true;
@@ -519,7 +519,7 @@ class Character extends FlxSprite
 				
 				playAnim('idle');
 		}
-
+		offsetcrap();
 		dance();
 
 		if (isPlayer)
@@ -677,7 +677,7 @@ class Character extends FlxSprite
 		animOffsets[name] = [x, y];
 	}
 	public function offsetcrap(){ //tight ass little man
-		var offsetList = sys.io.File.getContent(Paths.txt("bfOffsets"));
+		var offsetList = Assets.getText(Paths.txt(curCharacter + "Offsets"));
 		var pissArray:Array<String> = offsetList.split('\n');
 		for (i in 0...pissArray.length){
 			animOffsets[pissArray[i].split(" ")[0]] = [pissArray[i].split(" ")[1], pissArray[i].split(" ")[2]];
