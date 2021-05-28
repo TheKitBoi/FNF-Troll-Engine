@@ -676,9 +676,10 @@ class Character extends FlxSprite
 	}
 	public function offsetcrap(){ //tight ass little man
 		var offsetList = sys.io.File.getContent(Paths.txt("bfOffsets"));
+		var pissArray:Array<String> = offsetList.split('\n');
 		trace(offsetList);
 		for (i in 0...offsetList.length){
-			var r = ~/^(\w+\s){i}/gm;
+			pissArray[i].split(" ")[i]
 		}
 	}
 }
