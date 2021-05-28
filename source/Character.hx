@@ -295,6 +295,7 @@ class Character extends FlxSprite
 				animation.addByPrefix('dodge', "boyfriend dodge", 24, false);
 				animation.addByPrefix('attack', 'boyfriend attack', 24, false);
 
+				/*
 				addOffset('idle', -5);
 				addOffset("singUP", -29, 27);
 				addOffset("singRIGHT", -38, -7);
@@ -309,7 +310,8 @@ class Character extends FlxSprite
 				addOffset('deathLoop', 37, 5);
 				addOffset('deathConfirm', 37, 69);
 				addOffset('scared', -4);
-
+				*/
+				offsetcrap();
 				playAnim('idle');
 
 				flipX = true;
@@ -677,9 +679,8 @@ class Character extends FlxSprite
 	public function offsetcrap(){ //tight ass little man
 		var offsetList = sys.io.File.getContent(Paths.txt("bfOffsets"));
 		var pissArray:Array<String> = offsetList.split('\n');
-		trace(offsetList);
-		for (i in 0...offsetList.length){
-			pissArray[i].split(" ")[i]
+		for (i in 0...pissArray.length){
+			animOffsets[pissArray[i].split(" ")[0]] = [pissArray[i].split(" ")[1], pissArray[i].split(" ")[2]];
 		}
 	}
 }
