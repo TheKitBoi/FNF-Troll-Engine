@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxColor;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -20,10 +21,13 @@ class CharacterSelection extends MusicBeatState
 	override function create()
 	{
 		//Assets.loadLibrary("shared");
+		var blackBarThingie:FlxSprite = new FlxSprite(0, 500).makeGraphic(FlxG.width, 400, FlxColor.BLACK);
+		
 		curChar = new FlxSprite(30, 30);
 		curChar.frames = Paths.getSparrowAtlas("BOYFRIEND");
 		curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
-
+		curChar.screenCenter(X);
+		
 		var carlist = Assets.getText(Paths.txt("CustomCharacters"));
 		var pissArray:Array<String> = carlist.split('\n');
 		for (i in 0...pissArray.length){
@@ -39,7 +43,7 @@ class CharacterSelection extends MusicBeatState
 		curChar.animation.play("idle");
 		add(menuBG);
 		add(curChar);
-		
+		add(blackBarThingie);
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
 
@@ -47,8 +51,9 @@ class CharacterSelection extends MusicBeatState
 		{
 			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i], true, false);
 			//controlLabel.isMenuItem = true;
-			controlLabel.x += (600);
+			controlLabel.screenCenter(XY);
 			controlLabel.targetY = i;
+			controlLabel.y += 250;
 			grpControls.add(controlLabel);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
