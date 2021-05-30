@@ -49,6 +49,7 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
+	public static var gimmick:Bool;
 	public static var missedNotes:Int;
 	public static var downscroll:Bool = false;
 	public static var curStage:String = '';
@@ -868,7 +869,7 @@ class PlayState extends MusicBeatState
 					startCountdown();
 			}
 		}
-		if(GimmickState.upsidedown) FlxG.camera.angle = 180;
+		if(GimmickState.upsidedown && gimmick) FlxG.camera.angle = 180;
 		#if desktop
 		if(sys.FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/chartscript"))
 			{
@@ -1678,7 +1679,7 @@ class PlayState extends MusicBeatState
 			health += 1;
 			trace("User is cheating!");
 		}
-		if (GimmickState.instantdeath && missedNotes > 0) health = 0;
+		if (GimmickState.instantdeath && missedNotes > 0 && gimmick) health = 0;
 		if (health <= 0 && pracMode==false)
 		{
 			if(FlxG.save.data.instres){
@@ -1720,7 +1721,7 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (GimmickState.invisarrow) FlxTween.tween(daNote, {alpha: 0}, 0.2, {ease: FlxEase.quadInOut});
+				if (GimmickState.invisarrow && gimmick) FlxTween.tween(daNote, {alpha: 0}, 0.2, {ease: FlxEase.quadInOut});
 				if (daNote.y > FlxG.height)
 				{
 					daNote.active = false;
@@ -1777,7 +1778,7 @@ class PlayState extends MusicBeatState
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
-						if(GimmickState.diffvocals)vocals.fadeOut(0.2);
+						if(GimmickState.diffvocals && gimmick)vocals.fadeOut(0.2);
 					daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -1930,7 +1931,7 @@ class PlayState extends MusicBeatState
 			daRating = 'good';
 			score = 200;
 		}
-		if (daRating != "sick" && GimmickState.perfectcombo) 
+		if (daRating != "sick" && GimmickState.perfectcombo && gimmick) 
 			{
 				boyfriend.stunned = true;
 
@@ -2372,7 +2373,7 @@ class PlayState extends MusicBeatState
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
-			if(GimmickState.diffvocals)vocals.fadeOut(0.2);
+			if(GimmickState.diffvocals && gimmick)vocals.fadeOut(0.2);
 
 			if (!note.isSustainNote)
 			{
