@@ -31,6 +31,7 @@ class GimmickState extends MusicBeatState
 	public static var upsidedown:Bool = false;
 	public static var instantdeath:Bool = false;
 	public static var perfectcombo:Bool = false;
+	public static var diffvocals:Bool = false;
 
 	var cockJoke = new FlxTypedGroup<FlxText>();
 	var checkboxArray:FlxTypedGroup<FlxSprite>;
@@ -54,6 +55,7 @@ class GimmickState extends MusicBeatState
             "Upside Down",
 			"Instant Death",
 			"Perfect Combo",
+			"Difficulty Vocals",
             "Start"
         ];
 		add(checkboxArray);
@@ -103,6 +105,9 @@ class GimmickState extends MusicBeatState
 					case "Perfect Combo":
 						perfectcombo = !perfectcombo;
 						initSettings(false, 3, "Perfect Combo: " + Std.string(perfectcombo));
+					case "Difficulty Vocals":
+						diffvocals = !diffvocals;
+						initSettings(false, 4, "Difficulty Vocals: " + Std.string(diffvocals));
                     case "Start":
                         LoadingState.loadAndSwitchState(new PlayState());
                 }
@@ -176,8 +181,8 @@ class GimmickState extends MusicBeatState
 			}
 			if(noreset){
 				add(cockJoke);
-				var curStuff:Array<String> = ["Invisible Arrows: ","Upside Down:","Instant Death: ","Perfect Combo: "];
-				var curVars:Array<String> = [Std.string(invisarrow), Std.string(upsidedown), Std.string(instantdeath), Std.string(perfectcombo)];
+				var curStuff:Array<String> = ["Invisible Arrows: ","Upside Down:","Instant Death: ","Perfect Combo: ", "Difficulty Vocals: "];
+				var curVars:Array<String> = [Std.string(invisarrow), Std.string(upsidedown), Std.string(instantdeath), Std.string(perfectcombo), Std.string(diffvocals)];
 				for (i in 0...curStuff.length)
 				{
 					var dababy = new FlxText(20, 15 + (i * 32), 0, curStuff[i] + curVars[i], 32);

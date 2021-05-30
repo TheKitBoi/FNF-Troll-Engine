@@ -274,7 +274,9 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('BOYFRIEND');
+				var tex:Any;
+				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('BOYFRIEND');
+				else tex = Paths.getSparrowAtlas(FlxG.save.data.curcharacter);
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
