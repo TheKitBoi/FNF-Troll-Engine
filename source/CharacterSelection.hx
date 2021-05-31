@@ -79,9 +79,11 @@ class CharacterSelection extends MusicBeatState
 				changeSelection(1);
 		}
 		if(controls.ACCEPT){
+			/*
 			var tmp = grpControls.members[curSelected].x;
-			grpControls.members[curSelected] = new Alphabet(0, grpControls.members[curSelected].y, "niggerfaggots", true, false);
+			grpControls.members[curSelected] = new Alphabet(0, grpControls.members[curSelected].y, "ping!", true, false);
 			grpControls.members[curSelected].x = tmp;
+			*/
 			var stopspamming:Bool = false;
 			if (stopspamming == false)
 			{
@@ -141,7 +143,7 @@ class CharacterSelection extends MusicBeatState
 			curChar.frames = Paths.getSparrowAtlas(daSelected);
 			curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
 			curChar.animation.play("idle");
-			grpControls.forEach()
+			//grpControls.forEach()
 		}
 	function waitingInput():Void
 		{
