@@ -14,8 +14,9 @@ using StringTools;
 
 class CharacterSelection extends MusicBeatState
 {
-	var controlsStrings:Array<String> = ["BOYFRIEND"];
+	var controlsStrings:Array<String> = ["BOYFRIEND", "ritz", ];
 	var curChar:FlxSprite;
+	
 	var grpControls:FlxTypedGroup<Alphabet>;
 	var curSelected:Int = 0;
 	override function create()
@@ -30,8 +31,9 @@ class CharacterSelection extends MusicBeatState
 		
 		var carlist = Assets.getText(Paths.txt("CustomCharacters"));
 		var pissArray:Array<String> = carlist.split('\n');
+
 		for (i in 0...pissArray.length){
-			controlsStrings.push(pissArray[i]); 
+			//controlsStrings.push(pissArray[i]); 
 		}
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         menuBG.color = 0xFFea71fd;
@@ -49,11 +51,12 @@ class CharacterSelection extends MusicBeatState
 
 		for (i in 0...controlsStrings.length)
 		{
-			var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, controlsStrings[i], true, false);
-			//controlLabel.isMenuItem = true;
+			var controlLabel:Alphabet = new Alphabet(0, 0, controlsStrings[i], true, false);
 			controlLabel.screenCenter(XY);
+			controlLabel.y += 200;
+			//controlLabel.isMenuItem = true;
+			controlLabel.y += ((controlLabel.height + 20) * i);
 			controlLabel.targetY = i;
-			controlLabel.y += 250;
 			grpControls.add(controlLabel);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
@@ -76,11 +79,13 @@ class CharacterSelection extends MusicBeatState
 				changeSelection(1);
 		}
 		if(controls.ACCEPT){
+			var tmp = grpControls.members[curSelected].x;
+			grpControls.members[curSelected] = new Alphabet(0, grpControls.members[curSelected].y, "niggerfaggots", true, false);
+			grpControls.members[curSelected].x = tmp;
 			var stopspamming:Bool = false;
 			if (stopspamming == false)
 			{
 				var daSelected:String = controlsStrings[curSelected];
-				curChar.frames = Paths.getSparrowAtlas(daSelected);
 				curChar.animation.addByPrefix("hey", 'BF HEY!!', 24, false);
 				curChar.animation.play("hey");
 				FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -99,7 +104,7 @@ class CharacterSelection extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected += change;
-	
+			
 			if (curSelected < 0)
 				curSelected = grpControls.length - 1;
 			if (curSelected >= grpControls.length)
@@ -122,20 +127,21 @@ class CharacterSelection extends MusicBeatState
 					item.alpha = 1;
 					// item.setGraphicSize(Std.int(item.width));
 				}
+			} 
+			/*
+			if(curSelected > 2){
+				var tmp = grpControls.members[curSelected].x;
+				grpControls.members[curSelected] = new Alphabet(0, grpControls.members[curSelected].y, controlsStrings[curSelected], true, false);
+				grpControls.members[curSelected].x = tmp;
 			}
-			#if target.threaded
-			sys.thread.Thread.create(() -> {
-				var daSelected:String = controlsStrings[curSelected];
-				curChar.frames = Paths.getSparrowAtlas(daSelected);
-				curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
-				curChar.animation.play("idle");
-			});
-			#else 
+			*/
+			trace(curSelected);
+			trace(controlsStrings);
 			var daSelected:String = controlsStrings[curSelected];
 			curChar.frames = Paths.getSparrowAtlas(daSelected);
 			curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
 			curChar.animation.play("idle");
-			#end
+			grpControls.forEach()
 		}
 	function waitingInput():Void
 		{
