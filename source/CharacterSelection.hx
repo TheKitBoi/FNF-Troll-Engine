@@ -1,5 +1,7 @@
 package;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 #if desktop
 import Discord.DiscordClient;
@@ -143,7 +145,11 @@ class CharacterSelection extends MusicBeatState
 			curChar.frames = Paths.getSparrowAtlas(daSelected);
 			curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
 			curChar.animation.play("idle");
-			//grpControls.forEach()
+
+			grpControls.forEach(function(stuff:Alphabet){
+				if (change == -1) FlxTween.tween(stuff, {y: stuff.y + 50}, 0.2, {ease: FlxEase.quadInOut});
+				else FlxTween.tween(stuff, {y: stuff.y - 50}, 0.2, {ease: FlxEase.quadInOut});
+			});
 		}
 	function waitingInput():Void
 		{
