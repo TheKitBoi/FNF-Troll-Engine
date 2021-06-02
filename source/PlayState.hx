@@ -764,10 +764,18 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(new HealthIcon(SONG.player1, true).color, 0xFF66FF33); //0xFFFF0000
+
+		iconP1 = new HealthIcon(SONG.player1, true);
+		iconP1.y = healthBar.y - (iconP1.height / 2);
+
+		iconP2 = new HealthIcon(SONG.player2, false);
+		iconP2.y = healthBar.y - (iconP2.height / 2);
+
+		healthBar.createFilledBar(dominantColor(iconP2), dominantColor(iconP1)); //0xFFFF0000, 0xFF66FF33
 		// healthBar
 		add(healthBar);
-
+		add(iconP1);
+		add(iconP2);
 		var songtext = new FlxText(healthBarBG.x + (healthBarBG.width / 2) - 20, healthBarBG.y, 0, SONG.song, 16);
 		songtext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
 		songtext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
@@ -786,14 +794,6 @@ class PlayState extends MusicBeatState
 		missTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 		missTxt.scrollFactor.set();
 		add(missTxt);
-
-		iconP1 = new HealthIcon(SONG.player1, true);
-		iconP1.y = healthBar.y - (iconP1.height / 2);
-		add(iconP1);
-
-		iconP2 = new HealthIcon(SONG.player2, false);
-		iconP2.y = healthBar.y - (iconP2.height / 2);
-		add(iconP2);
 
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -2459,7 +2459,31 @@ class PlayState extends MusicBeatState
 		trainFinishing = false;
 		startedMoving = false;
 	}
-
+	function dominantColor(sprite:FlxSprite):Int{
+		var countByColor:Map<Int, Int> = [];
+		for(col in 0...sprite.frameWidth){
+			for(row in 0...sprite.frameHeight){
+			  var colorOfThisPixel:Int = sprite.pixels.getPixel32(col, row);
+			  if(colorOfThisPixel != 0){
+				  if(countByColor.exists(colorOfThisPixel)){
+				    countByColor[colorOfThisPixel] =  countByColor[colorOfThisPixel] + 1;
+				  }else if(countByColor[colorOfThisPixel] != 13520687 - (2*13520687)){
+					 countByColor[colorOfThisPixel] = 1;
+				  }
+			  }
+			}
+		 }
+		var maxCount = 0;
+		var maxKey:Int = 0;//after the loop this will store the max color
+		countByColor[FlxColor.BLACK] = 0;
+			for(key in countByColor.keys()){
+			if(countByColor[key] >= maxCount){
+				maxCount = countByColor[key];
+				maxKey = key;
+			}
+		}
+		return maxKey;
+	}
 	function lightningStrikeShit():Void
 	{
 		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));

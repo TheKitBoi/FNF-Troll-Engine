@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 
 class HealthIcon extends FlxSprite
@@ -8,13 +9,25 @@ class HealthIcon extends FlxSprite
 	 * Used for FreeplayState! If you use it elsewhere, prob gonna annoying
 	 */
 	public var sprTracker:FlxSprite;
-
+	var modifier:String;
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
-		loadGraphic(Paths.image('iconGrid'), true, 150, 150);
-
+		switch(PlayState.curStage){
+			case 'school' | 'school-evil':
+				modifier = "-pixel";
+			case 'mall' | 'mallEvil':
+				modifier = "-christmas";
+			case 'limo':
+				modifier = "-car";
+			default:
+				modifier = "";
+		}
+		if(isPlayer) loadGraphic(Paths.image("icon-"+FlxG.save.data.curcharacter+modifier, "characters"), true, 150, 150);
+		else loadGraphic(Paths.image("icon-"+char, "characters"), true, 150, 150);
 		antialiasing = true;
+		animation.add(char, [0, 1], 0, false, isPlayer);
+		/*
 		animation.add('bf', [0, 1], 0, false, isPlayer);
 		animation.add('bf-car', [0, 1], 0, false, isPlayer);
 		animation.add('bf-christmas', [0, 1], 0, false, isPlayer);
@@ -35,6 +48,7 @@ class HealthIcon extends FlxSprite
 		animation.add('parents-christmas', [17], 0, false, isPlayer);
 		animation.add('monster', [19, 20], 0, false, isPlayer);
 		animation.add('monster-christmas', [19, 20], 0, false, isPlayer);
+		*/
 		animation.play(char);
 		scrollFactor.set();
 	}

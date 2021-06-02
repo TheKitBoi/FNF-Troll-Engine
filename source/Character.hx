@@ -275,7 +275,7 @@ class Character extends FlxSprite
 
 			case 'bf':
 				var tex:Any;
-				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('BOYFRIEND');
+				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('bf');
 				else tex = Paths.getSparrowAtlas(FlxG.save.data.curcharacter);
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -331,7 +331,8 @@ class Character extends FlxSprite
 				animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
 				*/
 			case 'bf-christmas':
-				var tex = Paths.getSparrowAtlas('christmas/bfChristmas');
+				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('christmas/bf-christmas');
+				else tex = Paths.getSparrowAtlas('christmas/'+FlxG.save.data.curcharacter+'-christmas');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -359,7 +360,8 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-car':
-				var tex = Paths.getSparrowAtlas('bfCar');
+				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('bf-car');
+				else tex = Paths.getSparrowAtlas('christmas/'+FlxG.save.data.curcharacter+'-car');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -384,7 +386,8 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-pixel':
-				frames = Paths.getSparrowAtlas('weeb/bfPixel');
+				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('weeb/bf-pixel');
+				else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'-pixel');
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
 				animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
 				animation.addByPrefix('singLEFT', 'BF LEFT NOTE', 24, false);
@@ -417,7 +420,9 @@ class Character extends FlxSprite
 
 				flipX = true;
 			case 'bf-pixel-dead':
-				frames = Paths.getSparrowAtlas('weeb/bfPixelsDEAD');
+				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('weeb/bf-pixelDEAD');
+				else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'-pixelDEAD');
+				frames = tex;
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
 				animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
 				animation.addByPrefix('deathLoop', "Retry Loop", 24, true);

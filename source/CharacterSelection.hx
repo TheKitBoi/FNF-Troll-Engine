@@ -24,13 +24,15 @@ class CharacterSelection extends MusicBeatState
 	override function create()
 	{
 		//Assets.loadLibrary("shared");
+		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 445, FlxColor.CYAN);
+		var mnrbar:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
 		var blackBarThingie:FlxSprite = new FlxSprite(0, 500).makeGraphic(FlxG.width, 400, FlxColor.BLACK);
 		
 		curChar = new FlxSprite(30, 30);
 		curChar.frames = Paths.getSparrowAtlas("BOYFRIEND");
 		curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
 		curChar.screenCenter(X);
-		
+
 		var carlist = Assets.getText(Paths.txt("CustomCharacters"));
 		var pissArray:Array<String> = carlist.split('\n');
 
@@ -46,11 +48,12 @@ class CharacterSelection extends MusicBeatState
 
 		curChar.animation.play("idle");
 		add(menuBG);
-		add(curChar);
 		add(blackBarThingie);
+		add(mnrbar);
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
-
+		add(yellowBG);
+		add(curChar);
 		for (i in 0...controlsStrings.length)
 		{
 			var controlLabel:Alphabet = new Alphabet(0, 0, controlsStrings[i], true, false);
