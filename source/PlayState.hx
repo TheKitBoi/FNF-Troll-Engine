@@ -611,7 +611,7 @@ class PlayState extends MusicBeatState
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		dad = new Character(100, 100, SONG.player2);
+		dad = new Character(100, 100, SONG.player2, false);
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -883,6 +883,7 @@ class PlayState extends MusicBeatState
 				interp.variables.set("FlxEase",FlxEase);
 				interp.variables.set("FlxText",FlxText);
 				interp.variables.set("Alphabet",Alphabet);
+				interp.variables.set("MusicBeatState",MusicBeatState);
 				interp.variables.set("curBeat",curBeat);
 				//interp.variables.set("FlxColor",FlxColor);
 				sys.thread.Thread.create(() -> {

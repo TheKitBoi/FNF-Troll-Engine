@@ -308,9 +308,11 @@ class FreeplayState extends MusicBeatState
 
 		#if PRELOAD_ALL
 		#if target.threaded
-		sys.thread.Thread.create(() -> {
-			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-		});
+		if(!FlxG.sound.muted){
+			sys.thread.Thread.create(() -> {
+				FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
+			});
+		}
 		#else
 		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
 		#end
