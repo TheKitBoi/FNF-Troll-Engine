@@ -16,10 +16,12 @@ using StringTools;
 
 class CharacterSelection extends MusicBeatState
 {
-	var controlsStrings:Array<String> = ["BOYFRIEND", "ritz", ];
+	var controlsStrings:Array<String> = [];
 	var curChar:FlxSprite;
 	
 	var grpControls:FlxTypedGroup<Alphabet>;
+	var funkers:FlxTypedGroup<FlxSprite>;
+
 	var curSelected:Int = 0;
 	override function create()
 	{
@@ -27,18 +29,9 @@ class CharacterSelection extends MusicBeatState
 		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 445, FlxColor.CYAN);
 		var mnrbar:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
 		var blackBarThingie:FlxSprite = new FlxSprite(0, 500).makeGraphic(FlxG.width, 400, FlxColor.BLACK);
-		
-		curChar = new FlxSprite(30, 30);
-		curChar.frames = Paths.getSparrowAtlas("BOYFRIEND");
-		curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
-		curChar.screenCenter(X);
 
-		var carlist = Assets.getText(Paths.txt("CustomCharacters"));
-		var pissArray:Array<String> = carlist.split('\n');
+		controlsStrings = CoolUtil.coolTextFile(Paths.txt("CustomCharacters", "characters"));
 
-		for (i in 0...pissArray.length){
-			//controlsStrings.push(pissArray[i]); 
-		}
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         menuBG.color = 0xFFea71fd;
         menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -46,25 +39,35 @@ class CharacterSelection extends MusicBeatState
         menuBG.screenCenter();
         menuBG.antialiasing = true;
 
-		curChar.animation.play("idle");
 		add(menuBG);
 		add(blackBarThingie);
 		add(mnrbar);
 		grpControls = new FlxTypedGroup<Alphabet>();
+		funkers = new FlxTypedGroup<FlxSprite>();
 		add(grpControls);
-		add(yellowBG);
-		add(curChar);
+		//add(yellowBG);
 		for (i in 0...controlsStrings.length)
 		{
 			var controlLabel:Alphabet = new Alphabet(0, 0, controlsStrings[i], true, false);
 			controlLabel.screenCenter(XY);
-			controlLabel.y += 200;
+			controlLabel.y += 300;
 			//controlLabel.isMenuItem = true;
 			controlLabel.y += ((controlLabel.height + 20) * i);
 			controlLabel.targetY = i;
+
+			var curChar = new FlxSprite(30, 60);
+			curChar.frames = Paths.getSparrowAtlas(controlsStrings[i]);
+			curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
+			curChar.animation.addByPrefix("hey", 'BF HEY!!', 24, false);
+			curChar.screenCenter(X);
+			curChar.x += (500*i);
+			curChar.animation.play("idle");
+
 			grpControls.add(controlLabel);
+			funkers.add(curChar);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 		}
+		add(funkers);
 		changeSelection();
 		super.create();
 	}
@@ -93,8 +96,7 @@ class CharacterSelection extends MusicBeatState
 			if (stopspamming == false)
 			{
 				var daSelected:String = controlsStrings[curSelected];
-				curChar.animation.addByPrefix("hey", 'BF HEY!!', 24, false);
-				curChar.animation.play("hey");
+				funkers.members[curSelected].animation.play("hey");
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 				FlxG.save.data.curcharacter = daSelected;
 				FlxG.save.flush();
@@ -120,7 +122,22 @@ class CharacterSelection extends MusicBeatState
 			// selector.y = (70 * curSelected) + 30;
 	
 			var bullShit:Int = 0;
+			var asscrap:Int = 0;
+			var thing:Int = 0;
+			for (item in funkers.members){
+				thing = asscrap - curSelected;
+				asscrap++;
 	
+				item.alpha = 0.6;
+				// item.setGraphicSize(Std.int(item.width * 0.8));
+	
+				if (thing == 0)
+				{
+					item.alpha = 1;
+					// item.setGraphicSize(Std.int(item.width));
+				}
+
+			}
 			for (item in grpControls.members)
 			{
 				item.targetY = bullShit - curSelected;
@@ -145,9 +162,9 @@ class CharacterSelection extends MusicBeatState
 			trace(curSelected);
 			trace(controlsStrings);
 			var daSelected:String = controlsStrings[curSelected];
-			curChar.frames = Paths.getSparrowAtlas(daSelected);
-			curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
-			curChar.animation.play("idle");
+			//curChar.frames = Paths.getSparrowAtlas(daSelected);
+			//curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
+			//curChar.animation.play("idle");
 
 			grpControls.forEach(function(stuff:Alphabet){
 				if (change == -1) FlxTween.tween(stuff, {y: stuff.y + 50}, 0.2, {ease: FlxEase.quadInOut});

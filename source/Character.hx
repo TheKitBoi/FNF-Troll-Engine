@@ -361,7 +361,7 @@ class Character extends FlxSprite
 				flipX = true;
 			case 'bf-car':
 				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('bf-car');
-				else tex = Paths.getSparrowAtlas('christmas/'+FlxG.save.data.curcharacter+'-car');
+				else tex = Paths.getSparrowAtlas(FlxG.save.data.curcharacter+'-car');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -388,6 +388,7 @@ class Character extends FlxSprite
 			case 'bf-pixel':
 				if(FlxG.save.data.curcharacter == null) tex = Paths.getSparrowAtlas('weeb/bf-pixel');
 				else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'-pixel');
+				frames = tex;
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
 				animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
 				animation.addByPrefix('singLEFT', 'BF LEFT NOTE', 24, false);

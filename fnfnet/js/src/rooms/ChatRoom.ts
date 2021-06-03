@@ -1,7 +1,7 @@
 import { Room, Client } from "colyseus";
 import { Stuff } from "./schema/Stuff";
 import * as readline from 'readline';
-
+import * as fs from 'fs';
 let rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -44,6 +44,7 @@ export class ChatRoom extends Room<Stuff> {
     uuids.push(client.sessionId);
     hasAdmin.push(false);
     console.log(theY);
+    //var motd = fs.readFile("motd.txt", {encoding: null});
     client.send("string", { chatHist: chatHistory, axY: theY as unknown as string, motd: "hey shitass", rules: "if you read this it works"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";

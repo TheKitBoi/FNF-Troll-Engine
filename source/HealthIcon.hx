@@ -23,7 +23,7 @@ class HealthIcon extends FlxSprite
 			default:
 				modifier = "";
 		}
-		if(isPlayer) loadGraphic(Paths.image("icon-"+FlxG.save.data.curcharacter+modifier, "characters"), true, 150, 150);
+		if(isPlayer && FlxG.save.data.curcharacter != null) loadGraphic(Paths.image("icon-"+FlxG.save.data.curcharacter+modifier, "characters"), true, 150, 150);
 		else loadGraphic(Paths.image("icon-"+char, "characters"), true, 150, 150);
 		antialiasing = true;
 		animation.add(char, [0, 1], 0, false, isPlayer);
