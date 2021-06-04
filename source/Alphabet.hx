@@ -35,15 +35,18 @@ class Alphabet extends FlxSpriteGroup
 	var lastSprite:AlphaCharacter;
 	var xPosResetted:Bool = false;
 	var lastWasSpace:Bool = false;
-
+	var actualheightz:Float;
 	var splitWords:Array<String> = [];
-
+	var distancez:Int;
 	var isBold:Bool = false;
-
-	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false)
+	var trollingz:Bool;
+	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false, actualheight:Float = 0.48, distance:Int = 120, trolling:Bool = true)
 	{
 		super(x, y);
 
+		actualheightz = actualheight;
+		distancez = distance;
+		trollingz = trolling;
 		_finalText = text;
 		this.text = text;
 		isBold = bold;
@@ -224,8 +227,8 @@ class Alphabet extends FlxSpriteGroup
 		{
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
-			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
-			x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
+			y = FlxMath.lerp(y, (scaledY * distancez) + (FlxG.height * actualheightz), 0.16);
+			if(trollingz)x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
 		}
 
 		super.update(elapsed);

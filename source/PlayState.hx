@@ -44,6 +44,7 @@ import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 import PauseSubState.pracMode;
+import CoolUtil.dominantColor;
 import Controls.KeyboardScheme;
 using StringTools;
 
@@ -2460,31 +2461,7 @@ class PlayState extends MusicBeatState
 		trainFinishing = false;
 		startedMoving = false;
 	}
-	function dominantColor(sprite:FlxSprite):Int{
-		var countByColor:Map<Int, Int> = [];
-		for(col in 0...sprite.frameWidth){
-			for(row in 0...sprite.frameHeight){
-			  var colorOfThisPixel:Int = sprite.pixels.getPixel32(col, row);
-			  if(colorOfThisPixel != 0){
-				  if(countByColor.exists(colorOfThisPixel)){
-				    countByColor[colorOfThisPixel] =  countByColor[colorOfThisPixel] + 1;
-				  }else if(countByColor[colorOfThisPixel] != 13520687 - (2*13520687)){
-					 countByColor[colorOfThisPixel] = 1;
-				  }
-			  }
-			}
-		 }
-		var maxCount = 0;
-		var maxKey:Int = 0;//after the loop this will store the max color
-		countByColor[FlxColor.BLACK] = 0;
-			for(key in countByColor.keys()){
-			if(countByColor[key] >= maxCount){
-				maxCount = countByColor[key];
-				maxKey = key;
-			}
-		}
-		return maxKey;
-	}
+
 	function lightningStrikeShit():Void
 	{
 		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
