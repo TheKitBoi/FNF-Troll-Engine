@@ -109,7 +109,7 @@ class ChatStateNew extends MusicBeatState
             chatText.y = txtbox.y - 23;
             //client.send({nen: username});
             trace(room.state.chatHist);
-            room.send("string", {usname: username});
+            room.send("string", {usname: username, message: "DONOTSENT"});
             room.onMessage("string", function(message) {
                 /*
                 trace("cdz nuts");
@@ -216,7 +216,7 @@ class ChatStateNew extends MusicBeatState
         usnbox.backgroundColor = FlxColor.WHITE;
         usnbox.borderColor = 0xFFFFFFFF;
         usnbox.visible = false;
-
+        
 		var nameButton = new flixel.ui.FlxButton(txtbox.width - 80, txtbox.y, "Username", function()
             {
                 changeUsername();

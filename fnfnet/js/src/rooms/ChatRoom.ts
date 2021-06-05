@@ -37,7 +37,7 @@ export class ChatRoom extends Room<Stuff> {
       thefullassmessage = "<" + users[uuids.indexOf(client.sessionId)] + "> " + message.message; 
       chatHistory += thefullassmessage + "\n";
       theY -= 20;
-      if(message.message != null)client.send("string", { message: thefullassmessage});
+      if(message.message !== "DONOTSENT")client.send("string", { message: thefullassmessage});
     });
   }
   onJoin (client: Client, options: any) {
@@ -46,8 +46,10 @@ export class ChatRoom extends Room<Stuff> {
     uuids.push(client.sessionId);
     hasAdmin.push(false);
     console.log(theY);
-    //var motd = fs.readFile("motd.txt", {encoding: null});
-    client.send("string", { chatHist: chatHistory, axY: theY as unknown as string, motd: "hey shitass", rules: "if you read this it works"}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    var motd = fs.readFileSync("motd.txt", "utf-8");
+    var rules = fs.readFileSync("rules.txt", "utf-8");
+    console.log(motd);
+    client.send("string", { chatHist: chatHistory, axY: theY as unknown as string, motd: motd, rules: rules}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;
