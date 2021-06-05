@@ -1,4 +1,4 @@
-package;
+package online;
 
 import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;

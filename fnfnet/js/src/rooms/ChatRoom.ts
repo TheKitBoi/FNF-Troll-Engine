@@ -37,7 +37,7 @@ export class ChatRoom extends Room<Stuff> {
       thefullassmessage = "<" + users[uuids.indexOf(client.sessionId)] + "> " + message.message; 
       chatHistory += thefullassmessage + "\n";
       theY -= 20;
-      if(message.message !== "DONOTSENT")client.send("string", { message: thefullassmessage});
+      if(message.message !== "DONOTSENT")this.broadcast("string", { message: thefullassmessage});
     });
   }
   onJoin (client: Client, options: any) {

@@ -119,8 +119,8 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(ChatState.beentoChat){
-			ChatState.beentoChat = false;
+		if(online.ChatState.beentoChat){
+			online.ChatState.beentoChat = false;
 			FlxG.mouse.visible = false;
 			if(FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 			else FlxG.autoPause = true;
@@ -151,7 +151,7 @@ class MainMenuState extends MusicBeatState
 			if (FlxG.keys.justPressed.SIX) FlxG.openURL("https://www.youtube.com/watch?v=38FnpnflHEg");
 			if (FlxG.keys.justPressed.FOUR)
 				{
-					FlxG.switchState(new ChatStateNew());
+					FlxG.switchState(new online.ChatStateNew());
 				}
 			if (FlxG.keys.justPressed.FIVE) LoadingState.loadAndSwitchState(new CharacterSelection());
 			if (FlxG.keys.justPressed.THREE) FlxG.sound.play(Paths.sound('ok'));
@@ -193,7 +193,7 @@ class MainMenuState extends MusicBeatState
 										trace("Freeplay Menu Selected");
 									case 'chat':
 										#if desktop
-										FlxG.switchState(new ChatState());
+										FlxG.switchState(new online.ChatState());
 										#end
 										
 									case 'options':

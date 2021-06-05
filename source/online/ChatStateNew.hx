@@ -1,4 +1,4 @@
-package;
+package online;
 
 import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;

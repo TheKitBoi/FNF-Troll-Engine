@@ -52,9 +52,9 @@ class HealthIcon extends FlxSprite
 		animation.play(char);
 		scrollFactor.set();
 	}
-	public function changeIcon(char:String){
+	public function changeIcon(char:String, isPlayer:Bool = false){
 		loadGraphic(Paths.image("icon-"+char, "characters"), true, 150, 150);
-		animation.add(char, [0, 1], 0, false, false);
+		animation.add(char, [0, 1], 0, false, isPlayer);
 		animation.play(char);
 	}
 	override function update(elapsed:Float)
