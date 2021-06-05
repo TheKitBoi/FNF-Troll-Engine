@@ -14,9 +14,12 @@ import flixel.util.FlxTimer;
 import lime.utils.Assets;
 import Controls.Control;
 using StringTools;
-
+/*
+** this code genuinely sucks i apologize
+*/
 class CharacterSelection extends MusicBeatState
 {
+	var ticktockclock = false;
 	var controlsStrings:Array<String> = [];
 	var curChar:FlxSprite;
 	
@@ -63,14 +66,14 @@ class CharacterSelection extends MusicBeatState
 			controlLabel.y += ((controlLabel.height + 20) * i);
 			//controlLabel.targetY = controlLabel.y*i+1;
 
-			var curChar = new FlxSprite(30, 60);
+			var curChar = new FlxSprite(30, 72);
 			curChar.frames = Paths.getSparrowAtlas(controlsStrings[i]);
 			curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
 			curChar.animation.addByPrefix("hey", 'BF HEY!!', 24, false);
 			curChar.screenCenter(X);
 			curChar.x += (500*i);
 			curChar.animation.play("idle");
-
+			curChar.antialiasing = true;
 			grpControls.add(controlLabel);
 			funkers.add(curChar);
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -97,7 +100,7 @@ class CharacterSelection extends MusicBeatState
 				changeSelection(1);
 		}
 		if(controls.ACCEPT){
-			/*
+			/* FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK FUCK 
 			var tmp = grpControls.members[curSelected].x;
 			grpControls.members[curSelected] = new Alphabet(0, grpControls.members[curSelected].y, "ping!", true, false);
 			grpControls.members[curSelected].x = tmp;
@@ -123,16 +126,20 @@ class CharacterSelection extends MusicBeatState
 		{
 			if(nospam == false)
 			{
-				trace(funkers.members[0].x);
+				ticktockclock = false;
 				nospam = true;
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				curSelected += change;
 				
-				if (curSelected < 0)
-					curSelected = grpControls.length - 1;
-				if (curSelected >= grpControls.length)
-					curSelected = 0;
-		
+				if (curSelected < 0){
+					curSelected++;
+					ticktockclock = true;
+				}
+				if (curSelected >= grpControls.length){
+					curSelected--;
+					ticktockclock = true;
+				}
+				if(change == 0) ticktockclock = true;
 				// selector.y = (70 * curSelected) + 30;
 		
 				var bullShit:Int = 0;
@@ -174,8 +181,7 @@ class CharacterSelection extends MusicBeatState
 				}
 				*/
 				icon.loadGraphic(Paths.image("icon-"+controlsStrings[curSelected], "characters"));
-				trace(curSelected);
-				trace(controlsStrings);
+
 				var daSelected:String = controlsStrings[curSelected];
 				//curChar.frames = Paths.getSparrowAtlas(daSelected);
 				//curChar.animation.addByPrefix("idle", 'BF idle dance', 24, true);
@@ -188,20 +194,23 @@ class CharacterSelection extends MusicBeatState
 				});
 				*/
 				var asd:Int = 0;
-				for(i in 0...funkers.members.length)
-					if(change != 0)funkers.members[i].x = 470 / (curSelected + 1 + i);//((FlxG.width/2) * (curSelected + i) - (FlxG.width/2) * (curSelected + i))
-				/*
+				//for(i in 0...funkers.members.length)
+				//	if(change != 0)funkers.members[i].x = 470 - (funkers.members[i].x / i+1);//((FlxG.width/2) * (curSelected + i) - (FlxG.width/2) * (curSelected + i))
+
 				funkers.forEach(function(stuff:FlxSprite){
-					asd++;
-					if(change != 0)stuff.x = 500 * (curSelected);
-				});*/
-				//					if (change == -1) FlxTween.tween(stuff, {x: stuff.x + 500}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
-				//	else if (change == 1) FlxTween.tween(stuff, {x: stuff.x - 500}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
+					//asd++;
+					//if(change != 0)stuff.x = 500 * (curSelected);
+					if(curSelected == 0 && !ticktockclock) FlxTween.tween(stuff, {x: stuff.x + 500}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
+					if (curSelected == controlsStrings.length && ticktockclock) FlxTween.tween(stuff, {x: stuff.x + 500 * controlsStrings.length}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
+					else{
+						if (change == -1 && !ticktockclock) FlxTween.tween(stuff, {x: stuff.x + 500}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
+						else if (change == 1 && !ticktockclock) FlxTween.tween(stuff, {x: stuff.x - 500}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
+					}
+				});
+
+				if(change == 0 || ticktockclock) nospam = false;
 				
-				if(change == 0) nospam = false;
-				
-				nospam = false;
-				trace(funkers.members[0].y);
+				//nospam = false;
 			}
 		}
 	function waitingInput():Void

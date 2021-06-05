@@ -228,18 +228,18 @@ class ChartingState extends MusicBeatState
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player1 = characters[Std.parseInt(character)];
-			leftIcon.animation.play(characters[Std.parseInt(character)]);
+			leftIcon.changeIcon(characters[Std.parseInt(character)]);
 		});
 		player1DropDown.selectedLabel = _song.player1;
 
 		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player2 = characters[Std.parseInt(character)];
-			rightIcon.animation.play(characters[Std.parseInt(character)]);
+			rightIcon.changeIcon(characters[Std.parseInt(character)]);
 		});
 
 		player2DropDown.selectedLabel = _song.player2;
-
+		
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
 		tab_group_song.add(UI_songTitle);

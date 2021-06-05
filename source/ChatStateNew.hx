@@ -105,10 +105,11 @@ class ChatStateNew extends MusicBeatState
                 trace("JOIN ERROR: " + err);
                 return;
             }
-            chatText.text = "Connecting...";
+            chatText.text = "Connecting...\n";
             chatText.y = txtbox.y - 23;
             //client.send({nen: username});
             trace(room.state.chatHist);
+            room.send("string", {usname: username});
             room.onMessage("string", function(message) {
                 /*
                 trace("cdz nuts");

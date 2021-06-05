@@ -33,9 +33,11 @@ export class ChatRoom extends Room<Stuff> {
 
     this.onMessage("string", (client, message) => {
       console.log(message.message);
-      chatHistory += message.message + "\n";
+      if(message.usname != null) users[uuids.indexOf(client.sessionId)] = message.usname;
+      thefullassmessage = "<" + users[uuids.indexOf(client.sessionId)] + "> " + message.message; 
+      chatHistory += thefullassmessage + "\n";
       theY -= 20;
-      client.send("string", { message: message.message});
+      if(message.message != null)client.send("string", { message: thefullassmessage});
     });
   }
   onJoin (client: Client, options: any) {
