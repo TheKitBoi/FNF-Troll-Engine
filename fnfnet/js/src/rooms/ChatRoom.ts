@@ -31,13 +31,16 @@ export class ChatRoom extends Room<Stuff> {
   onCreate (options: any) {
     this.setState(new Stuff());
 
-    this.onMessage("string", (client, message) => {
+    this.onMessage("message", (client, message) => {
       console.log(message.message);
-      if(message.usname != null) users[uuids.indexOf(client.sessionId)] = message.usname;
       thefullassmessage = "<" + users[uuids.indexOf(client.sessionId)] + "> " + message.message; 
       chatHistory += thefullassmessage + "\n";
       theY -= 20;
-      if(message.message !== "DONOTSENT")this.broadcast("string", { message: thefullassmessage});
+      this.broadcast('message',{ message: thefullassmessage});
+    });
+    
+    this.onMessage("userdata", (client, message) => {      
+      users[uuids.indexOf(client.sessionId)] = message.usname;
     });
   }
   onJoin (client: Client, options: any) {
@@ -49,7 +52,7 @@ export class ChatRoom extends Room<Stuff> {
     var motd = fs.readFileSync("motd.txt", "utf-8");
     var rules = fs.readFileSync("rules.txt", "utf-8");
     console.log(motd);
-    client.send("string", { chatHist: chatHistory, axY: theY as unknown as string, motd: motd, rules: rules}); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    client.send("recvprev", { chatHist: chatHistory, axY: theY as unknown as string, motd: motd, rules: rules }); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;
@@ -61,7 +64,7 @@ export class ChatRoom extends Room<Stuff> {
     hasAdmin.splice(uuids.indexOf(client.sessionId));
     //uuids.remove(client.sessionId);
     test--;
-    client.send("string", {uslist: users});
+    client.send("userlist", {uslist: users});
     chatHistory += "Server: User has disconnected from the chat." + "\n";
     theY -= 20;
   }

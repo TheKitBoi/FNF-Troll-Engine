@@ -3,11 +3,12 @@ import { ChatRoom } from "../ChatRoom";
 
 export class Stuff extends Schema {
 
-  @type("string") mySynchronizedProperty: string = "Hello world";
+  @type("string") message: string;
   //public static stuff: string = string.mySynchronizedProperty;
-  @type("string") chatHist: string = "DICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDICKDEIDKDID";
+  @type("string") chatHist: string;
+
+  @type("string") recvprev: string;
 
   @type("int32") axY: Number = 0;
 
-  @type("string") leaveMessage: string = "Server: User has disconnected from the chat.";
 }

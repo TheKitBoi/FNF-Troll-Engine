@@ -1,4 +1,4 @@
-package online;
+package;
 
 import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;
@@ -109,37 +109,24 @@ class ChatStateNew extends MusicBeatState
             chatText.y = txtbox.y - 23;
             //client.send({nen: username});
             trace(room.state.chatHist);
-            room.send("string", {usname: username, message: "DONOTSENT"});
-            room.onMessage("string", function(message) {
-                /*
-                trace("cdz nuts");
+            room.send("userdata", {usname: username});
+            room.onMessage("message", function(message) {
                 FlxG.sound.play(Paths.sound("sentmessage"));
-                chatText.text = chatText.text + message + "\n";
+                chatText.text = chatText.text + message.message + "\n";
                 chatText.y -= 20;
-                 */
-                trace(message);
-                pissing = true;
-                if(message.chatHist != null) {
-                    chatText.text = message.chatHist;
-                    MOTD.text = message.motd;
-                    rules.text = message.rules;
-                    chatText.y += Std.int(message.axY); 
-                }
+                //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
+            });
 
-                if(message.message != null){
-                    FlxG.sound.play(Paths.sound("sentmessage"));
-                    chatText.text = chatText.text + message.message + "\n";
-                    chatText.y -= 20;
-                    //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
+            room.onMessage("recvprev", function(message){
+                chatText.text = message.chatHist;
+                MOTD.text = message.motd;
+                rules.text = message.rules;
+                chatText.y += Std.int(message.axY); 
 
-                }
-
-                if(message.uslist != null){
-                    userlist.text = "Users online:\n";
-                    var users:Array<String> = message.uslist;
-                    for(i in 0...users.length){
-                        userlist.text += users[i] + "\n";
-                    }
+                userlist.text = "Users online:\n";
+                var users:Array<String> = message.uslist;
+                for(i in 0...users.length){
+                    userlist.text += users[i] + "\n";
                 }
             });
             #if desktop
@@ -148,7 +135,7 @@ class ChatStateNew extends MusicBeatState
                     timer.run = function() {}
                     if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN && pissing) {
                         pissing = false;
-                        room.send("string", {message: txtbox.text});
+                        room.send("message", {message: txtbox.text});
                         txtbox.text = "";
                         txtbox.caretIndex = 0;
                     }
