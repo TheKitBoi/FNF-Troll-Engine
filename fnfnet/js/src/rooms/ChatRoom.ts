@@ -52,7 +52,7 @@ export class ChatRoom extends Room<Stuff> {
     var motd = fs.readFileSync("motd.txt", "utf-8");
     var rules = fs.readFileSync("rules.txt", "utf-8");
     console.log(motd);
-    client.send("recvprev", { chatHist: chatHistory, axY: theY as unknown as string, motd: motd, rules: rules }); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
+    client.send("recvprev", { chatHist: chatHistory, axY: theY as unknown as string, motd: motd, rules: rules, uslist: uuids }); // - 1  chathist: chatHistory, axY: theY, motd: motd, rules: rules, uslist: users
     //server.send({message: "Server: User has joined the chat!", uslist: users});
     chatHistory += "Server: User has joined the chat!" + "\n";
     theY -= 20;

@@ -133,8 +133,7 @@ class ChatStateNew extends MusicBeatState
             sys.thread.Thread.create(() -> {
                 while(true){
                     timer.run = function() {}
-                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN && pissing) {
-                        pissing = false;
+                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
                         room.send("message", {message: txtbox.text});
                         txtbox.text = "";
                         txtbox.caretIndex = 0;
