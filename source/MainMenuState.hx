@@ -149,10 +149,12 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new TitleState());
 			}
 			if (FlxG.keys.justPressed.SIX) FlxG.openURL("https://www.youtube.com/watch?v=38FnpnflHEg");
+			#if debug
 			if (FlxG.keys.justPressed.FOUR)
 				{
 					FlxG.switchState(new online.ChatStateNew());
 				}
+			#end
 			if (FlxG.keys.justPressed.FIVE) LoadingState.loadAndSwitchState(new CharacterSelection());
 			if (FlxG.keys.justPressed.THREE) FlxG.sound.play(Paths.sound('ok'));
 			if (controls.ACCEPT)

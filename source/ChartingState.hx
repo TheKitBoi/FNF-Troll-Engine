@@ -547,9 +547,6 @@ class ChartingState extends MusicBeatState
 			PlayState.SONG = _song;
 			FlxG.sound.music.stop();
 			vocals.stop();
-			if (notPlaying)
-				FlxG.switchState(new MainMenuState());
-			else
 			FlxG.switchState(new PlayState());
 		}
 

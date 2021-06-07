@@ -90,6 +90,11 @@ class ChatStateNew extends MusicBeatState
 		UI_box.resize(400, 400);
 		UI_box.screenCenter(XY);
         UI_box.selected_tab = 0;
+        #if debug
+        var bm = new flixel.ui.FlxButton(200, 200, "Battle Mode", function(){
+            FlxG.switchState(new online.BattleMode());
+        });
+        #end
 
         MOTD = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
         rules = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
@@ -232,6 +237,9 @@ class ChatStateNew extends MusicBeatState
         UI_box.addGroup(tab_group_rules);
         add(UI_box);
         add(okButton);
+        #if debug
+        add(bm);
+        #end
 		super.create();
 	}
 
