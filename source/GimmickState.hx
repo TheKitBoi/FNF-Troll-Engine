@@ -32,6 +32,7 @@ class GimmickState extends MusicBeatState
 	public static var instantdeath:Bool = false;
 	public static var perfectcombo:Bool = false;
 	public static var diffvocals:Bool = false;
+	public static var automatic:Bool = false;
 
 	var cockJoke = new FlxTypedGroup<FlxText>();
 	var checkboxArray:FlxTypedGroup<FlxSprite>;
@@ -56,6 +57,7 @@ class GimmickState extends MusicBeatState
 			"Instant Death",
 			"Perfect Combo",
 			"Difficulty Vocals",
+			"Automatic",
             "Start"
         ];
 		add(checkboxArray);
@@ -108,6 +110,8 @@ class GimmickState extends MusicBeatState
 					case "Difficulty Vocals":
 						diffvocals = !diffvocals;
 						initSettings(false, 4, "Difficulty Vocals: " + Std.string(diffvocals));
+					case "Automatic":
+						automatic = !automatic;
                     case "Start":
                         LoadingState.loadAndSwitchState(new PlayState());
                 }

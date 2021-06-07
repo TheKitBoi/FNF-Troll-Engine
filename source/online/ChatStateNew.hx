@@ -1,5 +1,6 @@
-package;
+package online;
 
+import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
@@ -19,7 +20,18 @@ import flixel.util.FlxColor;
 #if desktop
 import Config.data;
 #end
-class ChatState extends MusicBeatState
+import io.colyseus.Client;
+import io.colyseus.Room;
+
+typedef NDT = { // NDT means Nessecary Data Types btw!
+    var message:String;
+    var chatHist:String;
+    var uslist:Array<String>;
+    var motd:String;
+    var rules:String;
+    var axY:Int;
+}
+class ChatStateNew extends MusicBeatState
 {  
     public static var client:Session;
     var UI_box:FlxUITabMenu;
@@ -29,7 +41,9 @@ class ChatState extends MusicBeatState
 
     public static var isUsN:Bool;
     public static var beentoChat:Bool;
+    var pissing:Bool;
 
+    var coly:Client;
 
     public static var username:String;
 
@@ -43,7 +57,14 @@ class ChatState extends MusicBeatState
 
     override function create()
 	{
-        #if desktop
+        var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+        menuBG.color = 0xFFea71fd;
+        menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+        menuBG.updateHitbox();
+        menuBG.screenCenter();
+        menuBG.antialiasing = true;
+        
+        var coly = new Client('ws://localhost:2567');
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 30;
@@ -60,9 +81,7 @@ class ChatState extends MusicBeatState
 
         if(FlxG.save.data.username != null) username = FlxG.save.data.username;
         else username = "guest" + FlxG.random.int(0, 9999); 
-
-        var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
-
+        
         UI_box = new FlxUITabMenu(null, [
             {name: "tab1", label: 'MOTD'},
             {name: "tab2", label: 'Rules'},
@@ -80,7 +99,50 @@ class ChatState extends MusicBeatState
                 remove(UI_box);
                 this.okButton.visible = false;
             });
+        var timer = new haxe.Timer(50);
+        coly.joinOrCreate("chat", [], Stuff, function(err, room) {
+            if (err != null) {
+                trace("JOIN ERROR: " + err);
+                return;
+            }
+            chatText.text = "Connecting...\n";
+            chatText.y = txtbox.y - 23;
+            //client.send({nen: username});
+            trace(room.state.chatHist);
+            room.send("userdata", {usname: username});
+            room.onMessage("message", function(message) {
+                FlxG.sound.play(Paths.sound("sentmessage"));
+                chatText.text = chatText.text + message.message + "\n";
+                chatText.y -= 20;
+                //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
+            });
 
+            room.onMessage("recvprev", function(message){
+                chatText.text = message.chatHist;
+                MOTD.text = message.motd;
+                rules.text = message.rules;
+                chatText.y += Std.int(message.axY); 
+
+                userlist.text = "Users online:\n";
+                var users:Array<String> = message.uslist;
+                for(i in 0...users.length){
+                    userlist.text += users[i] + "\n";
+                }
+            });
+            #if desktop
+            sys.thread.Thread.create(() -> {
+                while(true){
+                    timer.run = function() {}
+                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
+                        room.send("message", {message: txtbox.text});
+                        txtbox.text = "";
+                        txtbox.caretIndex = 0;
+                    }
+                }
+            });
+            #end
+        });
+          /*
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
             
             if(event.data.chathist != null) {
@@ -107,7 +169,7 @@ class ChatState extends MusicBeatState
             }
             //if(event.data.message != null) chatText.y -= 20; 
         }); //event.data.axY;
-          
+
         client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
             add(UI_box);
             add(okButton);
@@ -115,19 +177,7 @@ class ChatState extends MusicBeatState
             chatText.y = txtbox.y - 23;
             client.send({nen: username});
         });
-
-        client.addEventListener(NetworkEvent.SERVER_FULL, function(event: NetworkEvent) {
-            chatText.text = "Server is full! Try joining later!\n";
-            chatText.y = txtbox.y - 23;
-        });
-
-        client.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
-            chatText.text = "You have been disconnected from the server!\n";
-            chatText.y = txtbox.y - 23;
-        });
-
-        client.start();
-
+        */
         txtbox = new FlxInputText(200, 704.5, FlxG.width);
         txtbox.screenCenter(X);
         txtbox.background = true;
@@ -152,7 +202,7 @@ class ChatState extends MusicBeatState
         usnbox.backgroundColor = FlxColor.WHITE;
         usnbox.borderColor = 0xFFFFFFFF;
         usnbox.visible = false;
-
+        
 		var nameButton = new flixel.ui.FlxButton(txtbox.width - 80, txtbox.y, "Username", function()
             {
                 changeUsername();
@@ -160,13 +210,6 @@ class ChatState extends MusicBeatState
 
         okButton.screenCenter(XY);
         okButton.y += 150;
-
-        var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-        menuBG.color = 0xFFea71fd;
-        menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-        menuBG.updateHitbox();
-        menuBG.screenCenter();
-        menuBG.antialiasing = true;
         
 		var tab_group_motd = new FlxUI(null, UI_box);
 		tab_group_motd.name = "tab1";
@@ -187,26 +230,18 @@ class ChatState extends MusicBeatState
 
         UI_box.addGroup(tab_group_motd);
         UI_box.addGroup(tab_group_rules);
-
+        add(UI_box);
+        add(okButton);
 		super.create();
-        #end
 	}
 
 	override function update(elapsed:Float)
 	{
-        #if desktop
         super.update(elapsed);
         if(FlxG.keys.justPressed.ESCAPE) {
             Network.destroySession(Network.sessions[0]);
             FlxG.switchState(new MainMenuState());
         }
-        if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
-            var session = Network.sessions[0];
-            session.send({message: txtbox.text, name: username}); //Bytes.ofString(txtbox.text)
-            txtbox.text = "";
-            txtbox.caretIndex = 0;
-        }
-        #end
 	}
     public function changeUsername(){
         usnbox.visible = !usnbox.visible;
