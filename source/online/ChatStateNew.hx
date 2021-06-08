@@ -30,6 +30,7 @@ typedef NDT = { // NDT means Nessecary Data Types btw!
 }
 class ChatStateNew extends MusicBeatState
 {  
+    var rooms:Room<Stuff>;
     var UI_box:FlxUITabMenu;
 
     var txtbox:FlxInputText;
@@ -38,6 +39,7 @@ class ChatStateNew extends MusicBeatState
     public static var isUsN:Bool;
     public static var beentoChat:Bool;
     var pissing:Bool;
+    var connected:Bool = false;
 
     var coly:Client;
 
@@ -101,7 +103,10 @@ class ChatStateNew extends MusicBeatState
                 this.okButton.visible = false;
             });
         var timer = new haxe.Timer(50);
+        connected = false;
         coly.joinOrCreate("chat", [], Stuff, function(err, room) {
+            connected = true;
+            rooms = room;
             if (err != null) {
                 trace("JOIN ERROR: " + err);
                 return;
@@ -130,18 +135,6 @@ class ChatStateNew extends MusicBeatState
                     userlist.text += users[i] + "\n";
                 }
             });
-            #if desktop
-            sys.thread.Thread.create(() -> {
-                while(true){
-                    timer.run = function() {}
-                    if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
-                        room.send("message", {message: txtbox.text});
-                        txtbox.text = "";
-                        txtbox.caretIndex = 0;
-                    }
-                }
-            });
-            #end
         });
           /*
         client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
@@ -242,6 +235,11 @@ class ChatStateNew extends MusicBeatState
 	override function update(elapsed:Float)
 	{
         super.update(elapsed);
+        if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
+            rooms.send("message", {message: txtbox.text});
+            txtbox.text = "";
+            txtbox.caretIndex = 0;
+        }
         if(FlxG.keys.justPressed.ESCAPE) {
             Network.destroySession(Network.sessions[0]);
             FlxG.switchState(new MainMenuState());
