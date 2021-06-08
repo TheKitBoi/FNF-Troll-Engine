@@ -1,5 +1,6 @@
 package online;
 
+import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
@@ -7,7 +8,7 @@ import flixel.text.FlxText;
 import flixel.FlxSprite;
 import io.colyseus.Client;
 import io.colyseus.Room;
-
+import flixel.tweens.FlxEase;
 class BattleMode extends MusicBeatState{
     var coly:Client;
 
@@ -100,6 +101,15 @@ class BattleMode extends MusicBeatState{
             if(FlxG.keys.justPressed.RIGHT) changeSelection(1);
             if(FlxG.keys.justPressed.UP) changeSelection(-2);
             if(FlxG.keys.justPressed.DOWN) changeSelection(2);
+            if(controls.BACK) FlxG.switchState(new ChatStateNew());
+            if(controls.ACCEPT){
+                assets.forEach(function (spr:FlxSprite){
+                    if(spr.ID != curSelected){
+                        FlxTween.tween(spr, {width: 0, height: 0}, 1.5, {ease:FlxEase.quintInOut});
+                    }
+
+                });
+            }
         }
         function changeSelection(change:Int = 0){
             curSelected += change;
