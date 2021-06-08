@@ -5,9 +5,6 @@ import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.system.FlxSound;
-import networking.sessions.Session;
-import networking.utils.NetworkEvent;
-import networking.utils.NetworkMode;
 import networking.Network;
 import haxe.io.Bytes;
 import flixel.addons.ui.FlxInputText;
@@ -33,7 +30,6 @@ typedef NDT = { // NDT means Nessecary Data Types btw!
 }
 class ChatStateNew extends MusicBeatState
 {  
-    public static var client:Session;
     var UI_box:FlxUITabMenu;
 
     var txtbox:FlxInputText;
