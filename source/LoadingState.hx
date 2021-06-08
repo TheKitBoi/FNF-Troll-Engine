@@ -52,6 +52,9 @@ class LoadingState extends MusicBeatState
 		motherfunkers.screenCenter(Y);
 		loading.x += FlxG.width * 0.14;
 		motherfunkers.x -= FlxG.width * 0.14;
+
+		motherfunkers.antialiasing = true;
+		loading.antialiasing = true;
 		//bgColor = 0xcaff4d;
 		add(ldBG);
 		add(motherfunkers);

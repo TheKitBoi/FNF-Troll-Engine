@@ -33,10 +33,7 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
-		var _gameSave = new flixel.util.FlxSave(); // initialize
-		_gameSave.bind("options");
-
-		switch(_gameSave.data.ks){
+		switch(FlxG.save.data.ks){
 			case null:
 				kbd = "WASD";
 			case "WASD":

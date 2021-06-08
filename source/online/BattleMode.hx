@@ -27,6 +27,7 @@ class BattleMode extends MusicBeatState{
             logo.antialiasing = true;
             logo.y = -160;
             logo.setGraphicSize(Std.int(logo.width / 1.6), Std.int(logo.height / 1.6));
+            
             var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
             menuBG.color = 0xFFea71fd;
             menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -97,6 +98,8 @@ class BattleMode extends MusicBeatState{
             super.update(elapsed);
             if(FlxG.keys.justPressed.LEFT) changeSelection(-1);
             if(FlxG.keys.justPressed.RIGHT) changeSelection(1);
+            if(FlxG.keys.justPressed.UP) changeSelection(-2);
+            if(FlxG.keys.justPressed.DOWN) changeSelection(2);
         }
         function changeSelection(change:Int = 0){
             curSelected += change;
@@ -104,14 +107,14 @@ class BattleMode extends MusicBeatState{
             if(curSelected < 0){
                 curSelected = 0;
             }
-            if(curSelected > 3){
-                curSelected = 3;
+            if(curSelected > 2){
+                curSelected = 2;
             }
             hand.y = 438;
             switch(curSelected)
             {
                 case 0:
-                    hand.x = 158;
+                    hand.x = 167;
                 case 1:
                     hand.flipX = true;
                     hand.x = 1000;
