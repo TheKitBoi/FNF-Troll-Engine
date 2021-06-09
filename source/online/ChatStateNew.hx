@@ -114,7 +114,6 @@ class ChatStateNew extends MusicBeatState
             chatText.text = "Connecting...\n";
             chatText.y = txtbox.y - 23;
             //client.send({nen: username});
-            trace(room.state.chatHist);
             room.send("userdata", {usname: username});
             room.onMessage("message", function(message) {
                 FlxG.sound.play(Paths.sound("sentmessage"));
@@ -122,7 +121,12 @@ class ChatStateNew extends MusicBeatState
                 chatText.y -= 20;
                 //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
             });
-
+            room.onMessage("reul", function(message){
+                var users:Array<String> = message.uslist;
+                for(i in 0...users.length){
+                    userlist.text += users[i] + "\n";
+                }
+            });
             room.onMessage("recvprev", function(message){
                 chatText.text = message.chatHist;
                 MOTD.text = message.motd;
@@ -131,9 +135,6 @@ class ChatStateNew extends MusicBeatState
 
                 userlist.text = "Users online:\n";
                 var users:Array<String> = message.uslist;
-                for(i in 0...users.length){
-                    userlist.text += users[i] + "\n";
-                }
             });
         });
           /*
@@ -241,7 +242,7 @@ class ChatStateNew extends MusicBeatState
             txtbox.caretIndex = 0;
         }
         if(FlxG.keys.justPressed.ESCAPE) {
-            Network.destroySession(Network.sessions[0]);
+            rooms.leave();
             FlxG.switchState(new MainMenuState());
         }
 	}
