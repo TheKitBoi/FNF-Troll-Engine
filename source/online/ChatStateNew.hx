@@ -139,42 +139,6 @@ class ChatStateNew extends MusicBeatState
                 var users:Array<String> = message.uslist;
             });
         });
-          /*
-        client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
-            
-            if(event.data.chathist != null) {
-                chatText.text = event.data.chathist;
-                MOTD.text = event.data.motd;
-                rules.text = event.data.rules;
-                chatText.y += event.data.axY; 
-            }
-
-            if(event.data.message != null){
-                FlxG.sound.play(Paths.sound("sentmessage"));
-                chatText.text = chatText.text + event.data.message + "\n";
-                chatText.y -= 20;
-                //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
-
-            }
-
-            if(event.data.uslist != null){
-                userlist.text = "Users online:\n";
-                var users:Array<String> = event.data.uslist;
-                for(i in 0...users.length){
-                    userlist.text += users[i] + "\n";
-                }
-            }
-            //if(event.data.message != null) chatText.y -= 20; 
-        }); //event.data.axY;
-
-        client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
-            add(UI_box);
-            add(okButton);
-            chatText.text = "";
-            chatText.y = txtbox.y - 23;
-            client.send({nen: username});
-        });
-        */
         txtbox = new FlxInputText(200, 704.5, FlxG.width);
         txtbox.screenCenter(X);
         txtbox.background = true;
@@ -255,6 +219,7 @@ class ChatStateNew extends MusicBeatState
             username = usnbox.text;
             FlxG.save.data.username = usnbox.text;
             FlxG.save.flush();
+            usnbox.text = "";
             if(connected)rooms.send("userdata", {usname: username});
         }
     }
