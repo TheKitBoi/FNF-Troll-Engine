@@ -1,3 +1,0 @@
-Here is the default MOTD for FNFNet!
-If you are hosting this instance
-Please edit motd.txt, thank you!
