@@ -118,6 +118,8 @@ class ChatStateNew extends MusicBeatState
             room.onMessage("message", function(message) {
                 FlxG.sound.play(Paths.sound("sentmessage"));
                 chatText.text = chatText.text + message.message + "\n";
+                chatText.applyMarkup(chatText.text,
+                [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "[G]")]);
                 chatText.y -= 20;
                 //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
             });
@@ -237,7 +239,7 @@ class ChatStateNew extends MusicBeatState
 	{
         super.update(elapsed);
         if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
-            rooms.send("message", {message: txtbox.text});
+            if(connected)rooms.send("message", {message: txtbox.text});
             txtbox.text = "";
             txtbox.caretIndex = 0;
         }
@@ -253,6 +255,7 @@ class ChatStateNew extends MusicBeatState
             username = usnbox.text;
             FlxG.save.data.username = usnbox.text;
             FlxG.save.flush();
+            if(connected)rooms.send("userdata", {usname: username});
         }
     }
 }
