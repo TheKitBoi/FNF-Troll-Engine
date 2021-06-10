@@ -104,16 +104,21 @@ class BattleMode extends MusicBeatState{
             if(controls.BACK) FlxG.switchState(new ChatStateNew());
 
             if(controls.ACCEPT){
-                var poop:String = Highscore.formatSong("dadbattle", 2);
-
-                trace(poop);
+                switch(curSelected){
+                case 0:
+                    var poop:String = Highscore.formatSong("dadbattle", 2);
     
-                PlayStateOnline.SONG = Song.loadFromJson(poop, "dadbattle");
-                PlayStateOnline.isStoryMode = false;
-                PlayStateOnline.storyDifficulty = 2;
+                    PlayStateOnline.SONG = Song.loadFromJson(poop, "dadbattle");
+                    PlayStateOnline.isStoryMode = false;
+                    PlayStateOnline.storyDifficulty = 2;
     
-                PlayStateOnline.storyWeek = 1;
-                LoadingState.loadAndSwitchState(new PlayStateOnline());
+                    PlayStateOnline.storyWeek = 1;
+                    LoadingState.loadAndSwitchState(new PlayStateOnline());
+                case 1:
+                    trace("ping pong");
+                case 2:
+                    FlxG.switchState(new ChatStateNew());
+                }
                 assets.forEach(function (spr:FlxSprite){
                     if(spr.ID != curSelected){
                         FlxTween.tween(spr, {width: 0, height: 0}, 1.5, {ease:FlxEase.quintInOut});

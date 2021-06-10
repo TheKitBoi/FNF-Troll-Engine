@@ -37,7 +37,7 @@ flixel-addons
 flixel-ui
 hscript
 newgrounds
-extension-networking (required for FNFNet)
+colyseus (required for FNFNet)
 flixel-studio (optional, only required for debug)
 ```
 So for each of those type `haxelib install [library]` so shit like `haxelib install newgrounds`
@@ -72,18 +72,10 @@ class APIStuff
 ```
 
 and you should be good to go there.
-### Compiling FNFNet
-In the fnfnet/ folder there is the server for FNFNet.
+### FNFNet
+This engine is bundled with FNFNet connecting capabilities.
 
-All you need to do is run this command:
-```sh
-lime build windows
-```
-You can of course, change the platform to the one you wish (like Linux)
-
-Make sure FNFNet is launched in the terminal! Else you will not have control over the server!
-
-The server will be listening on port 9000, and you can use the game to connect to it using the chat debug menu. (number 4 key on the titlestate!)
+If you wish to run a FNFNet instance yourself, perhaps check out [the github repository for it](https://github.com/general-infinity/fnfnet)
 ### Compiling game
 
 Once you have all those installed, it's pretty easy to compile the game. You just need to run 'lime test html5 -debug' in the root of the project to build and run the HTML5 version. (command prompt navigation guide can be found here: [https://ninjamuffin99.newgrounds.com/news/post/1090480](https://ninjamuffin99.newgrounds.com/news/post/1090480))
