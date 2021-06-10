@@ -74,6 +74,13 @@ class PlayStateOnline extends MusicBeatState
 	private var unspawnNotes:Array<Note> = [];
 	private var dodging:Bool;
 	private var strumLine:FlxSprite;
+
+
+	private var p1scoretext:FlxText;
+	private var p2scoretext:FlxText;
+
+	private var onlinemodetext:FlxText;
+
 	private var curSection:Int = 0;
 	public static var camFollow:FlxObject;
 	var parser = new hscript.Parser();
@@ -98,6 +105,10 @@ class PlayStateOnline extends MusicBeatState
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
+
+	var p1score:Int = 0;
+	var p2score:Int = 0;
+
 
 	public static var iconP1:HealthIcon;
 	public static var iconP2:HealthIcon;
@@ -152,14 +163,6 @@ class PlayStateOnline extends MusicBeatState
 	override public function create()
 	{
 		downscroll = FlxG.save.data.downscroll;
-
-        var coly = new Client('ws://localhost:2567');
-        coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
-            rooms = room;
-            room.onMessage("start", function(message){
-                startCountdown();
-            });
-        });
 
 		switch(FlxG.save.data.ks){
 			case null:
@@ -627,6 +630,12 @@ class PlayStateOnline extends MusicBeatState
 
 		dad = new Character(100, 100, SONG.player2, false);
 
+		p1scoretext = new FlxText(FlxG.width * 0.1, 60, 0, "Player 1 Score: " + p1score, 16);
+		p2scoretext = new FlxText(FlxG.width * 0.1, 80, 0, "Player 2 Score: " + p2score, 16);
+
+		onlinemodetext = new FlxText(0, 0, 0, "Waiting for another player... (1/2)", 64);
+		onlinemodetext.screenCenter(XY);
+
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
 		switch (SONG.player2)
@@ -869,6 +878,24 @@ class PlayStateOnline extends MusicBeatState
 					catch(e){ trace(e.message); }
 				});
 			}
+			add(onlinemodetext);
+			var coly = new Client('ws://localhost:2567');
+			coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
+				rooms = room;
+				room.onMessage("start", function(message){
+					remove(onlinemodetext);
+					startCountdown();
+				});
+				/*
+				room.onMessage("retscore", function(message){
+					p1score = message.p1score;
+					p2score = message.p2score;
+
+					p1scoretext.text = "Player 1 Score: " + p1score;
+					p2scoretext.text = "Player 2 Score: " + p2score;
+				});
+				*/
+			});
 		#end
 		super.create();
 	}
@@ -1393,22 +1420,7 @@ class PlayStateOnline extends MusicBeatState
 		missTxt.text = "Missed:" + missedNotes;
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-
-			// 1 / 1000 chance for Gitaroo Man easter egg
-			if (FlxG.random.bool(0.1))
-			{
-				// gitaroo man easter egg
-				FlxG.switchState(new GitarooPause());
-			}
-			else
-				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		
-			#if desktop
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			#end
+			trace("pissing");
 		}
 		if (FlxG.keys.justPressed.TWO) {
 			persistentUpdate = false;
@@ -1619,30 +1631,6 @@ class PlayStateOnline extends MusicBeatState
 			trace("User is cheating!");
 		}
 		if (GimmickState.instantdeath && missedNotes > 0 && gimmick) health = 0;
-		if (health <= 0 && pracMode==false)
-		{
-			if(FlxG.save.data.instres){
-				LoadingState.loadAndSwitchState(new PlayState());
-			}else{
-				boyfriend.stunned = true;
-
-				persistentUpdate = false;
-				persistentDraw = false;
-				paused = true;
-
-				vocals.stop();
-				FlxG.sound.music.stop();
-
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-				// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				
-				#if desktop
-				// Game Over doesn't get his own variable because it's only used here
-				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-				#end
-			}
-		}
 
 		if (unspawnNotes[0] != null)
 		{
