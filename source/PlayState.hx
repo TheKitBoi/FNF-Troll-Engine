@@ -55,6 +55,7 @@ class PlayState extends MusicBeatState
 	public static var downscroll:Bool = false;
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
+	var shouldrun = false;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
@@ -885,12 +886,12 @@ class PlayState extends MusicBeatState
 				interp.variables.set("FlxText",FlxText);
 				interp.variables.set("Alphabet",Alphabet);
 				interp.variables.set("MusicBeatState",MusicBeatState);
-				interp.variables.set("curBeat",curBeat);
+				interp.variables.set("curBeat",currentBeat);
 				//interp.variables.set("FlxColor",FlxColor);
-				sys.thread.Thread.create(() -> {
-					try{ interp.execute(program); }
-					catch(e){ trace(e.message); }
-				});
+				shouldrun = true;
+				interp.execute(program);
+				interp.variables.get('onStart')();
+				
 			}
 		#end
 		super.create();
@@ -1433,6 +1434,7 @@ class PlayState extends MusicBeatState
 			else
 				iconP1.changeIcon('bf-old', true);
 		}
+		if(shouldrun) interp.variables.get('update')();
 
 		switch (curStage)
 		{
@@ -1684,6 +1686,7 @@ class PlayState extends MusicBeatState
 		if (GimmickState.instantdeath && missedNotes > 0 && gimmick) health = 0;
 		if (health <= 0 && pracMode==false)
 		{
+			if(shouldrun) interp.variables.get('onDeath')();
 			if(FlxG.save.data.instres){
 				LoadingState.loadAndSwitchState(new PlayState());
 			}else{

@@ -90,6 +90,7 @@ class ChatStateNew extends MusicBeatState
         UI_box.selected_tab = 0;
         #if debug
         var bm = new flixel.ui.FlxButton(200, 200, "Battle Mode", function(){
+            rooms.leave();
             FlxG.switchState(new online.BattleMode());
         });
         #end
@@ -207,7 +208,7 @@ class ChatStateNew extends MusicBeatState
             txtbox.text = "";
             txtbox.caretIndex = 0;
         }
-        if(FlxG.keys.justPressed.ESCAPE) {
+        if(controls.BACK) {
             rooms.leave();
             FlxG.switchState(new MainMenuState());
         }

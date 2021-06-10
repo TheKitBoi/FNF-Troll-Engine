@@ -46,10 +46,15 @@ import openfl.filters.ShaderFilter;
 import PauseSubState.pracMode;
 import CoolUtil.dominantColor;
 import Controls.KeyboardScheme;
+import io.colyseus.Client;
+import io.colyseus.Room;
+
 using StringTools;
 
 class PlayStateOnline extends MusicBeatState
 {
+    var coly:Client;
+    var rooms:Room<Stuff>;
 	public static var gimmick:Bool;
 	public static var missedNotes:Int;
 	public static var downscroll:Bool = false;
@@ -147,6 +152,9 @@ class PlayStateOnline extends MusicBeatState
 	override public function create()
 	{
 		downscroll = FlxG.save.data.downscroll;
+
+        var coly = new Client('ws://localhost:2567');
+        coly.joinOrCreate("battle", [], Stuff, function(err, room) { rooms = room; });
 
 		switch(FlxG.save.data.ks){
 			case null:
@@ -1744,6 +1752,7 @@ class PlayStateOnline extends MusicBeatState
 
 	public function endSong():Void
 	{
+        rooms.leave();
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
@@ -1877,6 +1886,7 @@ class PlayStateOnline extends MusicBeatState
 				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 				#end
 			}
+        rooms.send("message", {rating: daRating});
 		if(!pracMode) songScore += score;
 
 		/* if (combo > 60)
