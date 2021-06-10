@@ -11,6 +11,9 @@ class Stuff extends Schema {
 	@:type("string")
 	public var recvprev: String = "";
 
+	@:type("string")
+	public var start: String = "";
+
 	@:type("int32")
 	public var axY: Int = 0;
 

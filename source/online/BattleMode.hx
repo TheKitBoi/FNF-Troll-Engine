@@ -14,7 +14,6 @@ class BattleMode extends MusicBeatState{
 
     var logo:FlxSprite;
     var hand:FlxSprite;
-
     var curSelected:Int = 0;
 
     var assets:FlxTypedGroup<FlxSprite>;
@@ -79,20 +78,6 @@ class BattleMode extends MusicBeatState{
             add(assets);   
             add(logo);
             add(hand);
-            var coly = new Client('ws://localhost:2567');
-            coly.joinOrCreate("battle", [], Stuff, function(err, room) {
-                if (err != null) {
-                    trace("JOIN ERROR: " + err);
-                    return;
-                }
-                connectedtext.applyMarkup("Connected: $Online$",
-                [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "$")]);
-                trace(room.state.chatHist);
-                room.onMessage("message", function(message) {
-                    //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
-                });
-            });
-
             super.create();
         }
         override function update(elapsed:Float){

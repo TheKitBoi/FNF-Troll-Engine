@@ -154,7 +154,12 @@ class PlayStateOnline extends MusicBeatState
 		downscroll = FlxG.save.data.downscroll;
 
         var coly = new Client('ws://localhost:2567');
-        coly.joinOrCreate("battle", [], Stuff, function(err, room) { rooms = room; });
+        coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
+            rooms = room;
+            room.onMessage("start", function(message){
+                startCountdown();
+            });
+        });
 
 		switch(FlxG.save.data.ks){
 			case null:
@@ -839,7 +844,7 @@ class PlayStateOnline extends MusicBeatState
 			switch (curSong.toLowerCase())
 			{
 				default:
-					startCountdown();
+					//startCountdown();
 			}
 		}
 		if(GimmickState.upsidedown && gimmick) FlxG.camera.angle = 180;
