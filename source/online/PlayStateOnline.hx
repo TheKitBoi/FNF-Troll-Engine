@@ -892,11 +892,19 @@ class PlayStateOnline extends MusicBeatState
 				});
 			}
 			add(onlinemodetext);
+			var roomcode:FlxText = new FlxText(5, FlxG.height - 18, 0, "Room code: ", 12);
+			roomcode.scrollFactor.set();
+			roomcode.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			add(roomcode);
 			var coly = new Client('ws://localhost:2567');
 			coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
 				rooms = room;
+				room.onMessage('message', function(message){
+					roomcode.text = roomcode.text + message.iden;	
+				});
 				room.onMessage("start", function(message){
 					remove(onlinemodetext);
+					remove(roomcode);
 					add(p1scoretext);
 					add(p2scoretext);
 					startCountdown();
