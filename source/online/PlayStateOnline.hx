@@ -630,25 +630,11 @@ class PlayStateOnline extends MusicBeatState
 
 		dad = new Character(100, 100, SONG.player2, false);
 
-		p1scoretext = new FlxText(FlxG.width * 0.1, 60, 0, "Player 1 Score: " + p1score, 16);
-		p2scoretext = new FlxText(FlxG.width * 0.1, 80, 0, "Player 2 Score: " + p2score, 16);
-
-		p1scoretext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
-		p1scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-
-		p2scoretext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
-		p2scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-
-		p1scoretext.cameras = [camHUD];
-		p2scoretext.cameras = [camHUD];
-
+		onlinemodetext = new FlxText(0, 0, 0, "Waiting for another player... (1/2)", 60);
+		onlinemodetext.screenCenter(XY);
 		onlinemodetext.cameras = [camHUD];
 
-		onlinemodetext = new FlxText(0, 0, 0, "Waiting for another player... (1/2)", 64);
-		onlinemodetext.screenCenter(XY);
-		onlinemodetext.x += 50;
-
-		onlinemodetext.setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, RIGHT);
+		onlinemodetext.setFormat(Paths.font("vcr.ttf"), 60, FlxColor.WHITE, RIGHT);
 		onlinemodetext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
@@ -802,6 +788,18 @@ class PlayStateOnline extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
+
+		p1scoretext = new FlxText(FlxG.width * 0.001, healthBar.y, 0, "Player 1 Score: " + p1score, 16);
+		p2scoretext = new FlxText(FlxG.width * 0.001, healthBar.y + 20, 0, "Player 2 Score: " + p2score, 16);
+
+		p1scoretext.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
+		p1scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
+		p2scoretext.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
+		p2scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
+		p1scoretext.cameras = [camHUD];
+		p2scoretext.cameras = [camHUD];
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);

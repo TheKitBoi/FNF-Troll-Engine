@@ -126,9 +126,11 @@ class ChatState extends MusicBeatState
             });
             room.onMessage("reul", function(message){
                 var users:Array<String> = message.uslist;
+                var tmpuser = "Users online:\n";
                 for(i in 0...users.length){
-                    userlist.text += users[i] + "\n";
+                    tmpuser += users[i] + "\n";
                 }
+                userlist.text = tmpuser;
             });
             room.onMessage("recvprev", function(message){
                 chatText.text = message.chatHist;
