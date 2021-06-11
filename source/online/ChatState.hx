@@ -1,12 +1,10 @@
 package online;
 
+import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.system.FlxSound;
-import networking.sessions.Session;
-import networking.utils.NetworkEvent;
-import networking.utils.NetworkMode;
 import networking.Network;
 import haxe.io.Bytes;
 import flixel.addons.ui.FlxInputText;
@@ -19,9 +17,20 @@ import flixel.util.FlxColor;
 #if desktop
 import Config.data;
 #end
+import io.colyseus.Client;
+import io.colyseus.Room;
+
+typedef NDT = { // NDT means Nessecary Data Types btw!
+    var message:String;
+    var chatHist:String;
+    var uslist:Array<String>;
+    var motd:String;
+    var rules:String;
+    var axY:Int;
+}
 class ChatState extends MusicBeatState
 {  
-    public static var client:Session;
+    var rooms:Room<Stuff>;
     var UI_box:FlxUITabMenu;
 
     var txtbox:FlxInputText;
@@ -29,7 +38,10 @@ class ChatState extends MusicBeatState
 
     public static var isUsN:Bool;
     public static var beentoChat:Bool;
+    var pissing:Bool;
+    var connected:Bool = false;
 
+    var coly:Client;
 
     public static var username:String;
 
@@ -43,7 +55,14 @@ class ChatState extends MusicBeatState
 
     override function create()
 	{
-        #if desktop
+        var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+        menuBG.color = 0xFFea71fd;
+        menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
+        menuBG.updateHitbox();
+        menuBG.screenCenter();
+        menuBG.antialiasing = true;
+        
+        var coly = new Client('ws://localhost:2567');
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 30;
@@ -60,9 +79,7 @@ class ChatState extends MusicBeatState
 
         if(FlxG.save.data.username != null) username = FlxG.save.data.username;
         else username = "guest" + FlxG.random.int(0, 9999); 
-
-        var client = Network.registerSession(NetworkMode.CLIENT, { ip: data.addr, port: data.port});
-
+        
         UI_box = new FlxUITabMenu(null, [
             {name: "tab1", label: 'MOTD'},
             {name: "tab2", label: 'Rules'},
@@ -72,6 +89,12 @@ class ChatState extends MusicBeatState
 		UI_box.screenCenter(XY);
         UI_box.selected_tab = 0;
 
+        var bm = new flixel.ui.FlxButton(200, 200, "Battle Mode", function(){
+            rooms.leave();
+            FlxG.switchState(new online.BattleMode());
+        });
+
+
         MOTD = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
         rules = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
         okButton = new flixel.ui.FlxButton(-280, 340, "Ok", function()
@@ -80,54 +103,43 @@ class ChatState extends MusicBeatState
                 remove(UI_box);
                 this.okButton.visible = false;
             });
-
-        client.addEventListener(NetworkEvent.MESSAGE_RECEIVED, function(event: NetworkEvent) { 
-            
-            if(event.data.chathist != null) {
-                chatText.text = event.data.chathist;
-                MOTD.text = event.data.motd;
-                rules.text = event.data.rules;
-                chatText.y += event.data.axY; 
+        var timer = new haxe.Timer(50);
+        connected = false;
+        coly.joinOrCreate("chat", [], Stuff, function(err, room) {
+            connected = true;
+            rooms = room;
+            if (err != null) {
+                trace("JOIN ERROR: " + err);
+                return;
             }
-
-            if(event.data.message != null){
+            chatText.text = "Connecting...\n";
+            chatText.y = txtbox.y - 23;
+            //client.send({nen: username});
+            room.send("userdata", {usname: username});
+            room.onMessage("message", function(message) {
                 FlxG.sound.play(Paths.sound("sentmessage"));
-                chatText.text = chatText.text + event.data.message + "\n";
+                chatText.text = chatText.text + message.message + "\n";
+                chatText.applyMarkup(chatText.text,
+                [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "[G]")]);
                 chatText.y -= 20;
                 //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
-
-            }
-
-            if(event.data.uslist != null){
-                userlist.text = "Users online:\n";
-                var users:Array<String> = event.data.uslist;
+            });
+            room.onMessage("reul", function(message){
+                var users:Array<String> = message.uslist;
                 for(i in 0...users.length){
                     userlist.text += users[i] + "\n";
                 }
-            }
-            //if(event.data.message != null) chatText.y -= 20; 
-        }); //event.data.axY;
-          
-        client.addEventListener(NetworkEvent.CONNECTED, function(event: NetworkEvent) {
-            add(UI_box);
-            add(okButton);
-            chatText.text = "";
-            chatText.y = txtbox.y - 23;
-            client.send({nen: username});
+            });
+            room.onMessage("recvprev", function(message){
+                chatText.text = message.chatHist;
+                MOTD.text = message.motd;
+                rules.text = message.rules;
+                chatText.y += Std.int(message.axY); 
+
+                userlist.text = "Users online:\n";
+                var users:Array<String> = message.uslist;
+            });
         });
-
-        client.addEventListener(NetworkEvent.SERVER_FULL, function(event: NetworkEvent) {
-            chatText.text = "Server is full! Try joining later!\n";
-            chatText.y = txtbox.y - 23;
-        });
-
-        client.addEventListener(NetworkEvent.DISCONNECTED, function(event: NetworkEvent) {
-            chatText.text = "You have been disconnected from the server!\n";
-            chatText.y = txtbox.y - 23;
-        });
-
-        client.start();
-
         txtbox = new FlxInputText(200, 704.5, FlxG.width);
         txtbox.screenCenter(X);
         txtbox.background = true;
@@ -152,7 +164,7 @@ class ChatState extends MusicBeatState
         usnbox.backgroundColor = FlxColor.WHITE;
         usnbox.borderColor = 0xFFFFFFFF;
         usnbox.visible = false;
-
+        
 		var nameButton = new flixel.ui.FlxButton(txtbox.width - 80, txtbox.y, "Username", function()
             {
                 changeUsername();
@@ -160,13 +172,6 @@ class ChatState extends MusicBeatState
 
         okButton.screenCenter(XY);
         okButton.y += 150;
-
-        var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-        menuBG.color = 0xFFea71fd;
-        menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
-        menuBG.updateHitbox();
-        menuBG.screenCenter();
-        menuBG.antialiasing = true;
         
 		var tab_group_motd = new FlxUI(null, UI_box);
 		tab_group_motd.name = "tab1";
@@ -187,26 +192,26 @@ class ChatState extends MusicBeatState
 
         UI_box.addGroup(tab_group_motd);
         UI_box.addGroup(tab_group_rules);
+        add(UI_box);
+        add(okButton);
+        
+        add(bm);
 
 		super.create();
-        #end
 	}
 
 	override function update(elapsed:Float)
 	{
-        #if desktop
         super.update(elapsed);
-        if(FlxG.keys.justPressed.ESCAPE) {
-            Network.destroySession(Network.sessions[0]);
-            FlxG.switchState(new MainMenuState());
-        }
         if(FlxG.keys.justPressed.ENTER && txtbox.text != "" && !isUsN) {
-            var session = Network.sessions[0];
-            session.send({message: txtbox.text, name: username}); //Bytes.ofString(txtbox.text)
+            if(connected)rooms.send("message", {message: txtbox.text});
             txtbox.text = "";
             txtbox.caretIndex = 0;
         }
-        #end
+        if(controls.BACK) {
+            rooms.leave();
+            FlxG.switchState(new MainMenuState());
+        }
 	}
     public function changeUsername(){
         usnbox.visible = !usnbox.visible;
@@ -215,6 +220,8 @@ class ChatState extends MusicBeatState
             username = usnbox.text;
             FlxG.save.data.username = usnbox.text;
             FlxG.save.flush();
+            usnbox.text = "";
+            if(connected)rooms.send("userdata", {usname: username});
         }
     }
 }

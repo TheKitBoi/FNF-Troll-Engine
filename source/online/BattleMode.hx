@@ -86,7 +86,7 @@ class BattleMode extends MusicBeatState{
             if(FlxG.keys.justPressed.RIGHT) changeSelection(1);
             if(FlxG.keys.justPressed.UP) changeSelection(-2);
             if(FlxG.keys.justPressed.DOWN) changeSelection(2);
-            if(controls.BACK) FlxG.switchState(new ChatStateNew());
+            if(controls.BACK) FlxG.switchState(new ChatState());
 
             if(controls.ACCEPT){
                 switch(curSelected){
@@ -98,11 +98,11 @@ class BattleMode extends MusicBeatState{
                     PlayStateOnline.storyDifficulty = 2;
     
                     PlayStateOnline.storyWeek = 1;
-                    LoadingState.loadAndSwitchState(new PlayStateOnline());
+                    LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                 case 1:
                     trace("ping pong");
                 case 2:
-                    FlxG.switchState(new ChatStateNew());
+                    FlxG.switchState(new ChatState());
                 }
                 assets.forEach(function (spr:FlxSprite){
                     if(spr.ID != curSelected){

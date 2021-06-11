@@ -15,6 +15,9 @@ class Stuff extends Schema {
 	public var start: String = "";
 
 	@:type("int32")
+	public var retscore: Int = 0;
+
+	@:type("int32")
 	public var axY: Int = 0;
 
 }

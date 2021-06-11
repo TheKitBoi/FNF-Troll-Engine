@@ -633,8 +633,23 @@ class PlayStateOnline extends MusicBeatState
 		p1scoretext = new FlxText(FlxG.width * 0.1, 60, 0, "Player 1 Score: " + p1score, 16);
 		p2scoretext = new FlxText(FlxG.width * 0.1, 80, 0, "Player 2 Score: " + p2score, 16);
 
+		p1scoretext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+		p1scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
+		p2scoretext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+		p2scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
+		p1scoretext.cameras = [camHud];
+		p2scoretext.cameras = [camHud];
+
+		onlinemodetext.cameras = [camHud];
+
 		onlinemodetext = new FlxText(0, 0, 0, "Waiting for another player... (1/2)", 64);
 		onlinemodetext.screenCenter(XY);
+		onlinemodetext.x += 50;
+
+		onlinemodetext.setFormat(Paths.font("vcr.ttf"), 64, FlxColor.WHITE, RIGHT);
+		onlinemodetext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -884,9 +899,11 @@ class PlayStateOnline extends MusicBeatState
 				rooms = room;
 				room.onMessage("start", function(message){
 					remove(onlinemodetext);
+					add(p1scoretext);
+					add(p2scoretext);
 					startCountdown();
 				});
-				/*
+				
 				room.onMessage("retscore", function(message){
 					p1score = message.p1score;
 					p2score = message.p2score;
@@ -894,7 +911,7 @@ class PlayStateOnline extends MusicBeatState
 					p1scoretext.text = "Player 1 Score: " + p1score;
 					p2scoretext.text = "Player 2 Score: " + p2score;
 				});
-				*/
+				
 			});
 		#end
 		super.create();
