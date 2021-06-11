@@ -639,10 +639,10 @@ class PlayStateOnline extends MusicBeatState
 		p2scoretext.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
 		p2scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 
-		p1scoretext.cameras = [camHud];
-		p2scoretext.cameras = [camHud];
+		p1scoretext.cameras = [camHUD];
+		p2scoretext.cameras = [camHUD];
 
-		onlinemodetext.cameras = [camHud];
+		onlinemodetext.cameras = [camHUD];
 
 		onlinemodetext = new FlxText(0, 0, 0, "Waiting for another player... (1/2)", 64);
 		onlinemodetext.screenCenter(XY);
