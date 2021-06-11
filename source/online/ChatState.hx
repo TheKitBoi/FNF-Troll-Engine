@@ -1,5 +1,6 @@
 package online;
 
+import Config.ConfigData;
 import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
@@ -14,9 +15,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-#if desktop
 import Config.data;
-#end
 import io.colyseus.Client;
 import io.colyseus.Room;
 
@@ -62,7 +61,7 @@ class ChatState extends MusicBeatState
         menuBG.screenCenter();
         menuBG.antialiasing = true;
         
-        var coly = new Client('ws://localhost:2567');
+        var coly = new Client('ws://' + data.addr + ':' + data.port);
         FlxG.sound.music.stop();
         var pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 30;
@@ -88,11 +87,6 @@ class ChatState extends MusicBeatState
 		UI_box.resize(400, 400);
 		UI_box.screenCenter(XY);
         UI_box.selected_tab = 0;
-
-        var bm = new flixel.ui.FlxButton(200, 200, "Battle Mode", function(){
-            rooms.leave();
-            FlxG.switchState(new online.BattleMode());
-        });
 
 
         MOTD = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
@@ -196,8 +190,6 @@ class ChatState extends MusicBeatState
         UI_box.addGroup(tab_group_rules);
         add(UI_box);
         add(okButton);
-        
-        add(bm);
 
 		super.create();
 	}
@@ -210,9 +202,9 @@ class ChatState extends MusicBeatState
             txtbox.text = "";
             txtbox.caretIndex = 0;
         }
-        if(controls.BACK) {
+        if(controls.BACK && !isUsN) {
             rooms.leave();
-            FlxG.switchState(new MainMenuState());
+            FlxG.switchState(new FNFNetMenu());
         }
 	}
     public function changeUsername(){

@@ -48,6 +48,7 @@ import CoolUtil.dominantColor;
 import Controls.KeyboardScheme;
 import io.colyseus.Client;
 import io.colyseus.Room;
+import Config.data;
 
 using StringTools;
 
@@ -66,6 +67,7 @@ class PlayStateOnline extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 	var halloweenLevel:Bool = false;
 	private var vocals:FlxSound;
+	var startedMatch:Bool = false;
 	private var i:Int;
 	private var dad:Character;
 	private var gf:Character;
@@ -162,6 +164,7 @@ class PlayStateOnline extends MusicBeatState
 
 	override public function create()
 	{
+		FlxG.autoPause = false;
 		downscroll = FlxG.save.data.downscroll;
 
 		switch(FlxG.save.data.ks){
@@ -870,39 +873,19 @@ class PlayStateOnline extends MusicBeatState
 			}
 		}
 		if(GimmickState.upsidedown && gimmick) FlxG.camera.angle = 180;
-		#if desktop
-		if(sys.FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/chartscript"))
-			{
-				var program = parser.parseString(sys.io.File.getContent("assets/data/" + SONG.song.toLowerCase() + "/chartscript"));
-				interp.variables.set("PlayState",PlayStateOnline);
-				interp.variables.set("FlxG",FlxG);
-				interp.variables.set("Sys",Sys);
-				interp.variables.set("Character",Character);
-				interp.variables.set("FlxSprite",FlxSprite);
-				interp.variables.set("FlxTween",FlxTween);
-				interp.variables.set("FlxEase",FlxEase);
-				interp.variables.set("FlxText",FlxText);
-				interp.variables.set("Alphabet",Alphabet);
-				interp.variables.set("MusicBeatState",MusicBeatState);
-				interp.variables.set("curBeat",curBeat);
-				//interp.variables.set("FlxColor",FlxColor);
-				sys.thread.Thread.create(() -> {
-					try{ interp.execute(program); }
-					catch(e){ trace(e.message); }
-				});
-			}
 			add(onlinemodetext);
 			var roomcode:FlxText = new FlxText(5, FlxG.height - 18, 0, "Room code: ", 12);
 			roomcode.scrollFactor.set();
-			roomcode.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			roomcode.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			add(roomcode);
-			var coly = new Client('ws://localhost:2567');
+			var coly = new Client('ws://' + data.addr + ':' + data.port);
 			coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
 				rooms = room;
 				room.onMessage('message', function(message){
 					roomcode.text = roomcode.text + message.iden;	
 				});
 				room.onMessage("start", function(message){
+					startedMatch = true;
 					remove(onlinemodetext);
 					remove(roomcode);
 					add(p1scoretext);
@@ -919,7 +902,6 @@ class PlayStateOnline extends MusicBeatState
 				});
 				
 			});
-		#end
 		super.create();
 	}
 
@@ -1408,6 +1390,10 @@ class PlayStateOnline extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		if(controls.BACK && !startedMatch) {
+			rooms.leave();
+			FlxG.switchState(new FNFNetMenu());
+		}
 		currentBeat = curBeat;
 		#if !debug
 		perfectMode = false;
@@ -1451,14 +1437,6 @@ class PlayStateOnline extends MusicBeatState
 			paused = true;
 			
 			openSubState(new ScriptSubState());
-		}
-		if (FlxG.keys.justPressed.SEVEN)
-		{
-			FlxG.switchState(new ChartingState());
-
-			#if desktop
-			DiscordClient.changePresence("Chart Editor", null, null, true);
-			#end
 		}
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
@@ -1843,7 +1821,7 @@ class PlayStateOnline extends MusicBeatState
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
-			FlxG.switchState(new FreeplayState());
+			FlxG.switchState(new FNFNetMenu());
 		}
 	}
 

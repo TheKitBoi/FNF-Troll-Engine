@@ -9,7 +9,8 @@ import flixel.FlxSprite;
 import io.colyseus.Client;
 import io.colyseus.Room;
 import flixel.tweens.FlxEase;
-class BattleMode extends MusicBeatState{
+
+class FNFNetMenu extends MusicBeatState{
     var coly:Client;
 
     var logo:FlxSprite;
@@ -35,10 +36,6 @@ class BattleMode extends MusicBeatState{
             menuBG.screenCenter();
             menuBG.antialiasing = true;
 
-            var connectedtext = new FlxText(0, 0, 0, "Connected: $Offline$", 32);
-            connectedtext.applyMarkup("Connected: $Offline$",
-            [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
-
             assets = new FlxTypedGroup<FlxSprite>();
 
             var tex = Paths.getSparrowAtlas('battleassets');
@@ -48,7 +45,7 @@ class BattleMode extends MusicBeatState{
             hand.animation.addByPrefix('hand', 'hand', 24, true);
             hand.animation.play('hand');
 
-            for (i in 0...Std.int(optionShit.length/2))
+            for (i in 0...2)
             {
                 var menuItem:FlxSprite = new FlxSprite(305 + (i * 360), 425);
                 menuItem.frames = tex;
@@ -60,7 +57,7 @@ class BattleMode extends MusicBeatState{
                 menuItem.scrollFactor.set();
                 menuItem.antialiasing = true;
             }
-            for (i in 0...1)
+            for (i in 0...2)
                 {
                     var menuItem:FlxSprite = new FlxSprite(305 + (i * 360), 550);
                     menuItem.frames = tex;
@@ -74,7 +71,6 @@ class BattleMode extends MusicBeatState{
                 }
 
             add(menuBG);
-            add(connectedtext);
             add(assets);   
             add(logo);
             add(hand);
@@ -102,13 +98,15 @@ class BattleMode extends MusicBeatState{
                 case 1:
                     trace("ping pong");
                 case 2:
+                    FlxG.switchState(new MainMenuState());
+                case 3:
                     FlxG.switchState(new ChatState());
                 }
+
                 assets.forEach(function (spr:FlxSprite){
                     if(spr.ID != curSelected){
                         FlxTween.tween(spr, {width: 0, height: 0}, 1.5, {ease:FlxEase.quintInOut});
                     }
-
                 });
             }
         }
@@ -118,8 +116,8 @@ class BattleMode extends MusicBeatState{
             if(curSelected < 0){
                 curSelected = 0;
             }
-            if(curSelected > 2){
-                curSelected = 2;
+            if(curSelected > 3){
+                curSelected = 3;
             }
             hand.y = 438;
             switch(curSelected)
@@ -128,9 +126,13 @@ class BattleMode extends MusicBeatState{
                     hand.x = 167;
                 case 1:
                     hand.flipX = true;
-                    hand.x = 1000;
+                    hand.x = 1050;
                 case 2:
                     hand.x = 167;
+                    hand.y = 550;
+                case 3:
+                    hand.flipX = true;
+                    hand.x = 1050;
                     hand.y = 550;
             }
             FlxG.sound.play(Paths.sound('scrollMenu'));

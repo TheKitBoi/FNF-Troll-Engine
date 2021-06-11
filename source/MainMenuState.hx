@@ -27,7 +27,7 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'chat', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'fnfnet', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
@@ -84,7 +84,7 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var tex = Paths.getSparrowAtlas('mm_assets');
+		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
 
 		for (i in 0...optionShit.length)
 		{
@@ -95,7 +95,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			if(optionShit[i] == "chat") menuItem.y = 164;
+			if(optionShit[i] == "fnfnet") menuItem.y = 222;
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
@@ -187,10 +187,8 @@ class MainMenuState extends MusicBeatState
 										FlxG.switchState(new FreeplayState());
 
 										trace("Freeplay Menu Selected");
-									case 'chat':
-										#if desktop
-										FlxG.switchState(new online.ChatState());
-										#end
+									case 'fnfnet':
+										FlxG.switchState(new online.FNFNetMenu());
 										
 									case 'options':
 										FlxG.switchState(new OptionsMenu());
@@ -225,6 +223,7 @@ class MainMenuState extends MusicBeatState
 
 			if (spr.ID == curSelected)
 			{
+				
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
 			}

@@ -1,4 +1,5 @@
 package;
+import haxe.Json;
 #if desktop
 import sys.io.File.getContent;
 #end
@@ -26,5 +27,15 @@ class Config {
     #if desktop
     public static var s = getContent("config.json"); //#else "{width: 1280, height: 720, fullscreen: false, addr: 'net.fnf.general-infinity.tech', port: '9000'}"; #end
     public static var data:ConfigData = haxe.Json.parse(s);
+    #else
+    public static var s:String = '{
+        "width": 1280,
+        "height": 720,
+        "addr": "127.0.0.1",
+        "port": 2567
+    }';
+    
+    public static var data:ConfigData = haxe.Json.parse(s);
     #end
+
 }
