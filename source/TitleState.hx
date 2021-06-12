@@ -49,9 +49,9 @@ class TitleState extends MusicBeatState
 	{
 		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 
-		#if polymod
+
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
-		#end
+
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
