@@ -119,7 +119,7 @@ class FreeplayState extends MusicBeatState
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		// scoreText.alignment = RIGHT;
 
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), 155, 0xFF000000);
+		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), #if gimmick 155 #else 115 #end, 0xFF000000);
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
@@ -131,10 +131,11 @@ class FreeplayState extends MusicBeatState
 		cutText.font = scoreText.font;
 		add(cutText);
 
+		#if gimmick
 		gimText = new FlxText(scoreText.x, cutText.y + 36, 0, "Gimmicks (G): " + gimmick, 24);
 		gimText.font = scoreText.font;
 		add(gimText);
-
+		#end
 		add(scoreText);
 
 		changeSelection();
@@ -222,10 +223,12 @@ class FreeplayState extends MusicBeatState
 			cutscene = !cutscene;
 			cutText.text = "Watch Cutscene (C): " + cutscene;
 		}
+		#if gimmick
 		if (FlxG.keys.justPressed.G) {
 			gimmick = !gimmick;
 			gimText.text = "Gimmicks (G): " + gimmick;
 		}
+		#end
 		if (controls.LEFT_P)
 			changeDiff(-1);
 		if (controls.RIGHT_P)

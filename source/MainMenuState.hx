@@ -27,7 +27,11 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
+	#if fnfnet
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'fnfnet', 'options'];
+	#else
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	#end
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
@@ -84,8 +88,11 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
+		#if fnfnet
 		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
-
+		#else
+		var tex = Paths.getSparrowAtlas('main_menu_wo_fnfnet');
+		#end
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
@@ -95,11 +102,27 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			if(optionShit[i] == "fnfnet") menuItem.y = 212;
+			#if fnfnet if(optionShit[i] == "fnfnet") menuItem.y = 212; #end
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
 		}
+
+		#if charselection
+		var cst = Paths.getSparrowAtlas('chaselect');
+
+		var menuItem:FlxSprite = new FlxSprite(-200, 180);
+		menuItem.frames = cst;
+		menuItem.animation.addByPrefix('idle', "chaselect white", 24);
+		menuItem.animation.addByPrefix('selected', "chaselect basic", 24);
+		menuItem.animation.play('idle');
+		menuItem.ID = optionShit.length;
+		menuItem.screenCenter(X);
+		menuItem.x -= 335;
+		menuItems.add(menuItem);
+		menuItem.scrollFactor.set();
+		menuItem.antialiasing = true;
+		#end
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
@@ -148,11 +171,27 @@ class MainMenuState extends MusicBeatState
 			{
 				FlxG.switchState(new TitleState());
 			}
+			#if charselection
+			if (FlxG.keys.justPressed.LEFT){
+				changeItem(0, true);
+			}
+			if (FlxG.keys.justPressed.RIGHT){
+				changeItem(1);
+			}
+			#end
 			if (FlxG.keys.justPressed.SIX) FlxG.openURL("https://www.youtube.com/watch?v=38FnpnflHEg");
-			if (FlxG.keys.justPressed.FIVE) LoadingState.loadAndSwitchState(new CharacterSelection());
 			if (FlxG.keys.justPressed.THREE) FlxG.sound.play(Paths.sound('ok'));
 			if (controls.ACCEPT)
 			{
+				if (optionShit[curSelected] == 'donate')
+					{
+						#if linux
+						Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
+						#else
+						FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
+						#end
+					}
+					else
 				{
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -176,7 +215,11 @@ class MainMenuState extends MusicBeatState
 							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
 							{
 								var daChoice:String = optionShit[curSelected];
-
+								#if charselection
+								if(spr.ID == optionShit.length){
+									LoadingState.loadAndSwitchState(new CharacterSelection());
+								}
+								#end
 								switch (daChoice)
 								{
 									case 'story mode':
@@ -204,14 +247,15 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			if(spr.ID != optionShit.length)spr.screenCenter(X);
 		});
 	}
 
-	function changeItem(huh:Int = 0)
+	function changeItem(huh:Int = 0, left = false)
 	{
 		curSelected += huh;
 
+		if(left) curSelected = menuItems.length - 1;
 		if (curSelected >= menuItems.length)
 			curSelected = 0;
 		if (curSelected < 0)
@@ -226,8 +270,10 @@ class MainMenuState extends MusicBeatState
 				
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
+				#if fnfnet 
 				if(optionShit[curSelected] == "fnfnet") spr.y = 155;
 				else menuItems.members[2].y = 212;
+				#end
 			}
 
 			spr.updateHitbox();
