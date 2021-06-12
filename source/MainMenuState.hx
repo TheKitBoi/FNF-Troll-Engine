@@ -95,7 +95,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			if(optionShit[i] == "fnfnet") menuItem.y = 222;
+			if(optionShit[i] == "fnfnet") menuItem.y = 212;
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
@@ -226,7 +226,8 @@ class MainMenuState extends MusicBeatState
 				
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
-				if(optionShit[curSelected] == "fnfnet") spr.y = 6363;
+				if(optionShit[curSelected] == "fnfnet") spr.y = 155;
+				else menuItems.members[2].y = 212;
 			}
 
 			spr.updateHitbox();

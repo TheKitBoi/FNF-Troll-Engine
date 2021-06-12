@@ -1,5 +1,6 @@
 package online;
 
+import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSubState;
@@ -11,7 +12,8 @@ class BattleResultSubState extends MusicBeatSubstate
 {
 	var bf:Boyfriend;
 	var camFollow:FlxObject;
-    var loseorwin:Alphabet;
+    var loseorwin:FlxText;
+	var aktc:Alphabet;
 	var stageSuffix:String = "";
 
 	public function new(x:Float, y:Float)
@@ -31,8 +33,10 @@ class BattleResultSubState extends MusicBeatSubstate
 		}
 
 		super();
+		aktc = new Alphabet(FlxG.width * 0.001, FlxG.height * 0.95, "Press any key to continue");
         //if(Math.max(PlayStateOnline.p1score, PlayStateOnline.p2score))
-        loseorwin = new Alphabet(FlxG.width * 0.01, 60, "Final Score:\nPlayer 1: " + PlayStateOnline.p1score + "\nPlayer 2: " + PlayStateOnline.p2score, true);
+        loseorwin = new FlxText(FlxG.width * 0.01, 60, "Final Score:\nPlayer 1: " + PlayStateOnline.p1score + "\nPlayer 2: " + PlayStateOnline.p2score +"\n\nPress any key to Continue", 32);
+		//loseorwin.font = Paths.font('fnf');
 		Conductor.songPosition = 0;
 
 		bf = new Boyfriend(x, y, daBf);
@@ -40,7 +44,9 @@ class BattleResultSubState extends MusicBeatSubstate
 
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
 		add(camFollow);
-
+		add(loseorwin);
+		add(aktc);
+		FlxG.sound.playMusic(Paths.music('breakfast'));
 		Conductor.changeBPM(100);
 
 		// FlxG.camera.followLerp = 1;
@@ -55,7 +61,7 @@ class BattleResultSubState extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (controls.BACK || controls.ACCEPT)
+		if (FlxG.keys.justPressed.ANY)
 		{
 			FlxG.sound.music.stop();
 			FlxG.switchState(new online.FNFNetMenu());
