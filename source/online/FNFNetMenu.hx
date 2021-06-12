@@ -82,7 +82,7 @@ class FNFNetMenu extends MusicBeatState{
             if(FlxG.keys.justPressed.RIGHT) changeSelection(1);
             if(FlxG.keys.justPressed.UP) changeSelection(-2);
             if(FlxG.keys.justPressed.DOWN) changeSelection(2);
-            if(controls.BACK) FlxG.switchState(new ChatState());
+            if(controls.BACK) FlxG.switchState(new MainMenuState());
 
             if(controls.ACCEPT){
                 switch(curSelected){

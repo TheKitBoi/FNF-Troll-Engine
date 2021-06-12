@@ -6,7 +6,6 @@ import flixel.addons.ui.FlxSlider;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.system.FlxSound;
-import networking.Network;
 import haxe.io.Bytes;
 import flixel.addons.ui.FlxInputText;
 import flixel.FlxG;

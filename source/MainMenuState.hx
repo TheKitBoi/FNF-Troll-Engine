@@ -226,6 +226,7 @@ class MainMenuState extends MusicBeatState
 				
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
+				if(optionShit[curSelected] == "fnfnet") spr.y = 6363;
 			}
 
 			spr.updateHitbox();

@@ -108,8 +108,8 @@ class PlayStateOnline extends MusicBeatState
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
 
-	var p1score:Int = 0;
-	var p2score:Int = 0;
+	public static var p1score:Int = 0;
+	public static var p2score:Int = 0;
 
 
 	public static var iconP1:HealthIcon;
@@ -1747,82 +1747,21 @@ class PlayStateOnline extends MusicBeatState
 	public function endSong():Void
 	{
         rooms.leave();
+
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
-		if (SONG.validScore)
-		{
-			#if !switch
-			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
-			#end
-		}
+		boyfriend.stunned = true;
 
-		if (isStoryMode)
-		{
-			campaignScore += songScore;
+		persistentUpdate = false;
+		persistentDraw = false;
+		paused = true;
 
-			storyPlaylist.remove(storyPlaylist[0]);
+		vocals.stop();
+		FlxG.sound.music.stop();
 
-			if (storyPlaylist.length <= 0)
-			{
-				FlxG.sound.playMusic(Paths.music('freakyMenu'));
+		openSubState(new online.BattleResultSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
-				transIn = FlxTransitionableState.defaultTransIn;
-				transOut = FlxTransitionableState.defaultTransOut;
-
-				FlxG.switchState(new StoryMenuState());
-
-				// if ()
-				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
-
-				if (SONG.validScore)
-				{
-					NGio.unlockMedal(60961);
-					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
-				}
-
-				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
-				FlxG.save.flush();
-			}
-			else
-			{
-				var difficulty:String = "";
-
-				if (storyDifficulty == 0)
-					difficulty = '-easy';
-
-				if (storyDifficulty == 2)
-					difficulty = '-hard';
-
-				trace('LOADING NEXT SONG');
-				trace(storyPlaylist[0].toLowerCase() + difficulty);
-
-				if (SONG.song.toLowerCase() == 'eggnog')
-				{
-					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
-						-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-					blackShit.scrollFactor.set();
-					add(blackShit);
-					camHUD.visible = false;
-
-					FlxG.sound.play(Paths.sound('Lights_Shut_off'));
-				}
-
-				FlxTransitionableState.skipNextTransIn = true;
-				FlxTransitionableState.skipNextTransOut = true;
-				prevCamFollow = camFollow;
-
-				SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase() + difficulty, storyPlaylist[0]);
-				FlxG.sound.music.stop();
-
-				LoadingState.loadAndSwitchState(new PlayState());
-			}
-		}
-		else
-		{
-			trace('WENT BACK TO FREEPLAY??');
-			FlxG.switchState(new FNFNetMenu());
-		}
 	}
 
 	var endingSong:Bool = false;
