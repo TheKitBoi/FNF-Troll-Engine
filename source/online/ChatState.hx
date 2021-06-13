@@ -201,7 +201,7 @@ class ChatState extends MusicBeatState
             txtbox.text = "";
             txtbox.caretIndex = 0;
         }
-        if(controls.BACK && !isUsN) {
+        if(FlxG.keys.justPressed.ESCAPE) {
             if(connected)rooms.leave();
             FlxG.switchState(new FNFNetMenu());
         }
