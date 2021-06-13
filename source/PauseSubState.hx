@@ -25,7 +25,11 @@ class PauseSubState extends MusicBeatSubstate
 	public static var kbd:String;
 
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
+	#if skipsong
 	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Charting Menu', 'Control Scheme', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
+	#else
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Charting Menu', 'Control Scheme', 'Toggle Practice Mode', 'Exit to menu'];
+	#end
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;

@@ -41,7 +41,7 @@ class CharacterSelection extends MusicBeatState
 
 		controlsStrings = CoolUtil.coolTextFile(Paths.txt("CustomCharacters", "characters"));
 
-		icon = new FlxSprite(50, 550).loadGraphic(Paths.image("icon-"+controlsStrings[0], "characters"));
+		icon = new FlxSprite(50, 550).loadGraphic(Paths.image("icon-"+actualIcon(true), "characters"));
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
         menuBG.color = 0xFFea71fd;
@@ -180,7 +180,7 @@ class CharacterSelection extends MusicBeatState
 					grpControls.members[curSelected].x = tmp;
 				}
 				*/
-				icon.loadGraphic(Paths.image("icon-"+controlsStrings[curSelected], "characters"));
+				icon.loadGraphic(Paths.image("icon-"+actualIcon(), "characters"));
 
 				var daSelected:String = controlsStrings[curSelected];
 				//curChar.frames = Paths.getSparrowAtlas(daSelected);
@@ -230,5 +230,14 @@ class CharacterSelection extends MusicBeatState
 			{
 				isSettingControl = true;
 			}
+		}
+		function actualIcon(?piss:Bool){
+			var icawn:String;
+			if(controlsStrings[curSelected] == "BOYFRIEND"){
+				icawn = "bf";
+			}else
+			icawn = controlsStrings[curSelected];
+			if(piss) icawn = "bf";
+			return icawn;
 		}
 }

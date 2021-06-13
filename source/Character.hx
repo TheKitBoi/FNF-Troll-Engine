@@ -337,10 +337,10 @@ class Character extends FlxSprite
 				*/
 			case 'bf-christmas':
 				#if charselection
-				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('christmas/bf-christmas');
-				else tex = Paths.getSparrowAtlas('christmas/'+FlxG.save.data.curcharacter+'-christmas');
+				if(FlxG.save.data.curcharacter == null || !isPlayer || FlxG.save.data.curcharacter == "BOYFRIEND") tex = Paths.getSparrowAtlas('christmas/bfChristmas');
+				else tex = Paths.getSparrowAtlas('christmas/'+FlxG.save.data.curcharacter+'Christmas');
 				#else
-				tex = Paths.getSparrowAtlas('bf-christmas');
+				tex = Paths.getSparrowAtlas('Christmas');
 				#end
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -370,10 +370,13 @@ class Character extends FlxSprite
 				flipX = true;
 			case 'bf-car':
 				#if charselection
-				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('bf-car');
-				else tex = Paths.getSparrowAtlas(FlxG.save.data.curcharacter+'-car');
+				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('bfCar');
+				else {
+					if(FlxG.save.data.curcharacter == "BOYFRIEND") tex = Paths.getSparrowAtlas('bfCar');
+					else tex = Paths.getSparrowAtlas(FlxG.save.data.curcharacter+'Car');
+				}
 				#else
-				tex = Paths.getSparrowAtlas('bf-car');
+				tex = Paths.getSparrowAtlas('bfCar');
 				#end
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -400,8 +403,11 @@ class Character extends FlxSprite
 				flipX = true;
 			case 'bf-pixel':
 				#if charselection
-				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('weeb/bf-pixel');
-				else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'-pixel');
+				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('weeb/bfPixel');
+				else {
+					if(FlxG.save.data.curcharacter == "BOYFRIEND") tex = Paths.getSparrowAtlas('weeb/bfPixel');
+					else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'Pixel');
+				}
 				#else
 				tex = Paths.getSparrowAtlas('weeb/bf-pixel');
 				#end
@@ -439,8 +445,11 @@ class Character extends FlxSprite
 				flipX = true;
 			case 'bf-pixel-dead':
 				#if charselection
-				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('weeb/bf-pixelDEAD');
-				else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'-pixelDEAD');
+				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('weeb/bfPixelsDEAD');
+				else {
+					if(FlxG.save.data.curcharacter == "BOYFRIEND") tex = Paths.getSparrowAtlas('weeb/bfPixelsDEAD');
+					else tex = Paths.getSparrowAtlas('weeb/'+FlxG.save.data.curcharacter+'PixelsDEAD');
+				}
 				#else
 				tex = Paths.getSparrowAtlas('bf');
 				#end
