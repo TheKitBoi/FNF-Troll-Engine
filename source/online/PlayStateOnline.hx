@@ -136,6 +136,8 @@ class PlayStateOnline extends MusicBeatState
 	var bottomBoppers:FlxSprite;
 	var santa:FlxSprite;
 
+
+	var userleft:FlxText;
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 	var songtext:FlxText;

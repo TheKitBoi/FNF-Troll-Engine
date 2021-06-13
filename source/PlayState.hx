@@ -46,6 +46,8 @@ import openfl.filters.ShaderFilter;
 import PauseSubState.pracMode;
 import CoolUtil.dominantColor;
 import Controls.KeyboardScheme;
+import Config.data;
+
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -1758,7 +1760,7 @@ class PlayState extends MusicBeatState
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
 				{
-					camZooming = false;
+					if(data.width == 1280 && data.height == 720)camZooming = true;
 					var altAnim:String = "";
 
 					if (SONG.notes[Math.floor(curStep / 16)] != null)
