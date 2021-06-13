@@ -122,6 +122,7 @@ class MainMenuState extends MusicBeatState
 		menuItems.add(menuItem);
 		menuItem.scrollFactor.set();
 		menuItem.antialiasing = true;
+		//menuItem.setGraphicSize(Std.int(menuItem.width / 0.5), Std.int(menuItem.height / 0.5));
 		#end
 
 		FlxG.camera.follow(camFollow, null, 0.06);
@@ -157,13 +158,11 @@ class MainMenuState extends MusicBeatState
 		{
 			if (controls.UP_P)
 			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
 			if (controls.DOWN_P)
 			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
 			}
 
@@ -253,6 +252,7 @@ class MainMenuState extends MusicBeatState
 
 	function changeItem(huh:Int = 0, left = false)
 	{
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 		curSelected += huh;
 
 		if(left) curSelected = menuItems.length - 1;
