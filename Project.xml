@@ -148,7 +148,8 @@
 
 	<!--Disable the native cursor API on Flash-->
 	<!--<haxedef name="FLX_NO_NATIVE_CURSOR" />-->
-
+	<postbuild cmd="art\postbuild.bat" if="windows"/>
+	<postbuild cmd="./art/postbuild.sh" unless="windows"/>
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
 	<!-- <haxedef name="FLX_NO_MOUSE" if="mobile" /> -->
 	<!-- <haxedef name="FLX_NO_KEYBOARD" if="mobile" /> -->

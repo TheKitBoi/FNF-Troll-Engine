@@ -88,8 +88,8 @@ class ChatState extends MusicBeatState
         UI_box.selected_tab = 0;
 
 
-        MOTD = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
-        rules = new FlxText(3, 3, "dummy", 13); //UI_box.x + 3, UI_box.y + 50
+        MOTD = new FlxText(3, 3, "Cannot connect to the server!", 13); //UI_box.x + 3, UI_box.y + 50
+        rules = new FlxText(3, 3, "Server down?", 13); //UI_box.x + 3, UI_box.y + 50
         okButton = new flixel.ui.FlxButton(-280, 340, "Ok", function()
             {
                 FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -99,7 +99,6 @@ class ChatState extends MusicBeatState
         var timer = new haxe.Timer(50);
         connected = false;
         coly.joinOrCreate("chat", [], Stuff, function(err, room) {
-            connected = true;
             rooms = room;
             if (err != null) {
                 trace("JOIN ERROR: " + err);
@@ -126,6 +125,7 @@ class ChatState extends MusicBeatState
                 userlist.text = tmpuser;
             });
             room.onMessage("recvprev", function(message){
+                connected = true;
                 chatText.text = message.chatHist;
                 MOTD.text = message.motd;
                 rules.text = message.rules;

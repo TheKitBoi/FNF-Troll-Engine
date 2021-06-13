@@ -57,6 +57,7 @@ class PlayStateOnline extends MusicBeatState
     var coly:Client;
     var rooms:Room<Stuff>;
 	public static var gimmick:Bool;
+	var connected:Bool = false;
 	public static var missedNotes:Int;
 	public static var downscroll:Bool = false;
 	public static var curStage:String = '';
@@ -883,26 +884,34 @@ class PlayStateOnline extends MusicBeatState
 			var coly = new Client('ws://' + data.addr + ':' + data.port);
 			coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
 				rooms = room;
-				room.onMessage('message', function(message){
-					roomcode.text = roomcode.text + message.iden;	
-				});
-				room.onMessage("start", function(message){
-					startedMatch = true;
-					remove(onlinemodetext);
-					remove(roomcode);
-					add(p1scoretext);
-					add(p2scoretext);
-					startCountdown();
-				});
-				
-				room.onMessage("retscore", function(message){
-					p1score = message.p1score;
-					p2score = message.p2score;
+				try{
+					room.onMessage('message', function(message){
+						connected = true;
+						roomcode.text = roomcode.text + message.iden;	
+					});
+					room.onMessage("start", function(message){
+						startedMatch = true;
+						remove(onlinemodetext);
+						remove(roomcode);
+						add(p1scoretext);
+						add(p2scoretext);
+						startCountdown();
+					});
+					
+					room.onMessage("retscore", function(message){
+						p1score = message.p1score;
+						p2score = message.p2score;
 
-					p1scoretext.text = "Player 1 Score: " + p1score;
-					p2scoretext.text = "Player 2 Score: " + p2score;
-				});
-				
+						p1scoretext.text = "Player 1 Score: " + p1score;
+						p2scoretext.text = "Player 2 Score: " + p2score;
+					});
+				}catch(e:Any){
+					connected = false;
+					trace("Could not connect to the server");
+					if(FlxG.random.bool(0.1))onlinemodetext.text = "bitch git gud internet";
+					else onlinemodetext.text = "Not connected to the server.";
+					onlinemodetext.screenCenter(XY);
+				}
 			});
 		super.create();
 	}
@@ -1393,7 +1402,7 @@ class PlayStateOnline extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 		if(controls.BACK && !startedMatch) {
-			rooms.leave();
+			if(connected)rooms.leave();
 			FlxG.switchState(new FNFNetMenu());
 		}
 		currentBeat = curBeat;

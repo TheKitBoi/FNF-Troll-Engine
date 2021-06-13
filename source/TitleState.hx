@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import Controls;
 import flixel.util.FlxSave;
 #if desktop
@@ -49,8 +50,7 @@ class TitleState extends MusicBeatState
 	{
 		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 
-
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
+		polymod.Polymod.init({modRoot: "mods", dirs: ["introMod"]});
 
 		PlayerSettings.init();
 
