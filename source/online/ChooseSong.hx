@@ -12,6 +12,9 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import io.colyseus.Client;
+import io.colyseus.Room;
+
 using StringTools;
 
 class ChooseSong extends MusicBeatState
