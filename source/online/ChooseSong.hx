@@ -126,21 +126,13 @@ class ChooseSong extends MusicBeatSubstate
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		// scoreText.alignment = RIGHT;
 
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), 155, 0xFF000000);
+		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), 75, 0xFF000000);
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
 		add(diffText);
-
-		cutText = new FlxText(scoreText.x, diffText.y + 36, 0, "", 24);
-		cutText.font = scoreText.font;
-		add(cutText);
-
-		gimText = new FlxText(scoreText.x, cutText.y + 36, 0, "Gimmicks (G): " + gimmick, 24);
-		gimText.font = scoreText.font;
-		add(gimText);
 
 		add(scoreText);
 
@@ -212,7 +204,6 @@ class ChooseSong extends MusicBeatSubstate
 			lerpScore = intendedScore;
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
-		cutText.text = "Watch Cutscene (C): " + cutscene;
 		var upP = controls.UP_P;
 		var downP = controls.DOWN_P;
 		var accepted = controls.ACCEPT;
@@ -224,14 +215,6 @@ class ChooseSong extends MusicBeatSubstate
 		if (downP || FlxG.mouse.wheel < 0)
 		{
 			changeSelection(1);
-		}
-		if (FlxG.keys.justPressed.C) {
-			cutscene = !cutscene;
-			cutText.text = "Watch Cutscene (C): " + cutscene;
-		}
-		if (FlxG.keys.justPressed.G) {
-			gimmick = !gimmick;
-			gimText.text = "Gimmicks (G): " + gimmick;
 		}
 		if (controls.LEFT_P)
 			changeDiff(-1);
@@ -253,7 +236,7 @@ class ChooseSong extends MusicBeatSubstate
 
 			PlayStateOnline.storyWeek = songs[curSelected].week;
 			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
-			//rooms.send('songname', {song: songs[curSelected].songName.toLowerCase()});
+			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
 		}
 		if(bruh){
 			var poop:String = Highscore.formatSong(celsong, 2);

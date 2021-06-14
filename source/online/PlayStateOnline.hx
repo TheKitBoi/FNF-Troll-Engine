@@ -877,9 +877,10 @@ class PlayStateOnline extends MusicBeatState
 			}
 		}
 			add(onlinemodetext);
-			var roomcode:FlxText = new FlxText(5, FlxG.height - 18, 0, "Room code: " + code, 12);
+			var roomcode:FlxText = new FlxText(5, FlxG.height - 38, 0, "Room code: " + code, 12);
 			roomcode.scrollFactor.set();
 			roomcode.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			roomcode.cameras = [camHUD];
 			add(roomcode);
 
 		super.create();
@@ -1378,6 +1379,7 @@ class PlayStateOnline extends MusicBeatState
 			remove(roomcode);
 			add(p1scoretext);
 			add(p2scoretext);
+			remove(roomcode);
 			startCountdown();
 			assing = false;
 		}

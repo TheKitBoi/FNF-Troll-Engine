@@ -26,6 +26,7 @@ class ConnectingState extends MusicBeatState {
                                 ChooseSong.bruh = true;
                             });
                             room.onMessage('message', function(message){
+                                if(PlayStateOnline.code == message.iden) PlayStateOnline.onlinemodetext.text = "Player Found! Starting...";
                                 PlayStateOnline.code = message.iden;	
                             });
                             room.onMessage("start", function(message){
@@ -73,9 +74,9 @@ class ConnectingState extends MusicBeatState {
 
                                 PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
                                 PlayStateOnline.isStoryMode = false;
-                                PlayStateOnline.storyDifficulty = 2;
+                                PlayStateOnline.storyDifficulty = message.diff;
                     
-                                PlayStateOnline.storyWeek = 3;
+                                PlayStateOnline.storyWeek = message.week;
                                 LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                             });
 
@@ -93,19 +94,20 @@ class ConnectingState extends MusicBeatState {
                     }catch(e:Any){
                         trace(e);
                     }
-                    var poop:String = Highscore.formatSong("philly", 2);
+                    //var poop:String = Highscore.formatSong("philly", 2);
 
-                    PlayStateOnline.SONG = Song.loadFromJson(poop, "philly");
-                    PlayStateOnline.isStoryMode = false;
-                    PlayStateOnline.storyDifficulty = 2;
+                    ///PlayStateOnline.SONG = Song.loadFromJson(poop, "philly");
+                    ///PlayStateOnline.isStoryMode = false;
+                    ///PlayStateOnline.storyDifficulty = 2;
         
-                    PlayStateOnline.storyWeek = 3;
-                    LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+                   /// PlayStateOnline.storyWeek = 3;
+                    //LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                 }
                 
         }
     }
     override function create(){
+        FlxG.autoPause = false;
 
         super.create();
     }
