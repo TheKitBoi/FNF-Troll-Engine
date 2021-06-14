@@ -1,5 +1,6 @@
 package online;
 
+import flixel.FlxSubState;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -14,11 +15,14 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 import io.colyseus.Client;
 import io.colyseus.Room;
+import Controls.*;
 
 using StringTools;
 
-class ChooseSong extends MusicBeatState
+class ChooseSong extends MusicBeatSubstate
 {
+	public static var bruh:Bool = false;
+	public static var celsong:String;
 	var songs:Array<SongMetadata> = [];
 	public static var rooms:Room<Stuff>;
 	var selector:FlxText;
@@ -241,7 +245,26 @@ class ChooseSong extends MusicBeatState
 
 		if (accepted)
 		{
-			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase()});
+			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), 2);
+		
+			PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+			PlayStateOnline.isStoryMode = false;
+			PlayStateOnline.storyDifficulty = 2;
+
+			PlayStateOnline.storyWeek = songs[curSelected].week;
+			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+			//rooms.send('songname', {song: songs[curSelected].songName.toLowerCase()});
+		}
+		if(bruh){
+			var poop:String = Highscore.formatSong(celsong, 2);
+		
+			PlayStateOnline.SONG = Song.loadFromJson(poop, celsong);
+			PlayStateOnline.isStoryMode = false;
+			PlayStateOnline.storyDifficulty = 2;
+
+			PlayStateOnline.storyWeek = 1;
+			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+			bruh = false;
 		}
 	}
 
@@ -290,18 +313,6 @@ class ChooseSong extends MusicBeatState
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		// lerpScore = 0;
-		#end
-
-		#if PRELOAD_ALL
-		#if target.threaded
-		if(!FlxG.sound.muted){
-			sys.thread.Thread.create(() -> {
-				FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-			});
-		}
-		#else
-		FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-		#end
 		#end
 
 		var bullShit:Int = 0;

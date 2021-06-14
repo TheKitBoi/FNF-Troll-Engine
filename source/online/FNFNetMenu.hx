@@ -87,11 +87,11 @@ class FNFNetMenu extends MusicBeatState{
             if(controls.ACCEPT){
                 switch(curSelected){
                 case 0:
-                    FlxG.switchState(new ConnectingState('battle'));
+                    FlxG.switchState(new ConnectingState('battle', 'host'));
                 case 1:
                     trace("ping pong");
                 case 2:
-                    FlxG.switchState(new MainMenuState());
+                    FlxG.switchState(new ConnectingState('battle', 'join'));
                 case 3:
                     FlxG.switchState(new ChatState());
                 }
@@ -119,13 +119,13 @@ class FNFNetMenu extends MusicBeatState{
                     hand.x = 167;
                 case 1:
                     hand.flipX = true;
-                    hand.x = 1050;
+                    hand.x = 1006;
                 case 2:
                     hand.x = 167;
                     hand.y = 550;
                 case 3:
                     hand.flipX = true;
-                    hand.x = 1050;
+                    hand.x = 1006;
                     hand.y = 550;
             }
             FlxG.sound.play(Paths.sound('scrollMenu'));

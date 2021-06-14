@@ -846,7 +846,7 @@ class PlayStateOnline extends MusicBeatState
 		pgBar.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
-		
+
 		scoreTxt.cameras = [camHUD];
 		missTxt.cameras = [camHUD];
 		// if (SONG.song == 'South')
