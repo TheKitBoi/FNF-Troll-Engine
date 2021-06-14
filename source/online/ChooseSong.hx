@@ -17,7 +17,7 @@ using StringTools;
 class ChooseSong extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
-
+	var rooms:Room<Stuff>;
 	var selector:FlxText;
 	var curSelected:Int = 0;
 	var curDifficulty:Int = 1;
@@ -238,24 +238,7 @@ class ChooseSong extends MusicBeatState
 
 		if (accepted)
 		{
-			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-
-			trace(poop);
-
-			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = curDifficulty;
-
-			PlayState.storyWeek = songs[curSelected].week;
-			trace('CUR WEEK' + PlayState.storyWeek);
-			if(gimmick) {
-				PlayState.gimmick = true;
-				FlxG.switchState(new GimmickState());
-			}
-			else {
-				PlayState.gimmick = false;
-				LoadingState.loadAndSwitchState(new PlayState());
-			}
+			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase()});
 		}
 	}
 

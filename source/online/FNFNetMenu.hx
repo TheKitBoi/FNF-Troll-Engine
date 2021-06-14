@@ -87,14 +87,7 @@ class FNFNetMenu extends MusicBeatState{
             if(controls.ACCEPT){
                 switch(curSelected){
                 case 0:
-                    var poop:String = Highscore.formatSong("dadbattle", 2);
-    
-                    PlayStateOnline.SONG = Song.loadFromJson(poop, "dadbattle");
-                    PlayStateOnline.isStoryMode = false;
-                    PlayStateOnline.storyDifficulty = 2;
-    
-                    PlayStateOnline.storyWeek = 1;
-                    LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+                    FlxG.switchState(new ConnectingState('battle'));
                 case 1:
                     trace("ping pong");
                 case 2:

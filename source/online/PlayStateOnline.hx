@@ -55,9 +55,9 @@ using StringTools;
 class PlayStateOnline extends MusicBeatState
 {
     var coly:Client;
-    var rooms:Room<Stuff>;
-	public static var gimmick:Bool;
-	var connected:Bool = false;
+	public static var rooms:Room<Stuff>;
+	public static var gimmick:Bool = false;
+	public static var connected:Bool = false;
 	public static var missedNotes:Int;
 	public static var downscroll:Bool = false;
 	public static var curStage:String = '';
@@ -66,9 +66,10 @@ class PlayStateOnline extends MusicBeatState
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
+	public static var code:String;
 	var halloweenLevel:Bool = false;
 	private var vocals:FlxSound;
-	var startedMatch:Bool = false;
+	public static var startedMatch:Bool = false;
 	private var i:Int;
 	private var dad:Character;
 	private var gf:Character;
@@ -77,12 +78,12 @@ class PlayStateOnline extends MusicBeatState
 	private var unspawnNotes:Array<Note> = [];
 	private var dodging:Bool;
 	private var strumLine:FlxSprite;
+	public static var assing:Bool = false;
 
+	public static var p1scoretext:FlxText;
+	public static var p2scoretext:FlxText;
 
-	private var p1scoretext:FlxText;
-	private var p2scoretext:FlxText;
-
-	private var onlinemodetext:FlxText;
+	public static var onlinemodetext:FlxText;
 
 	private var curSection:Int = 0;
 	public static var camFollow:FlxObject;
@@ -111,7 +112,7 @@ class PlayStateOnline extends MusicBeatState
 
 	public static var p1score:Int = 0;
 	public static var p2score:Int = 0;
-
+	public static var roomcode:FlxText;
 
 	public static var iconP1:HealthIcon;
 	public static var iconP2:HealthIcon;
@@ -138,7 +139,7 @@ class PlayStateOnline extends MusicBeatState
 	var santa:FlxSprite;
 
 
-	var userleft:FlxText;
+	public static var userleft:FlxText;
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 	var songtext:FlxText;
@@ -795,8 +796,8 @@ class PlayStateOnline extends MusicBeatState
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
 
-		p1scoretext = new FlxText(FlxG.width * 0.001, healthBar.y, 0, "Player 1 Score: " + p1score, 16);
-		p2scoretext = new FlxText(FlxG.width * 0.001, healthBar.y + 20, 0, "Player 2 Score: " + p2score, 16);
+		p1scoretext = new FlxText(FlxG.width * 0.001, healthBar.y - 40, 0, "Player 1 Score: " + p1score, 16);
+		p2scoretext = new FlxText(FlxG.width * 0.001, healthBar.y - 20, 0, "Player 2 Score: " + p2score, 16);
 
 		p1scoretext.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
 		p1scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
@@ -855,7 +856,7 @@ class PlayStateOnline extends MusicBeatState
 		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
 
-		if (isStoryMode || FreeplayState.cutscene)
+		if (isStoryMode)
 		{
 			if(PauseSubState.PauseSubState.skipped) {
 				PauseSubState.skipped = false;
@@ -875,44 +876,12 @@ class PlayStateOnline extends MusicBeatState
 					//startCountdown();
 			}
 		}
-		if(GimmickState.upsidedown && gimmick) FlxG.camera.angle = 180;
 			add(onlinemodetext);
-			var roomcode:FlxText = new FlxText(5, FlxG.height - 18, 0, "Room code: ", 12);
+			var roomcode:FlxText = new FlxText(5, FlxG.height - 18, 0, "Room code: " + code, 12);
 			roomcode.scrollFactor.set();
 			roomcode.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			add(roomcode);
-			var coly = new Client('ws://' + data.addr + ':' + data.port);
-			coly.joinOrCreate("battle", [], Stuff, function(err, room) { 
-				rooms = room;
-				try{
-					room.onMessage('message', function(message){
-						connected = true;
-						roomcode.text = roomcode.text + message.iden;	
-					});
-					room.onMessage("start", function(message){
-						startedMatch = true;
-						remove(onlinemodetext);
-						remove(roomcode);
-						add(p1scoretext);
-						add(p2scoretext);
-						startCountdown();
-					});
-					
-					room.onMessage("retscore", function(message){
-						p1score = message.p1score;
-						p2score = message.p2score;
 
-						p1scoretext.text = "Player 1 Score: " + p1score;
-						p2scoretext.text = "Player 2 Score: " + p2score;
-					});
-				}catch(e:Any){
-					connected = false;
-					trace("Could not connect to the server");
-					if(FlxG.random.bool(0.1))onlinemodetext.text = "bitch git gud internet";
-					else onlinemodetext.text = "Not connected to the server.";
-					onlinemodetext.screenCenter(XY);
-				}
-			});
 		super.create();
 	}
 
@@ -961,7 +930,6 @@ class PlayStateOnline extends MusicBeatState
 
 	var startTimer:FlxTimer;
 	var perfectMode:Bool = false;
-
 	function startCountdown():Void
 	{
 		inCutscene = false;
@@ -1405,6 +1373,14 @@ class PlayStateOnline extends MusicBeatState
 			if(connected)rooms.leave();
 			FlxG.switchState(new FNFNetMenu());
 		}
+		if(assing){
+			remove(onlinemodetext);
+			remove(roomcode);
+			add(p1scoretext);
+			add(p2scoretext);
+			startCountdown();
+			assing = false;
+		}
 		currentBeat = curBeat;
 		#if !debug
 		perfectMode = false;
@@ -1442,13 +1418,6 @@ class PlayStateOnline extends MusicBeatState
 		{
 			trace("pissing");
 		}
-		if (FlxG.keys.justPressed.TWO) {
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-			
-			openSubState(new ScriptSubState());
-		}
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
@@ -1480,10 +1449,6 @@ class PlayStateOnline extends MusicBeatState
 		/* if (FlxG.keys.justPressed.NINE)
 			FlxG.switchState(new Charting()); */
 
-		#if debug
-		if (FlxG.keys.justPressed.EIGHT)
-			FlxG.switchState(new AnimationDebug(SONG.player2));
-		#end
 
 		if (startingSong)
 		{
@@ -1622,27 +1587,8 @@ class PlayStateOnline extends MusicBeatState
 			health = 0;
 			trace("RESET = True");
 		}
-		if (FlxG.keys.justPressed.C)
-			{
-				while(i<100){
-					i++;
-					boyfriend.playAnim("dodge");
-					dodging=true;
-				}
-			}
-		if(i==100)
-			{
-				i=0;
-				dodging=false;
-			}
 
 		// CHEAT = brandon's a pussy
-		if (controls.CHEAT)
-		{
-			health += 1;
-			trace("User is cheating!");
-		}
-		if (GimmickState.instantdeath && missedNotes > 0 && gimmick) health = 0;
 
 		if (unspawnNotes[0] != null)
 		{
@@ -1660,7 +1606,6 @@ class PlayStateOnline extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (GimmickState.invisarrow && gimmick) FlxTween.tween(daNote, {alpha: 0}, 0.2, {ease: FlxEase.quadInOut});
 				if (daNote.y > FlxG.height)
 				{
 					daNote.active = false;
@@ -1717,7 +1662,6 @@ class PlayStateOnline extends MusicBeatState
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
-						if(GimmickState.diffvocals && gimmick)vocals.fadeOut(0.2);
 					daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -1810,28 +1754,8 @@ class PlayStateOnline extends MusicBeatState
 			daRating = 'good';
 			score = 200;
 		}
-		if (daRating != "sick" && GimmickState.perfectcombo && gimmick) 
-			{
-				boyfriend.stunned = true;
-
-				persistentUpdate = false;
-				persistentDraw = false;
-				paused = true;
-	
-				vocals.stop();
-				FlxG.sound.music.stop();
-	
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-	
-				// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				
-				#if desktop
-				// Game Over doesn't get his own variable because it's only used here
-				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-				#end
-			}
         rooms.send("message", {rating: daRating});
-		if(!pracMode) songScore += score;
+		songScore += score;
 
 		/* if (combo > 60)
 				daRating = 'sick';
@@ -2253,7 +2177,6 @@ class PlayStateOnline extends MusicBeatState
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
-			if(GimmickState.diffvocals && gimmick)vocals.fadeOut(0.2);
 
 			if (!note.isSustainNote)
 			{
