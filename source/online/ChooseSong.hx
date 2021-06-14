@@ -20,7 +20,7 @@ using StringTools;
 class ChooseSong extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
-	var rooms:Room<Stuff>;
+	public static var rooms:Room<Stuff>;
 	var selector:FlxText;
 	var curSelected:Int = 0;
 	var curDifficulty:Int = 1;
