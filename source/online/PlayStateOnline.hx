@@ -879,7 +879,7 @@ class PlayStateOnline extends MusicBeatState
 			}
 		}
 			add(onlinemodetext);
-			var roomcode:FlxText = new FlxText(5, FlxG.height - 38, 0, "Room code: " + code, 12);
+			roomcode = new FlxText(5, FlxG.height - 38, 0, "Room code: " + code, 12);
 			roomcode.scrollFactor.set();
 			roomcode.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			roomcode.cameras = [camHUD];
@@ -1373,7 +1373,7 @@ class PlayStateOnline extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 		if(controls.BACK && !startedMatch) {
-			if(connected)rooms.leave();
+			rooms.leave();
 			FlxG.switchState(new FNFNetMenu());
 		}
 		if(assing){

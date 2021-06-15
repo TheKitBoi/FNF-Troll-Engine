@@ -1,9 +1,9 @@
 package;
 
-import sys.FileSystem;
 import Controls;
 import flixel.util.FlxSave;
 #if desktop
+import sys.FileSystem;
 import Discord.DiscordClient;
 import sys.thread.Thread;
 #end

@@ -26,14 +26,15 @@ class FNFNetMenu extends MusicBeatState{
 
     override function create()
         {
+            FlxG.mouse.visible = true;
             logo = new FlxSprite().loadGraphic(Paths.image('fnfnet'));
             logo.screenCenter(XY);
             logo.antialiasing = true;
             logo.y = -160;
             logo.setGraphicSize(Std.int(logo.width / 1.6), Std.int(logo.height / 1.6));
             
-            jfc = new FlxInputText(50, 100, 50, "", 16);
-            jbt = new FlxButton(jfc.x, jfc.y, "Join", function(){
+            jfc = new FlxInputText(50, 100, 150, "", 16);
+            jbt = new FlxButton(jfc.x + 200, jfc.y, "Join", function(){
                 FlxG.switchState(new ConnectingState('battle', 'code', jfc.text));
             });
             var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));

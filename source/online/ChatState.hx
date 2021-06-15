@@ -68,8 +68,8 @@ class ChatState extends MusicBeatState
         FlxG.sound.list.add(pauseMusic);
 
         var userlist = new FlxText(FlxG.width - 150, 0, "Users online:\n", 10);
-        userlist.borderSize = 1;
-        userlist.borderColor = FlxColor.BLACK;
+        userlist.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
+        userlist.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 
         beentoChat = true;
         FlxG.mouse.visible = true;
@@ -113,7 +113,7 @@ class ChatState extends MusicBeatState
                 chatText.text = chatText.text + message.message + "\n";
                 chatText.applyMarkup(chatText.text,
                 [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "[G]")]);
-                chatText.y -= 15;
+                chatText.y -= 16;
                 //chatText.applyMarkup(chatText.text, [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "$")]);
             });
             room.onMessage("reul", function(message){
@@ -135,7 +135,7 @@ class ChatState extends MusicBeatState
                 var users:Array<String> = message.uslist;
             });
         });
-        txtbox = new FlxInputText(200, 704.5, FlxG.width);
+        txtbox = new FlxInputText(200, 695.5, FlxG.width, "", 16);
         txtbox.screenCenter(X);
         txtbox.background = true;
         txtbox.backgroundColor = FlxColor.WHITE;
@@ -144,14 +144,14 @@ class ChatState extends MusicBeatState
         var chatTexts = new FlxTypedGroup<FlxText>();
 		add(chatTexts);
         
-        chatText = new FlxText(FlxG.width * 0.01, txtbox.y - 23, 0, "Connecting...\n", 16); // FlxG.width * 0.01
+        chatText = new FlxText(FlxG.width * 0.01, txtbox.y - 23, 0, "Connecting...\n", 26); // FlxG.width * 0.01
         chatText.ID = 1;
         //chatText.screenCenter(X);
         chatTexts.add(chatText);
         chatText.scrollFactor.set();
         chatText.antialiasing = true;
         chatText.autoSize = true;
-        chatText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+        chatText.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
 		chatText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         //FlxG.watch.addQuick("dababy Y", chatText.y);
 
@@ -161,8 +161,7 @@ class ChatState extends MusicBeatState
         usnbox.backgroundColor = FlxColor.WHITE;
         usnbox.borderColor = 0xFFFFFFFF;
         usnbox.visible = false;
-        usnbox.height += 50;
-		var nameButton = new flixel.ui.FlxButton(txtbox.width - 80, txtbox.y, "Username", function()
+		var nameButton = new flixel.ui.FlxButton(txtbox.width - 80, txtbox.y - 20, "Username", function()
             {
                 changeUsername();
             });
