@@ -7,7 +7,7 @@ import flixel.FlxSubState;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-
+import flixel.FlxCamera;
 class BattleResultSubState extends MusicBeatSubstate
 {
 	var bf:Boyfriend;
@@ -33,12 +33,14 @@ class BattleResultSubState extends MusicBeatSubstate
 		}
 
 		super();
+		var camHUD = new FlxCamera();
+		FlxG.cameras.add(camHUD);
 		aktc = new Alphabet(FlxG.width * 0.001, FlxG.height * 0.95, "Press any key to continue");
         //if(Math.max(PlayStateOnline.p1score, PlayStateOnline.p2score))
         loseorwin = new FlxText(FlxG.width * 0.01, 60, "Final Score:\nPlayer 1: " + PlayStateOnline.p1score + "\nPlayer 2: " + PlayStateOnline.p2score +"\n\nPress any key to Continue", 32);
 		//loseorwin.font = Paths.font('fnf');
 		Conductor.songPosition = 0;
-
+		loseorwin.cameras = [camHUD];
 		bf = new Boyfriend(x, y, daBf);
 		add(bf);
 		

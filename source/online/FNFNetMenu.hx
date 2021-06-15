@@ -1,5 +1,7 @@
 package online;
 
+import flixel.ui.FlxButton;
+import flixel.addons.ui.FlxInputText;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -16,7 +18,8 @@ class FNFNetMenu extends MusicBeatState{
     var logo:FlxSprite;
     var hand:FlxSprite;
     var curSelected:Int = 0;
-
+    var jfc:FlxInputText;
+    var jbt:FlxButton;
     var assets:FlxTypedGroup<FlxSprite>;
 
 	var optionShit:Array<String> = ['matchmaking', 'join from code', 'back', 'login'];
@@ -29,6 +32,10 @@ class FNFNetMenu extends MusicBeatState{
             logo.y = -160;
             logo.setGraphicSize(Std.int(logo.width / 1.6), Std.int(logo.height / 1.6));
             
+            jfc = new FlxInputText(50, 100, 50, "", 16);
+            jbt = new FlxButton(jfc.x, jfc.y, "Join", function(){
+                FlxG.switchState(new ConnectingState('battle', 'code', jfc.text));
+            });
             var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
             menuBG.color = 0xFFea71fd;
             menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -89,7 +96,8 @@ class FNFNetMenu extends MusicBeatState{
                 case 0:
                     FlxG.switchState(new ConnectingState('battle', 'host'));
                 case 1:
-                    trace("ping pong");
+                    add(jfc);
+                    add(jbt);
                 case 2:
                     FlxG.switchState(new ConnectingState('battle', 'join'));
                 case 3:

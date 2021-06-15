@@ -238,17 +238,17 @@ class ChooseSong extends MusicBeatSubstate
 			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
 			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
 		}
-		if(bruh){
-			var poop:String = Highscore.formatSong(celsong, 2);
-		
-			PlayStateOnline.SONG = Song.loadFromJson(poop, celsong);
-			PlayStateOnline.isStoryMode = false;
-			PlayStateOnline.storyDifficulty = 2;
-
-			PlayStateOnline.storyWeek = 1;
-			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
-			bruh = false;
-		}
+//		if(bruh){
+//			var poop:String = Highscore.formatSong(celsong, 2);
+//		
+//			PlayStateOnline.SONG = Song.loadFromJson(poop, celsong);
+//			PlayStateOnline.isStoryMode = false;
+//			PlayStateOnline.storyDifficulty = 2;
+//
+//			PlayStateOnline.storyWeek = 1;
+//			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+//			bruh = false;
+//		}
 	}
 
 	function changeDiff(change:Int = 0)

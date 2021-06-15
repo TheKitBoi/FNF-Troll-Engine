@@ -50,7 +50,7 @@ class TitleState extends MusicBeatState
 	{
 		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 
-		polymod.Polymod.init({modRoot: "mods", dirs: ["introMod"]});
+		polymod.Polymod.init({modRoot: "mods", dirs: ["introMod", "characters"]});
 
 		PlayerSettings.init();
 
@@ -100,6 +100,7 @@ class TitleState extends MusicBeatState
 		DiscordClient.initialize();
 		
 		Application.current.onExit.add (function (exitCode) {
+			cpp.Lib.print("See you next time!\n");
 			DiscordClient.shutdown();
 		 });
 		#end

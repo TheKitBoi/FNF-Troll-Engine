@@ -168,6 +168,8 @@ class PlayStateOnline extends MusicBeatState
 
 	override public function create()
 	{
+		p1score = 0;
+		p2score = 0;
 		FlxG.autoPause = false;
 		downscroll = FlxG.save.data.downscroll;
 
