@@ -130,7 +130,7 @@ class CharacterSelection extends MusicBeatState
 				nospam = true;
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				curSelected += change;
-				
+
 				if (curSelected < 0){
 					curSelected++;
 					ticktockclock = true;
@@ -140,6 +140,7 @@ class CharacterSelection extends MusicBeatState
 					ticktockclock = true;
 				}
 				if(change == 0) ticktockclock = true;
+				yellowBG.color = CoolUtil.dominantColor(funkers.members[curSelected]);
 				// selector.y = (70 * curSelected) + 30;
 		
 				var bullShit:Int = 0;
@@ -207,7 +208,6 @@ class CharacterSelection extends MusicBeatState
 						else if (change == 1 && !ticktockclock) FlxTween.tween(stuff, {x: stuff.x - 500}, 0.2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween){ nospam = false; }});
 					}
 				});
-
 				if(change == 0 || ticktockclock) nospam = false;
 				
 				//nospam = false;
