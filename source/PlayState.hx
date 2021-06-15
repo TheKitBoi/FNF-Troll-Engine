@@ -881,6 +881,10 @@ class PlayState extends MusicBeatState
 				interp.variables.set("PlayState",PlayState);
 				interp.variables.set("FlxG",FlxG);
 				interp.variables.set("Sys",Sys);
+				interp.variables.set("Math",Math);
+				interp.variables.set("FlxSprite",FlxSprite);
+				interp.variables.set("FlxObject",FlxObject);
+				interp.variables.set("Sys",Sys);
 				interp.variables.set("Character",Character);
 				interp.variables.set("FlxSprite",FlxSprite);
 				interp.variables.set("FlxTween",FlxTween);
@@ -888,8 +892,12 @@ class PlayState extends MusicBeatState
 				interp.variables.set("FlxText",FlxText);
 				interp.variables.set("Alphabet",Alphabet);
 				interp.variables.set("MusicBeatState",MusicBeatState);
+				interp.variables.set("camFollow",camFollow);
 				interp.variables.set("curBeat",currentBeat);
-				//interp.variables.set("FlxColor",FlxColor);
+				interp.variables.set("iconP1",iconP1);
+				interp.variables.set("iconP2",iconP2);
+				interp.variables.set("playerStrums",playerStrums);
+				interp.variables.set("FlxCamera",FlxCamera);
 				shouldrun = true;
 				interp.execute(program);
 				interp.variables.get('onStart')();

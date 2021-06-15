@@ -34,7 +34,7 @@ class FNFNetMenu extends MusicBeatState{
             logo.setGraphicSize(Std.int(logo.width / 1.6), Std.int(logo.height / 1.6));
             
             jfc = new FlxInputText(50, 100, 150, "", 16);
-            jbt = new FlxButton(jfc.x + 200, jfc.y, "Join", function(){
+            jbt = new FlxButton(jfc.x + 150, jfc.y, "Join", function(){
                 FlxG.switchState(new ConnectingState('battle', 'code', jfc.text));
             });
             var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -90,7 +90,7 @@ class FNFNetMenu extends MusicBeatState{
             if(FlxG.keys.justPressed.RIGHT) changeSelection(1);
             if(FlxG.keys.justPressed.UP) changeSelection(-2);
             if(FlxG.keys.justPressed.DOWN) changeSelection(2);
-            if(controls.BACK) FlxG.switchState(new MainMenuState());
+            if(FlxG.keys.justPressed.ESCAPE) FlxG.switchState(new MainMenuState());
 
             if(controls.ACCEPT){
                 switch(curSelected){

@@ -20,6 +20,11 @@ class ConnectingState extends MusicBeatState {
                     coly.create("battle", [], Stuff, function(err, room) { 
                         PlayStateOnline.rooms = room;
                         ChooseSong.rooms = room;
+                        if (err != null) {
+                            trace("JOIN ERROR: " + err);
+                            FlxG.switchState(new FNFNetMenu());
+                            return;
+                        }
                         try{
                             room.onMessage('creatematch', function(message){
                                 ChooseSong.celsong = message.song;
@@ -59,7 +64,11 @@ class ConnectingState extends MusicBeatState {
                     try{
                         coly.join("battle", [], Stuff, function(err, room) { 
                             PlayStateOnline.rooms = room;
-
+                            if (err != null) {
+                                trace("JOIN ERROR: " + err);
+                                FlxG.switchState(new FNFNetMenu());
+                                return;
+                            }
                             room.onMessage("start", function(message){
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();
@@ -83,9 +92,6 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.p1scoretext.text = "Player 1 Score: " + PlayStateOnline.p1score;
                                 PlayStateOnline.p2scoretext.text = "Player 2 Score: " + PlayStateOnline.p2score;
                             });
-                            room.onError += function(code, message){
-                                FlxG.switchState(new FNFNetMenu());
-                            }
                         });
                     }catch(e:Any){
                         trace(e);
@@ -103,7 +109,11 @@ class ConnectingState extends MusicBeatState {
                     try{
                         coly.joinById(code, [], Stuff, function(err, room) { 
                             PlayStateOnline.rooms = room;
-
+                            if (err != null) {
+                                trace("JOIN ERROR: " + err);
+                                FlxG.switchState(new FNFNetMenu());
+                                return;
+                            }
                             room.onMessage("start", function(message){
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();

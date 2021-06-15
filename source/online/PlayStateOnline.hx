@@ -87,8 +87,6 @@ class PlayStateOnline extends MusicBeatState
 
 	private var curSection:Int = 0;
 	public static var camFollow:FlxObject;
-	var parser = new hscript.Parser();
-	var interp = new hscript.Interp();
 	private static var prevCamFollow:FlxObject;
 	public static var currentBeat:Int;
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;

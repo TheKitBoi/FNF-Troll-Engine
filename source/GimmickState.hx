@@ -57,7 +57,7 @@ class GimmickState extends MusicBeatState
 			"Instant Death",
 			"Perfect Combo",
 			"Difficulty Vocals",
-			"Automatic",
+			//"Automatic",
             "Start"
         ];
 		add(checkboxArray);

@@ -67,7 +67,7 @@ class ChatState extends MusicBeatState
 		pauseMusic.play(true, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
         FlxG.sound.list.add(pauseMusic);
 
-        var userlist = new FlxText(FlxG.width - 150, 0, "Users online:\n", 10);
+        var userlist = new FlxText(FlxG.width - 250, 0, "Users online:\n", 10);
         userlist.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
         userlist.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 
