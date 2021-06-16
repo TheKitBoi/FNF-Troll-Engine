@@ -276,10 +276,10 @@ class Character extends FlxSprite
 			case 'bf':
 				var tex:Any;
 				#if charselection
-				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('bf');
+				if(FlxG.save.data.curcharacter == null || !isPlayer) tex = Paths.getSparrowAtlas('BOYFRIEND');
 				else tex = Paths.getSparrowAtlas(FlxG.save.data.curcharacter);
 				#else
-				tex = Paths.getSparrowAtlas('bf');
+				tex = Paths.getSparrowAtlas('BOYFRIEND');
 				#end
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
