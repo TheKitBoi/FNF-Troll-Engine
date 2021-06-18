@@ -48,3 +48,4 @@ These are the objects that are declared (currently):
 * playerStrums
 * FlxCamera
 * camFollow
+* FlxTimer

@@ -886,6 +886,7 @@ class PlayState extends MusicBeatState
 				interp.variables.set("FlxObject",FlxObject);
 				interp.variables.set("Sys",Sys);
 				interp.variables.set("Character",Character);
+				interp.variables.set("FlxTimer",FlxTimer);
 				interp.variables.set("FlxSprite",FlxSprite);
 				interp.variables.set("FlxTween",FlxTween);
 				interp.variables.set("FlxEase",FlxEase);

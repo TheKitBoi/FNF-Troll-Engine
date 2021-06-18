@@ -52,7 +52,23 @@ You should have everything ready for compiling the game! Follow the guide below 
 
 At the moment, you can optionally fix the transition bug in songs with zoomed out cameras.
 - Run `haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons` in the terminal/command-prompt.
-
+### Removing features
+In ``Project.xml`` there's haxedefs defined for the inclusion of certain features.
+The features are:
+```
+FNFNet
+Character Selection
+Gimmicks
+skipsong
+```
+If you do not want to include one of them, go to Project.xml and remove all of the ones you don't want:
+```xml
+	<haxedef name="fnfnet" /> <!-- FNFNet -->
+	<haxedef name="charselection" /> <!-- Character Selection -->
+	<haxedef name="gimmick" /> <!-- Gimmicks in the freeplay menu -->
+	<haxedef name="skipsong"/>
+```
+This will make it easier to make mods without the included features.
 ### Ignored files
 
 I gitignore the API keys for the game, so that no one can nab them and post fake highscores on the leaderboards. But because of that the game
