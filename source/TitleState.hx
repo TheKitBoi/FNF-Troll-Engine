@@ -1,5 +1,7 @@
 package;
 
+import polymod.Polymod.Framework;
+import lime.utils.AssetCache;
 import Controls;
 import flixel.util.FlxSave;
 #if desktop
@@ -29,7 +31,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import io.newgrounds.NG;
 import lime.app.Application;
-import openfl.Assets;
+import lime.utils.Assets;
 import Controls.KeyboardScheme;
 using StringTools;
 
@@ -49,8 +51,8 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
-
-		polymod.Polymod.init({modRoot: "mods", dirs: ["introMod", "characters"]});
+		
+		polymod.Polymod.init({modRoot: "./mods", dirs: ["introMod", "characters"], framework: Framework.LIME});
 
 		PlayerSettings.init();
 

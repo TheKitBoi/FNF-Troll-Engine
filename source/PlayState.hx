@@ -1,5 +1,6 @@
 package;
 
+import openfl.utils.AssetCache;
 import flixel.util.FlxSave;
 #if desktop
 import Discord.DiscordClient;
@@ -65,6 +66,9 @@ class PlayState extends MusicBeatState
 	var halloweenLevel:Bool = false;
 	private var vocals:FlxSound;
 	private var i:Int;
+	var pressedNotes:Int = 0;
+	var grade:String = "NCY";
+	var gradetxt:FlxText;
 	private var dad:Character;
 	private var gf:Character;
 	public var boyfriend:Boyfriend;
@@ -93,6 +97,8 @@ class PlayState extends MusicBeatState
 	private var healthBarBG:FlxSprite;
 	private var progressBG:FlxSprite;
 	private var healthBar:FlxBar;
+
+	public static var accuracy:Float = 0.00;
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
@@ -128,6 +134,7 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
 	var missTxt:FlxText;
+	var accTxt:FlxText;
 	var noteDiff:Float;
 	public static var campaignScore:Int = 0;
 
@@ -149,6 +156,7 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		accuracy = 0.00;
 		downscroll = FlxG.save.data.downscroll;
 
 		switch(FlxG.save.data.ks){
@@ -799,6 +807,18 @@ class PlayState extends MusicBeatState
 		missTxt.scrollFactor.set();
 		add(missTxt);
 
+		accTxt = new FlxText(healthBarBG.x + healthBarBG.width - 600, healthBarBG.y + 30, 0, "Accuracy: " + accuracy + '%', 20);
+		accTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+		accTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		accTxt.scrollFactor.set();
+		add(accTxt);
+
+		gradetxt = new FlxText(healthBarBG.x + healthBarBG.width - 850, healthBarBG.y + 30, 0, "Grade:" + grade, 20);
+		gradetxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, LEFT);
+		gradetxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		gradetxt.scrollFactor.set();
+		add(gradetxt);
+
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -811,6 +831,8 @@ class PlayState extends MusicBeatState
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 		missTxt.cameras = [camHUD];
+		accTxt.cameras = [camHUD];
+		gradetxt.cameras = [camHUD];
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1808,6 +1830,7 @@ class PlayState extends MusicBeatState
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
 						missedNotes++;
+						accuracyThing("miss");
 						health -= 0.0475;
 						combo = 0;
 						vocals.volume = 0;
@@ -1913,6 +1936,74 @@ class PlayState extends MusicBeatState
 	}
 
 	var endingSong:Bool = false;
+	var ass = 0;
+
+	function round2( number : Float, precision : Int): Float {
+		var num = number;
+		num = num * Math.pow(10, precision);
+		num = Math.round( num ) / Math.pow(10, precision);
+		return num;
+	}
+	var gradecolor:FlxColor;
+	function updateGrade(){
+
+		if(accuracy < 10){
+			grade = 'F';
+			gradecolor = FlxColor.RED;
+		}
+		if(accuracy > 10 && accuracy < 30){
+			grade = 'D';
+			gradecolor = FlxColor.ORANGE;
+		}
+		if(accuracy > 30 && accuracy < 50){
+			grade = 'C';
+			gradecolor = FlxColor.YELLOW;
+		}
+		if(accuracy > 50 && accuracy < 70){
+			grade = 'B';
+			gradecolor = FlxColor.LIME;
+		}
+		if(accuracy > 70 && accuracy < 95){
+			grade = 'A';
+			gradecolor = FlxColor.GREEN;
+		}
+		if(accuracy > 95){
+			grade = 'S';
+			gradecolor = FlxColor.fromRGB(255,215,0);
+		}
+		if(missedNotes == 0){
+			grade = 'FC';
+			gradecolor = FlxColor.fromRGB(255,215,0);
+		}
+		gradetxt.applyMarkup("Grade:" + '$'+grade+'$',
+			[new FlxTextFormatMarkerPair(new FlxTextFormat(gradecolor), "$")]);
+	}
+
+	function accuracyThing(score:String):Void {
+		ass++;
+		var modf = 0.00;
+		var tmpn = 0.00;
+		tmpn = 0.00;
+		modf = 0.00;
+		switch(score){
+			case 'miss':
+				modf = -0.25;
+			case 'shit':
+				modf = 0.25;
+			case 'bad':
+				modf = 0.50;
+			case 'good':
+				modf = 1;
+			case 'sick':
+				modf = 2;
+		}
+		accuracy = 	round2(pressedNotes / ass * 100, 2);
+		//accuracy = (100 * accuracy * modf * (pressedNotes + 1 / missedNotes));
+		if(accuracy < 0) accuracy = 0;
+		if(accuracy > 100) accuracy = 100;
+		accTxt.text = "Accuracy: " + accuracy + "%";
+		updateGrade();
+	}
 
 	private function popUpScore(strumtime:Float):Void
 	{
@@ -1947,6 +2038,18 @@ class PlayState extends MusicBeatState
 			daRating = 'good';
 			score = 200;
 		}
+
+		pressedNotes++;
+
+		if(missedNotes == 0){
+			accuracy = 100;
+			grade = "FC";
+			updateGrade();
+			accuracyThing(daRating);
+		}else{
+			accuracyThing(daRating);
+		}
+
 		if (daRating != "sick" && GimmickState.perfectcombo && gimmick) 
 			{
 				boyfriend.stunned = true;
@@ -2297,6 +2400,7 @@ class PlayState extends MusicBeatState
 
 			if(!pracMode) songScore -= 10;
 			missedNotes++;
+			accuracyThing("miss");
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
 			// FlxG.log.add('played imss note');
