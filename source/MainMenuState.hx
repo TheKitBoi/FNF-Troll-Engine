@@ -229,8 +229,10 @@ class MainMenuState extends MusicBeatState
 										FlxG.switchState(new FreeplayState());
 
 										trace("Freeplay Menu Selected");
+									#if fnfnet
 									case 'fnfnet':
 										FlxG.switchState(new online.FNFNetMenu());
+									#end
 										
 									case 'options':
 										FlxG.switchState(new OptionsMenu());
