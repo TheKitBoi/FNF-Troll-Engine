@@ -1,4 +1,7 @@
 # TrollEngine
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fgeneral-infinity%2Ftrollengine%2Fbadge%3Fref%3Dmaster&style=flat)](https://actions-badge.atrox.dev/general-infinity/trollengine/goto?ref=master) ![Issues](https://img.shields.io/github/issues/general-infinity/trollengine) ![Issues](https://img.shields.io/github/forks/General-Infinity/TrollEngine) ![Issues](https://img.shields.io/github/stars/General-Infinity/TrollEngine)     <a href="https://discord.gg/5mbz9jjMrf">
+        <img src="https://img.shields.io/discord/841019709255974953?logo=discord"
+            alt="chat on Discord"></a>
 
 This is the repository for TrollEngine, a fork of ninjamuffin's Friday Night Funkin.
 
