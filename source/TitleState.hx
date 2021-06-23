@@ -5,6 +5,7 @@ import lime.utils.AssetCache;
 import Controls;
 import flixel.util.FlxSave;
 #if desktop
+import sys.io.File;
 import sys.FileSystem;
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -51,8 +52,14 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
-		
-		polymod.Polymod.init({modRoot: "./mods", dirs: ["introMod", "characters"], framework: Framework.LIME});
+		#if desktop
+		var list = File.getContent("./mods/modList.txt").trim().split('\n');
+		for (i in 0...list.length)
+			{
+				list[i] = list[i].trim();
+			}
+		polymod.Polymod.init({modRoot: "./mods", dirs: list, framework: Framework.LIME});
+		#end
 
 		PlayerSettings.init();
 
