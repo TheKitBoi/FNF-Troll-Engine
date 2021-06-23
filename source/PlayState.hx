@@ -921,6 +921,7 @@ class PlayState extends MusicBeatState
 				interp.variables.set("iconP2",iconP2);
 				interp.variables.set("playerStrums",playerStrums);
 				interp.variables.set("FlxCamera",FlxCamera);
+				interp.variables.set("defaultCamZoom",defaultCamZoom);
 				shouldrun = true;
 				interp.execute(program);
 				interp.variables.get('onStart')();
