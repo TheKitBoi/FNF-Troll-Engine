@@ -72,7 +72,8 @@ class TitleState extends MusicBeatState
 		NGio.noLogin(APIStuff.API);
 
 		#if ng
-		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
+		var ng:NGio = new N
+		Gio(APIStuff.API, APIStuff.EncKey);
 		trace('NEWGROUNDS LOL');
 		#end
 
