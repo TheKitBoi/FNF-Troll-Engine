@@ -1,6 +1,7 @@
 import haxe.macro.Context.Message;
 import hxp.*;
 import lime.tools.*;
+import lime.project.*;
 
 class Project extends HXProject {
     
@@ -22,8 +23,6 @@ class Project extends HXProject {
         haxelibs.push (new Haxelib ("lime"));
         haxelibs.push (new Haxelib ("flixel"));
         haxelibs.push (new Haxelib ("flixel-ui"));
-        haxelibs.push (new Haxelib ("lime"));
-        haxelibs.push (new Haxelib ("lime"));
         sources.push ("source");
         
         // Other code goes here!
