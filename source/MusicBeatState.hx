@@ -11,7 +11,7 @@ class MusicBeatState extends FlxUIState
 {
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
-
+	var geom:flash.geom.Rectangle;
 	private var curStep:Int = 0;
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
@@ -21,6 +21,7 @@ class MusicBeatState extends FlxUIState
 
 	override function create()
 	{
+		geom = new flash.geom.Rectangle(0, 0, FlxG.width, FlxG.height);
 		if (transIn != null)
 			trace('reg ' + transIn.region);
 
@@ -29,6 +30,9 @@ class MusicBeatState extends FlxUIState
 
 	override function update(elapsed:Float)
 	{
+		if(FlxG.keys.justPressed.J){	
+			//flixel.addons.plugin.screengrab.FlxScreenGrab.grab(geom,true);
+		}
 		//everyStep();
 		var oldStep:Int = curStep;
 
