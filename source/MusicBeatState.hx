@@ -1,6 +1,7 @@
 package;
-
+#if sys
 import sys.io.File;
+#end
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.FlxCamera;
@@ -45,6 +46,7 @@ class MusicBeatState extends FlxUIState
 
 	override function update(elapsed:Float)
 	{
+		#if sys
 		if(FlxG.keys.justPressed.F2){	
 			var bitfile = FlxScreenGrab.grab();
 			var finalresult = bitfile.bitmapData.encode(bitfile.bitmapData.rect, new PNGEncoderOptions(true));
@@ -67,6 +69,7 @@ class MusicBeatState extends FlxUIState
 				});
 			}});
 		}
+		#end
 		//everyStep();
 		var oldStep:Int = curStep;
 
