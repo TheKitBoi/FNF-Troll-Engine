@@ -75,6 +75,7 @@
 	</section>
 
 	<assets path="assets/scripts"  library="scripts"/>
+	<assets path="assets/screenshots"  library="screenshots"/>
 	<assets path="assets/characters"  library="characters"/>
 	<assets path="assets/songs"    library="songs"    exclude="*.ogg" if="web"/>
 	<assets path="assets/songs"    library="songs"    exclude="*.mp3" unless="web"/>
