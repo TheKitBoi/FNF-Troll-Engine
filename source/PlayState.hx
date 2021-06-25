@@ -84,6 +84,7 @@ class PlayState extends MusicBeatState
 	public static var currentBeat:Int;
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
+	private var enemyStrums:FlxTypedGroup<FlxSprite>;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -729,7 +730,7 @@ class PlayState extends MusicBeatState
 		add(strumLineNotes);
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
-
+		enemyStrums = new FlxTypedGroup<FlxSprite>();
 		// startCountdown();
 
 		generateSong(SONG.song);
@@ -920,8 +921,10 @@ class PlayState extends MusicBeatState
 				interp.variables.set("iconP1",iconP1);
 				interp.variables.set("iconP2",iconP2);
 				interp.variables.set("playerStrums",playerStrums);
+				interp.variables.set("enemyStrums",enemyStrums);
 				interp.variables.set("FlxCamera",FlxCamera);
 				interp.variables.set("defaultCamZoom",defaultCamZoom);
+				interp.variables.set("notes",notes);
 				shouldrun = true;
 				interp.execute(program);
 				interp.variables.get('onStart')();
@@ -1346,10 +1349,17 @@ class PlayState extends MusicBeatState
 				FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
 			}
 			babyArrow.ID = i;
-
+			/*group of asdjoasidjoiasd
+			https://cdn.discordapp.com/attachments/842824254889656320/857355132098576414/unknown.png
+			https://cdn.discordapp.com/attachments/842824254889656320/857355564530925598/unknown.png
+			https://cdn.discordapp.com/attachments/842824254889656320/857355842352185364/unknown.png
+			https://cdn.discordapp.com/attachments/842824254889656320/857355889635885056/so_smart.mp4
+			*/
 			if (player == 1)
 			{
 				playerStrums.add(babyArrow);
+			}else{
+				enemyStrums.add(babyArrow);
 			}
 
 			babyArrow.animation.play('static');
