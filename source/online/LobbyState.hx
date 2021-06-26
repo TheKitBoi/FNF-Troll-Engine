@@ -52,7 +52,9 @@ class LobbyState extends MusicBeatState{
     }
 
     override function update(elapsed:Float){
-
+        if(PlayStateOnline.startedMatch){
+            LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+        }
         super.update(elapsed);
     }
 }

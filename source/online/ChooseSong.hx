@@ -237,7 +237,7 @@ class ChooseSong extends MusicBeatSubstate
 			PlayStateOnline.storyWeek = songs[curSelected].week;
 			//LoadingOnline.loadAndSwitchState(new PlayStateOnline());
 			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
-			LoadingOnline.loadAndSwitchState(new LobbyState());
+			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
 
 		}
 //		if(bruh){
