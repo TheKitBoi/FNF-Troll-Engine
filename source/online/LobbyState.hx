@@ -1,5 +1,6 @@
 package online;
 
+import flixel.addons.ui.FlxUITabMenu;
 import flixel.text.FlxText;
 import haxe.MainLoop;
 import flixel.FlxSprite;
@@ -44,10 +45,21 @@ class LobbyState extends MusicBeatState{
         stageCurtains.scrollFactor.set(1.3, 1.3);
         stageCurtains.active = false;
 
+        var UI_box = new FlxUITabMenu(null, [
+            {name: "tab1", label: 'Player'},
+            {name: "tab2", label: 'Info'},
+        ], true);
+
+		UI_box.resize(400, 200);
+		UI_box.screenCenter(X);
+        UI_box.x += 400;
+        UI_box.selected_tab = 0;
+
         add(stageCurtains);
         add(p1);
         add(p2);
         add(playertxt);
+        add(UI_box);
         super.create();
     }
 
