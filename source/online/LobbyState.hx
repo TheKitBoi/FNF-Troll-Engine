@@ -1,5 +1,6 @@
 package online;
 
+import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.addons.ui.FlxUITabMenu;
@@ -21,12 +22,12 @@ class LobbyState extends MusicBeatState{
         p2 = new Character(660, 303);
         playertxt = new FlxTypedGroup<FlxSprite>();
         var ptxt = new FlxText(p1.x, p1.y, 0, "Player 1:\nNot Ready");
-        ptxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
+        ptxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
 		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         playertxt.add(ptxt);
 
         var ptxt = new FlxText(p2.x, p2.y, 0, "Player 2:\nNot Ready");
-        ptxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
+        ptxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
 		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         playertxt.add(ptxt);
 
@@ -56,7 +57,10 @@ class LobbyState extends MusicBeatState{
             {name: "tab1", label: 'Player'},
             {name: "tab2", label: 'Info'},
         ], true);
-
+        var characters = CoolUtil.coolTextFile(Paths.txt('characterList'));
+        var characterdropdown = new FlxUIDropDownMenu(0,0,FlxUIDropDownMenu.makeStrIdLabelArray(characters,true), function(character:String){
+            p1 = new Character(p1.x, p1.y, characters[Std.parseInt(character)]); 
+        });
 		UI_box.resize(400, 200);
 		UI_box.screenCenter(X);
         UI_box.y += 50;
@@ -68,6 +72,7 @@ class LobbyState extends MusicBeatState{
         add(p2);
         add(playertxt);
         add(UI_box);
+        UI_box.add(characterdropdown);
         super.create();
     }
 
