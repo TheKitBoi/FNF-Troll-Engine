@@ -34,6 +34,7 @@ class BattleResultSubState extends MusicBeatSubstate
 
 		super();
 		var camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
 		FlxG.cameras.add(camHUD);
 		aktc = new Alphabet(FlxG.width * 0.001, FlxG.height * 0.95, "Press any key to continue");
         //if(Math.max(PlayStateOnline.p1score, PlayStateOnline.p2score))
@@ -53,8 +54,8 @@ class BattleResultSubState extends MusicBeatSubstate
 
 		// FlxG.camera.followLerp = 1;
 		// FlxG.camera.focusOn(FlxPoint.get(FlxG.width / 2, FlxG.height / 2));
-		FlxG.camera.scroll.set();
-		FlxG.camera.target = null;
+		//FlxG.camera.scroll.set();
+		//FlxG.camera.target = null;
 
 		bf.playAnim('idle');
 	}

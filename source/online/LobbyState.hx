@@ -1,5 +1,7 @@
 package online;
 
+import flixel.FlxG;
+import flixel.util.FlxColor;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.text.FlxText;
 import haxe.MainLoop;
@@ -19,10 +21,15 @@ class LobbyState extends MusicBeatState{
         p2 = new Character(660, 303);
         playertxt = new FlxTypedGroup<FlxSprite>();
         var ptxt = new FlxText(p1.x, p1.y, 0, "Player 1:\nNot Ready");
+        ptxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
+		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         playertxt.add(ptxt);
 
         var ptxt = new FlxText(p2.x, p2.y, 0, "Player 2:\nNot Ready");
+        ptxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
+		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         playertxt.add(ptxt);
+
 
         var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
         bg.antialiasing = true;
@@ -52,6 +59,7 @@ class LobbyState extends MusicBeatState{
 
 		UI_box.resize(400, 200);
 		UI_box.screenCenter(X);
+        UI_box.y += 50;
         UI_box.x += 400;
         UI_box.selected_tab = 0;
 
@@ -67,6 +75,7 @@ class LobbyState extends MusicBeatState{
         if(PlayStateOnline.startedMatch){
             LoadingOnline.loadAndSwitchState(new PlayStateOnline());
         }
+        if(controls.BACK) FlxG.switchState(new FNFNetMenu());
         super.update(elapsed);
     }
 }
