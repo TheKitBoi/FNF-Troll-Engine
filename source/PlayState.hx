@@ -1707,6 +1707,7 @@ class PlayState extends MusicBeatState
 			health = 0;
 			trace("RESET = True");
 		}
+		if (FlxG.keys.justPressed.F3) camHUD.visible = !camHUD.visible;
 		if (FlxG.keys.justPressed.C)
 			{
 				while(i<100){
