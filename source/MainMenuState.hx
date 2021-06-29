@@ -89,9 +89,9 @@ class MainMenuState extends MusicBeatState
 		add(menuItems);
 
 		#if fnfnet
-		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
+		var tex = Paths.getSparrowAtlas('main_menu_assets');
 		#else
-		var tex = Paths.getSparrowAtlas('main_menu_wo_fnfnet');
+		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
 		#end
 		for (i in 0...optionShit.length)
 		{
@@ -102,7 +102,14 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			#if fnfnet if(optionShit[i] == "fnfnet") menuItem.y = 212; #end
+			#if fnfnet 
+			if(optionShit[i] == "fnfnet") {
+				menuItem.y = 212; 
+				#if updatecheck
+				if(TitleState.outdated) menuItem.alpha = 0.5;
+				#end
+			}
+			#end
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
@@ -231,7 +238,12 @@ class MainMenuState extends MusicBeatState
 										trace("Freeplay Menu Selected");
 									#if fnfnet
 									case 'fnfnet':
+										#if updatecheck
+										if(!TitleState.outdated) FlxG.switchState(new online.FNFNetMenu());
+										else FlxG.resetState();
+										#else
 										FlxG.switchState(new online.FNFNetMenu());
+										#end
 									#end
 										
 									case 'options':

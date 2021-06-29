@@ -1,5 +1,6 @@
 package online;
 
+import flixel.text.FlxText.FlxTextFormatMarkerPair;
 import io.colyseus.Client;
 import io.colyseus.Room;
 import Config.data;
@@ -77,6 +78,10 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
+                            });
+                            room.onMessage("misc", (message) -> {
+                                LobbyState.playertxt.members[0].applyMarkup(chatText.text,
+                                    [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "[G]")]);
                             });
                             room.onMessage("message", function(message){
                                 var poop:String = Highscore.formatSong(message.song, 2);

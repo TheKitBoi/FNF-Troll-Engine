@@ -130,7 +130,7 @@
 	<haxelib name="flixel-studio" if="debug"/>
 	<!-- TOGGLES FOR COMPILATION! REMOVE ONE IF YOU DON"T WANT ONE COMPILED -->
 
-	<haxedef name="updatecheck" /> <!-- FNFNet -->
+	<haxedef name="updatecheck" /> <!-- Check for Updates -->
 	<haxedef name="fnfnet" /> <!-- FNFNet -->
 	<haxedef name="charselection" /> <!-- Character Selection -->
 	<haxedef name="gimmick" /> <!-- Gimmicks in the freeplay menu -->

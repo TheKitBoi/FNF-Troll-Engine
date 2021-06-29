@@ -18,12 +18,12 @@ class LobbyState extends MusicBeatState{
     var p1:Character;
     var p2:Character;
     var ready:Boolean = false;
-    var playertxt:FlxTypedGroup<FlxSprite>;
+    public static var playertxt:FlxTypedGroup<FlxText>;
 
     override function create(){
         p1 = new Character(180, 303);
         p2 = new Character(660, 303);
-        playertxt = new FlxTypedGroup<FlxSprite>();
+        playertxt = new FlxTypedGroup<FlxText>();
         var ptxt = new FlxText(p1.x, p1.y, 0, "Player 1:\nNot Ready");
         ptxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
 		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);

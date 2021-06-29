@@ -40,7 +40,7 @@ class TitleState extends MusicBeatState
 {
 	static var initialized:Bool = false;
 
-	var outdated:Bool = true;
+	public static var outdated:Bool = true;
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -62,6 +62,7 @@ class TitleState extends MusicBeatState
 		polymod.Polymod.init({modRoot: "./mods", dirs: list, framework: Framework.LIME});
 		#end
 
+		#if updatecheck
 		var http = new haxe.Http("https://raw.githubusercontent.com/General-Infinity/TrollEngine/master/version.txt");
 
 		http.onData = function (data:String) {
@@ -73,6 +74,7 @@ class TitleState extends MusicBeatState
 		}
 
 		http.request();	
+		#end
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -329,6 +331,7 @@ class TitleState extends MusicBeatState
 					FlxG.switchState(new ScreenSubState());
 				}
 				*/
+				#if updatecheck
 				if (outdated && !OutdatedSubState.leftState)
 				{
 					FlxG.switchState(new OutdatedSubState());
@@ -337,6 +340,9 @@ class TitleState extends MusicBeatState
 				{
 					FlxG.switchState(new MainMenuState());
 				}
+				#else
+				FlxG.switchState(new MainMenuState());
+				#end
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
