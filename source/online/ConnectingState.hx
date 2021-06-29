@@ -1,6 +1,8 @@
 package online;
 
+import flixel.util.FlxColor;
 import flixel.text.FlxText.FlxTextFormatMarkerPair;
+import flixel.text.FlxText.FlxTextFormat;
 import io.colyseus.Client;
 import io.colyseus.Room;
 import Config.data;
@@ -20,14 +22,14 @@ class ConnectingState extends MusicBeatState {
                 {
                     FlxG.switchState(new ChooseSong());
                     coly.create("battle", [], Stuff, function(err, room) { 
-                        PlayStateOnline.rooms = room;
-                        ChooseSong.rooms = room;
-                        LobbyState.rooms = room;
                         if (err != null) {
                             trace("JOIN ERROR: " + err);
                             FlxG.switchState(new FNFNetMenu());
                             return;
                         }
+                        PlayStateOnline.rooms = room;
+                        ChooseSong.rooms = room;
+                        LobbyState.rooms = room;
                         try{
                             room.onMessage('creatematch', function(message){
                                 ChooseSong.celsong = message.song;
@@ -36,6 +38,18 @@ class ConnectingState extends MusicBeatState {
                             room.onMessage('message', function(message){
                                 if(PlayStateOnline.code == message.iden) PlayStateOnline.onlinemodetext.text = "Player Found! Starting...";
                                 PlayStateOnline.code = message.iden;	
+                            });
+                            room.onMessage("misc", (message) -> {
+                                if(message.p1) {
+                                    LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                }else{
+                                    LobbyState.playertxt.members[0].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                }
+                                if(message.p2) {
+                                    LobbyState.playertxt.members[1].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                }else{
+                                    LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                }
                             });
                             room.onMessage("start", function(message){
                                 PlayStateOnline.startedMatch = true;
@@ -66,13 +80,13 @@ class ConnectingState extends MusicBeatState {
                     trace("ass");
                     try{
                         coly.join("battle", [], Stuff, function(err, room) { 
-                            LobbyState.rooms = room;
-                            PlayStateOnline.rooms = room;
                             if (err != null) {
                                 trace("JOIN ERROR: " + err);
                                 FlxG.switchState(new FNFNetMenu());
                                 return;
                             }
+                            LobbyState.rooms = room;
+                            PlayStateOnline.rooms = room;
                             room.onMessage("start", function(message){
                                 LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                                 PlayStateOnline.startedMatch = true;
@@ -80,8 +94,16 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.assing = true;
                             });
                             room.onMessage("misc", (message) -> {
-                                LobbyState.playertxt.members[0].applyMarkup(chatText.text,
-                                    [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "[G]")]);
+                                if(message.p1) {
+                                    LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                }else{
+                                    LobbyState.playertxt.members[0].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                }
+                                if(message.p2) {
+                                    LobbyState.playertxt.members[1].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                }else{
+                                    LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                }
                             });
                             room.onMessage("message", function(message){
                                 var poop:String = Highscore.formatSong(message.song, 2);

@@ -1,5 +1,6 @@
 package online;
 
+import flixel.addons.ui.FlxUI;
 import flixel.ui.FlxButton;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.FlxG;
@@ -24,14 +25,16 @@ class LobbyState extends MusicBeatState{
         p1 = new Character(180, 303);
         p2 = new Character(660, 303);
         playertxt = new FlxTypedGroup<FlxText>();
-        var ptxt = new FlxText(p1.x, p1.y, 0, "Player 1:\nNot Ready");
+        var ptxt = new FlxText(p1.x, p1.y, 0, "Not Ready");
         ptxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
 		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+        ptxt.applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
         playertxt.add(ptxt);
 
-        var ptxt = new FlxText(p2.x, p2.y, 0, "Player 2:\nNot Ready");
+        var ptxt = new FlxText(p2.x, p2.y, 0, "Not Ready");
         ptxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
 		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+        ptxt.applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
         playertxt.add(ptxt);
 
 
@@ -74,13 +77,18 @@ class LobbyState extends MusicBeatState{
         UI_box.x += 400;
         UI_box.selected_tab = 0;
 
+        var tab_group = new FlxUI(null, UI_box);
+		tab_group.name = "tab1";
+		//tab_group_song.add(UI_songTitle);
+        //tab_group.add(characterdropdown);
+        tab_group.add(ready);
+        UI_box.addGroup(tab_group);
         add(stageCurtains);
         add(p1);
         add(p2);
         add(playertxt);
         add(UI_box);
-        UI_box.add(characterdropdown);
-        UI_box.add(ready); 
+
         super.create();
     }
 
@@ -88,7 +96,10 @@ class LobbyState extends MusicBeatState{
         if(PlayStateOnline.startedMatch){
             LoadingOnline.loadAndSwitchState(new PlayStateOnline());
         }
-        if(controls.BACK) FlxG.switchState(new FNFNetMenu());
+        if(controls.BACK) {
+            rooms.leave();
+            FlxG.switchState(new FNFNetMenu());
+        }
         super.update(elapsed);
     }
 }
