@@ -62,7 +62,7 @@ class TitleState extends MusicBeatState
 		polymod.Polymod.init({modRoot: "./mods", dirs: list, framework: Framework.LIME});
 		#end
 
-		var http = new haxe.Http("https://api6.ipify.org?format=json");
+		var http = new haxe.Http("https://raw.githubusercontent.com/General-Infinity/TrollEngine/master/version.txt");
 
 		http.onData = function (data:String) {
 			if(data == Application.current.meta.get('version')) outdated = false; 
