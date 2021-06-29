@@ -1,5 +1,6 @@
 package online;
 
+import flixel.ui.FlxButton;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.FlxG;
 import flixel.util.FlxColor;
@@ -11,10 +12,12 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import lime.graphics.cairo.CairoPattern;
 import io.colyseus.Room;
 
+typedef Boolean = Bool; //doing this just to piss off haya :troll:
 class LobbyState extends MusicBeatState{
-    var rooms:Room<Stuff>;
+    public static var rooms:Room<Stuff>;
     var p1:Character;
     var p2:Character;
+    var ready:Boolean = false;
     var playertxt:FlxTypedGroup<FlxSprite>;
 
     override function create(){
@@ -61,6 +64,10 @@ class LobbyState extends MusicBeatState{
         var characterdropdown = new FlxUIDropDownMenu(0,0,FlxUIDropDownMenu.makeStrIdLabelArray(characters,true), function(character:String){
             p1 = new Character(p1.x, p1.y, characters[Std.parseInt(character)]); 
         });
+        var ready = new FlxButton(0, 0, "Ready", function(){
+            ready = !ready;
+            rooms.send("misc", {ready: ready});
+        });
 		UI_box.resize(400, 200);
 		UI_box.screenCenter(X);
         UI_box.y += 50;
@@ -73,6 +80,7 @@ class LobbyState extends MusicBeatState{
         add(playertxt);
         add(UI_box);
         UI_box.add(characterdropdown);
+        UI_box.add(ready); 
         super.create();
     }
 

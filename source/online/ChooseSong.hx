@@ -232,12 +232,12 @@ class ChooseSong extends MusicBeatSubstate
 		
 			PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 			PlayStateOnline.isStoryMode = false;
-			PlayStateOnline.storyDifficulty = 2;
+			PlayStateOnline.storyDifficulty = curDifficulty;
 
 			PlayStateOnline.storyWeek = songs[curSelected].week;
 			//LoadingOnline.loadAndSwitchState(new PlayStateOnline());
 			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
-			LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+			LoadingOnline.loadAndSwitchState(new LobbyState());
 
 		}
 //		if(bruh){

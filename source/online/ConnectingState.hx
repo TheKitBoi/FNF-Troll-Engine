@@ -10,6 +10,7 @@ class ConnectingState extends MusicBeatState {
     public static var coly:Client;
     public function new(state:String, type:String, ?code:String){
         super();
+        FlxG.autoPause = false;
         PlayStateOnline.assing = false;
         coly = new Client('ws://' + data.addr + ':' + data.port);
         switch(state){
@@ -20,6 +21,7 @@ class ConnectingState extends MusicBeatState {
                     coly.create("battle", [], Stuff, function(err, room) { 
                         PlayStateOnline.rooms = room;
                         ChooseSong.rooms = room;
+                        LobbyState.rooms = room;
                         if (err != null) {
                             trace("JOIN ERROR: " + err);
                             FlxG.switchState(new FNFNetMenu());
@@ -63,6 +65,7 @@ class ConnectingState extends MusicBeatState {
                     trace("ass");
                     try{
                         coly.join("battle", [], Stuff, function(err, room) { 
+                            LobbyState.rooms = room;
                             PlayStateOnline.rooms = room;
                             if (err != null) {
                                 trace("JOIN ERROR: " + err);
@@ -70,6 +73,7 @@ class ConnectingState extends MusicBeatState {
                                 return;
                             }
                             room.onMessage("start", function(message){
+                                LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
@@ -82,7 +86,8 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.storyDifficulty = message.diff;
                     
                                 PlayStateOnline.storyWeek = message.week;
-                                LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+                                
+                                LoadingOnline.loadAndSwitchState(new LobbyState());
                             });
 
                             room.onMessage("retscore", function(message){
@@ -115,6 +120,7 @@ class ConnectingState extends MusicBeatState {
                                 return;
                             }
                             room.onMessage("start", function(message){
+                                LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
@@ -127,7 +133,7 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.storyDifficulty = message.diff;
                     
                                 PlayStateOnline.storyWeek = message.week;
-                                LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+                                LoadingOnline.loadAndSwitchState(new LobbyState());
                             });
 
                             room.onMessage("retscore", function(message){

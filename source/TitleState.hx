@@ -40,6 +40,7 @@ class TitleState extends MusicBeatState
 {
 	static var initialized:Bool = false;
 
+	var outdated:Bool = true;
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -61,6 +62,17 @@ class TitleState extends MusicBeatState
 		polymod.Polymod.init({modRoot: "./mods", dirs: list, framework: Framework.LIME});
 		#end
 
+		var http = new haxe.Http("https://api6.ipify.org?format=json");
+
+		http.onData = function (data:String) {
+			if(data == Application.current.meta.get('version')) outdated = false; 
+		}
+
+		http.onError = function (error) {
+		trace('error: $error');
+		}
+
+		http.request();	
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -317,9 +329,9 @@ class TitleState extends MusicBeatState
 					FlxG.switchState(new ScreenSubState());
 				}
 				*/
-				if (1==1)
+				if (outdated && !OutdatedSubState.leftState)
 				{
-					FlxG.switchState(new MainMenuState());
+					FlxG.switchState(new OutdatedSubState());
 				}
 				else
 				{

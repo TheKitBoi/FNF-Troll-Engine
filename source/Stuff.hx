@@ -18,6 +18,9 @@ class Stuff extends Schema {
 	public var creatematch: String = "";
 
 	@:type("string")
+	public var misc: String = "";
+
+	@:type("string")
 	public var songname: String = "";
 
 	@:type("int32")
