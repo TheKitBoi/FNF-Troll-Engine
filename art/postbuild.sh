@@ -1,8 +1,10 @@
 #!/usr/bin/sh
-echo =================================
-echo 
-echo Thanks for compiling Trollengine!
-echo
-echo PS: if you want to remove features check out the docs :)
-echo
-echo =================================
+cat << 'EOF'
+=================================
+
+Thanks for compiling TrollEngine!
+
+PS: if you want to remove features check out the docs :)
+
+=================================
+EOF
