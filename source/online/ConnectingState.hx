@@ -9,6 +9,8 @@ import Config.data;
 import flixel.FlxG;
 
 class ConnectingState extends MusicBeatState {
+    public static var p1name:String;
+    public static var p2name:String;
     public static var rooms:Room<Stuff>;
     public static var coly:Client;
     public function new(state:String, type:String, ?code:String){
@@ -18,6 +20,8 @@ class ConnectingState extends MusicBeatState {
         coly = new Client('ws://' + data.addr + ':' + data.port);
         switch(state){
             case 'battle':
+                if(FlxG.save.data.username != null) p1name = "guest" + FlxG.random.int(0, 9999); 
+                else p1name = FlxG.save.data.username;
                 if(type == "host")
                 {
                     FlxG.switchState(new ChooseSong());

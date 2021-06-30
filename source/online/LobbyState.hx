@@ -18,6 +18,7 @@ class LobbyState extends MusicBeatState{
     public static var rooms:Room<Stuff>;
     var p1:Character;
     var p2:Character;
+    var readybtn:FlxButton;
     var ready:Boolean = false;
     public static var playertxt:FlxTypedGroup<FlxText>;
 
@@ -67,9 +68,11 @@ class LobbyState extends MusicBeatState{
         var characterdropdown = new FlxUIDropDownMenu(0,0,FlxUIDropDownMenu.makeStrIdLabelArray(characters,true), function(character:String){
             p1 = new Character(p1.x, p1.y, characters[Std.parseInt(character)]); 
         });
-        var ready = new FlxButton(0, 0, "Ready", function(){
+        readybtn = new FlxButton(50, 50, "Ready", function(){
             ready = !ready;
-            rooms.send("misc", {ready: ready});
+            if(ready) readybtn.text = "Unready";
+            else readybtn.text = "Ready";
+            //rooms.send("misc", {ready: ready});
         });
 		UI_box.resize(400, 200);
 		UI_box.screenCenter(X);
@@ -81,7 +84,7 @@ class LobbyState extends MusicBeatState{
 		tab_group.name = "tab1";
 		//tab_group_song.add(UI_songTitle);
         //tab_group.add(characterdropdown);
-        tab_group.add(ready);
+        tab_group.add(readybtn);
         UI_box.addGroup(tab_group);
         add(stageCurtains);
         add(p1);

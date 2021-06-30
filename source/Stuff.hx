@@ -24,6 +24,9 @@ class Stuff extends Schema {
 	public var userleft: String = "";
 
 	@:type("string")
+	public var userjoin: String = "";
+
+	@:type("string")
 	public var songname: String = "";
 
 	@:type("int32")
