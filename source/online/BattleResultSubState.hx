@@ -1,5 +1,8 @@
 package online;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -36,9 +39,15 @@ class BattleResultSubState extends MusicBeatSubstate
 		var camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		FlxG.cameras.add(camHUD);
-		aktc = new Alphabet(FlxG.width * 0.001, FlxG.height * 0.95, "Press any key to continue");
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg.alpha = 0;
+		bg.scrollFactor.set();
+		add(bg);
+		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+		aktc = new Alphabet(FlxG.width * 0.001, FlxG.height * 0.95, "Press any key to continue", true);
+		aktc.cameras = [camHUD];
         //if(Math.max(PlayStateOnline.p1score, PlayStateOnline.p2score))
-        loseorwin = new FlxText(FlxG.width * 0.01, 60, "Final Score:\nPlayer 1: " + PlayStateOnline.p1score + "\nPlayer 2: " + PlayStateOnline.p2score +"\n\nPress any key to Continue", 32);
+        loseorwin = new FlxText(FlxG.width * 0.01, 60, "Final Score:\nPlayer 1: " + PlayStateOnline.p1score + "\nPlayer 2: " + PlayStateOnline.p2score, 32);
 		//loseorwin.font = Paths.font('fnf');
 		Conductor.songPosition = 0;
 		loseorwin.cameras = [camHUD];

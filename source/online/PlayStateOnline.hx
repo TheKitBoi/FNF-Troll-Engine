@@ -1371,6 +1371,7 @@ class PlayStateOnline extends MusicBeatState
 	override public function update(elapsed:Float)
 	{
 		if(controls.BACK && !startedMatch) {
+			startedMatch = false;
 			rooms.leave();
 			FlxG.switchState(new FNFNetMenu());
 		}
@@ -1703,6 +1704,7 @@ class PlayStateOnline extends MusicBeatState
 
 	public function endSong():Void
 	{
+		startedMatch = false;
         rooms.leave();
 
 		canPause = false;
@@ -1710,8 +1712,8 @@ class PlayStateOnline extends MusicBeatState
 		vocals.volume = 0;
 		boyfriend.stunned = true;
 
-		persistentUpdate = false;
-		persistentDraw = false;
+		//persistentUpdate = false;
+		//persistentDraw = false;
 		paused = true;
 
 		vocals.stop();
