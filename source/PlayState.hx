@@ -1708,14 +1708,6 @@ class PlayState extends MusicBeatState
 			trace("RESET = True");
 		}
 		if (FlxG.keys.justPressed.F3) camHUD.visible = !camHUD.visible;
-		if (FlxG.keys.justPressed.C)
-			{
-				while(i<100){
-					i++;
-					boyfriend.playAnim("dodge");
-					dodging=true;
-				}
-			}
 		if(i==100)
 			{
 				i=0;

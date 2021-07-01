@@ -796,8 +796,8 @@ class PlayStateOnline extends MusicBeatState
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
 
-		p1scoretext = new FlxText(FlxG.width * 0.001, healthBar.y - 40, 0, "Player 1 Score: " + p1score, 16);
-		p2scoretext = new FlxText(FlxG.width * 0.001, healthBar.y - 20, 0, "Player 2 Score: " + p2score, 16);
+		p1scoretext = new FlxText(FlxG.width * 0.001, healthBar.y - 40, 0, ConnectingState.p1name + " Score: " + p1score, 16);
+		p2scoretext = new FlxText(FlxG.width * 0.001, healthBar.y - 20, 0, ConnectingState.p2name + " Score: " + p2score, 16);
 
 		p1scoretext.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT);
 		p1scoretext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);

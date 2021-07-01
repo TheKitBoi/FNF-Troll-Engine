@@ -12,12 +12,16 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import lime.graphics.cairo.CairoPattern;
 import io.colyseus.Room;
+import online.ConnectingState.songmeta;
 
 typedef Boolean = Bool; //doing this just to piss off haya :troll:
 class LobbyState extends MusicBeatState{
     public static var rooms:Room<Stuff>;
     var p1:Character;
-    var p2:Character;
+    public static var p2:Character;
+    public static var songdata:ConnectingState.SongData = {song: '', week: 1, difficulty: 1};
+    public static var roomcode:FlxText;
+    public static var code:String;
 
     var p1name:FlxText;
     var p2name:FlxText;
@@ -26,11 +30,38 @@ class LobbyState extends MusicBeatState{
     public static var playertxt:FlxTypedGroup<FlxText>;
 
     override function create(){
+        var songname = songdata.song;
+        var songweek = songdata.week;
+        var songdiff = switch(songdata.difficulty){
+            case 0:
+                'Easy';
+            case 1:
+                'Normal';
+            case 3:
+                'Hard';
+            default:
+                'Normal';
+        };
+        
+        var info = new FlxText(-140, -55);
+        info.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        info.text = '
+        Song: $songname
+        Week: $songweek
+        Difficulty: $songdiff
+        ';
+        //info.text = "Song: " + songdata.song + "\n Week: " + songdata.week + "Difficulty: " + songdata.difficulty;
+        
+        roomcode = new FlxText(5, FlxG.height *0.001, 0, "Room code: " + code, 12);
+        roomcode.scrollFactor.set();
+        roomcode.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
         p1 = new Character(180, 303);
         p2 = new Character(660, 303);
-
-        p1name = new FlxText(p1.x, p1.y + 30);
-        p2name = new FlxText(p2.x, p2.y + 30);
+        p2.alpha = 0;
+        if(ConnectingState.conmode == 'join')p2.alpha = 1;
+        p1name = new FlxText(p1.x + 100, p1.y - 30);
+        p2name = new FlxText(p2.x + 100, p2.y - 30);
         
         p1name.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
 		p1name.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
@@ -95,10 +126,15 @@ class LobbyState extends MusicBeatState{
 
         var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "tab1";
+
+        var tab_info = new FlxUI(null, UI_box);
+		tab_info.name = "tab2";
 		//tab_group_song.add(UI_songTitle);
         //tab_group.add(characterdropdown);
         tab_group.add(readybtn);
+        tab_info.add(info);
         UI_box.addGroup(tab_group);
+        UI_box.addGroup(tab_info);
         add(stageCurtains);
         add(p1);
         add(p2);
@@ -106,6 +142,7 @@ class LobbyState extends MusicBeatState{
         add(p2name);
         add(playertxt);
         add(UI_box);
+        if(ConnectingState.conmode != "join")add(roomcode);
 
         super.create();
     }
