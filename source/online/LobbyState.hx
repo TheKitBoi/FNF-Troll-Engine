@@ -18,6 +18,9 @@ class LobbyState extends MusicBeatState{
     public static var rooms:Room<Stuff>;
     var p1:Character;
     var p2:Character;
+
+    var p1name:FlxText;
+    var p2name:FlxText;
     var readybtn:FlxButton;
     var ready:Boolean = false;
     public static var playertxt:FlxTypedGroup<FlxText>;
@@ -25,6 +28,16 @@ class LobbyState extends MusicBeatState{
     override function create(){
         p1 = new Character(180, 303);
         p2 = new Character(660, 303);
+
+        p1name = new FlxText(p1.x, p1.y + 30);
+        p2name = new FlxText(p2.x, p2.y + 30);
+        
+        p1name.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
+		p1name.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
+        p2name.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
+		p2name.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
         playertxt = new FlxTypedGroup<FlxText>();
         var ptxt = new FlxText(p1.x, p1.y, 0, "Not Ready");
         ptxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT);
@@ -72,7 +85,7 @@ class LobbyState extends MusicBeatState{
             ready = !ready;
             if(ready) readybtn.text = "Unready";
             else readybtn.text = "Ready";
-            //rooms.send("misc", {ready: ready});
+            rooms.send("misc", {ready: ready});
         });
 		UI_box.resize(400, 200);
 		UI_box.screenCenter(X);
@@ -89,6 +102,8 @@ class LobbyState extends MusicBeatState{
         add(stageCurtains);
         add(p1);
         add(p2);
+        add(p1name);
+        add(p2name);
         add(playertxt);
         add(UI_box);
 
@@ -96,6 +111,8 @@ class LobbyState extends MusicBeatState{
     }
 
     override function update(elapsed:Float){
+        p1name.text = ConnectingState.p1name;
+        p2name.text = ConnectingState.p2name;
         if(PlayStateOnline.startedMatch){
             LoadingOnline.loadAndSwitchState(new PlayStateOnline());
         }

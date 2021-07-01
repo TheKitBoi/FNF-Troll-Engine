@@ -64,7 +64,9 @@ class ConnectingState extends MusicBeatState {
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
                             });
-                            
+                            room.onMessage('userjoin' function(message){
+                                p2name = message.name;
+                            });
                             room.onMessage("retscore", function(message){
                                 PlayStateOnline.p1score = message.p1score;
                                 PlayStateOnline.p2score = message.p2score;
