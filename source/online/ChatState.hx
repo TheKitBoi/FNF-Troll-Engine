@@ -89,7 +89,13 @@ class ChatState extends MusicBeatState
 
 
         MOTD = new FlxText(3, 3, "Cannot connect to the server!", 13); //UI_box.x + 3, UI_box.y + 50
-        rules = new FlxText(3, 3, "Server down?", 13); //UI_box.x + 3, UI_box.y + 50
+        MOTD.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT);
+        MOTD.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
+        rules = new FlxText(3, 3, "Server down?", 18); //UI_box.x + 3, UI_box.y + 50
+        rules.setFormat(Paths.font("vcr.ttf"), 15, FlxColor.WHITE, LEFT);
+        rules.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
         okButton = new flixel.ui.FlxButton(-280, 340, "Ok", function()
             {
                 FlxG.sound.play(Paths.sound('scrollMenu'));

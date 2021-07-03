@@ -104,7 +104,7 @@ class PlayStateOnline extends MusicBeatState
 	private var healthBarBG:FlxSprite;
 	private var progressBG:FlxSprite;
 	private var healthBar:FlxBar;
-
+	public static var leftText:FlxText;
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
 
@@ -644,6 +644,14 @@ class PlayStateOnline extends MusicBeatState
 		onlinemodetext.setFormat(Paths.font("vcr.ttf"), 60, FlxColor.WHITE, RIGHT);
 		onlinemodetext.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
 
+		leftText = new FlxText(0, 30, 0, "", 60);
+		leftText.screenCenter(XY);
+		leftText.y = 30;
+		leftText.cameras = [camHUD];
+
+		leftText.setFormat(Paths.font("vcr.ttf"), 60, FlxColor.WHITE, RIGHT);
+		leftText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
 		switch (SONG.player2)
@@ -882,7 +890,7 @@ class PlayStateOnline extends MusicBeatState
 			roomcode.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			roomcode.cameras = [camHUD];
 			add(roomcode);
-
+		add(leftText);
 		super.create();
 	}
 

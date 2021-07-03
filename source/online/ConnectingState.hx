@@ -31,6 +31,7 @@ class ConnectingState extends MusicBeatState {
             case 'battle':
                 if(type == "host")
                 {
+                    conmode = 'host';
                     if(FlxG.save.data.username != null) p1name = FlxG.save.data.username; 
                     else p1name = "guest" + FlxG.random.int(0, 9999);
                     p2name = "";
@@ -81,6 +82,7 @@ class ConnectingState extends MusicBeatState {
                             });
                             room.onMessage('userleft', function(message){
                                 LobbyState.p2.alpha = 0;
+                                if(PlayStateOnline.startedMatch) PlayStateOnline.leftText.text = "User left the game.";
                                 if(!PlayStateOnline.startedMatch)p2name = '';
                                 if(!PlayStateOnline.startedMatch)LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
                             });
@@ -136,7 +138,11 @@ class ConnectingState extends MusicBeatState {
                             });
                             room.onMessage('userleft', function(message){
                                 LobbyState.p2.alpha = 0;
-                                FlxG.switchState(new FNFNetMenu());
+                                if(PlayStateOnline.startedMatch) PlayStateOnline.leftText.text = "User left the game.";
+                                if(!PlayStateOnline.startedMatch){
+                                    FlxG.switchState(new FNFNetMenu());
+                                    p2name = '';
+                                }
                                 if(!PlayStateOnline.startedMatch)LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
                             });
                             room.onMessage("message", function(message){
@@ -178,19 +184,49 @@ class ConnectingState extends MusicBeatState {
                     trace("ass");
                     try{
                         coly.joinById(code, [], Stuff, function(err, room) { 
-                            PlayStateOnline.rooms = room;
                             if (err != null) {
                                 trace("JOIN ERROR: " + err);
                                 FlxG.switchState(new FNFNetMenu());
                                 return;
                             }
+                            LobbyState.rooms = room;
+                            PlayStateOnline.rooms = room;
+                            room.send('recvprev', {name: p2name});
                             room.onMessage("start", function(message){
                                 LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
                             });
+                            room.onLeave += function () {
+
+                            };
+                            room.onMessage("misc", (message) -> {
+                                if(message.p1) {
+                                    LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                }else{
+                                    LobbyState.playertxt.members[0].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                }
+                                if(message.p2) {
+                                    LobbyState.playertxt.members[1].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                }else{
+                                    LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                }
+                            });
+                            room.onMessage('userleft', function(message){
+                                LobbyState.p2.alpha = 0;
+                                if(PlayStateOnline.startedMatch) PlayStateOnline.leftText.text = "User left the game.";
+                                if(!PlayStateOnline.startedMatch){
+                                    FlxG.switchState(new FNFNetMenu());
+                                    p2name = '';
+                                }
+                                if(!PlayStateOnline.startedMatch)LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                            });
                             room.onMessage("message", function(message){
+                                p1name = message.p1name;
+                                LobbyState.songdata.song = message.song;
+                                LobbyState.songdata.week = message.week;
+
                                 var poop:String = Highscore.formatSong(message.song, 2);
 
                                 PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
@@ -198,6 +234,7 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.storyDifficulty = message.diff;
                     
                                 PlayStateOnline.storyWeek = message.week;
+                                LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
                                 LoadingOnline.loadAndSwitchState(new LobbyState());
                             });
 
@@ -205,12 +242,9 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.p1score = message.p1score;
                                 PlayStateOnline.p2score = message.p2score;
 
-                                PlayStateOnline.p1scoretext.text = "Player 1 Score: " + PlayStateOnline.p1score;
-                                PlayStateOnline.p2scoretext.text = "Player 2 Score: " + PlayStateOnline.p2score;
+                                PlayStateOnline.p1scoretext.text = p1name + " Score: " + PlayStateOnline.p1score;
+                                PlayStateOnline.p2scoretext.text = p2name + " Score: " + PlayStateOnline.p2score;
                             });
-                            room.onError += function(code, message){
-                                FlxG.switchState(new FNFNetMenu());
-                            }
                         });
                     }catch(e:Any){
                         trace(e);
