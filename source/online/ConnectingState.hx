@@ -1,5 +1,6 @@
 package online;
 
+import flixel.FlxSprite;
 import haxe.display.Protocol.HaxeNotificationMethod;
 import flixel.util.FlxColor;
 import flixel.text.FlxText.FlxTextFormatMarkerPair;
@@ -15,6 +16,7 @@ typedef SongData = {
     week:Int
 }
 class ConnectingState extends MusicBeatState {
+    public static var modded:Bool = false;
     public static var songmeta:SongData;
     public static var p1name:String;
     public static var p2name:String;
@@ -150,6 +152,33 @@ class ConnectingState extends MusicBeatState {
                                 LobbyState.songdata.song = message.song;
                                 LobbyState.songdata.week = message.week;
 
+                                /*
+                                var http = new haxe.Http("http://192.168.1.100/songs/zavodila/chart.json");
+
+                                http.onData = function (data:String) {
+                                    PlayState.SONG = Song.loadFromJson(data);
+                                }
+                                
+                                http.onError = function (error) {
+                                trace('error: $error');
+                                }
+                                
+                                http.request();
+                                new FlxTimer().start(4, (tmr:FlxTimer) -> {
+                                    PlayState.isStoryMode = false;
+                                    PlayState.storyDifficulty = curDifficulty;
+                        
+                                    PlayState.storyWeek = songs[curSelected].week;
+                                    trace('CUR WEEK' + PlayState.storyWeek);
+                                    if(gimmick) {
+                                        PlayState.gimmick = true;
+                                        FlxG.switchState(new GimmickState());
+                                    }
+                                    else {
+                                        PlayState.gimmick = false;
+                                        LoadingState.loadAndSwitchState(new PlayState());
+                                }
+			                    });*/
                                 var poop:String = Highscore.formatSong(message.song, 2);
 
                                 PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
@@ -255,7 +284,29 @@ class ConnectingState extends MusicBeatState {
     }
     override function create(){
         FlxG.autoPause = false;
+        var logo = new FlxSprite(-150, -100);
+		logo.frames = Paths.getSparrowAtlas('logoBumpin');
+		logo.antialiasing = true;
+		logo.animation.addByPrefix('bump', 'logo bumpin', 24);
+		logo.animation.play('bump');
+		logo.updateHitbox();
+		// logoBl.screenCenter();
+		// logoBl.color = FlxColor.BLACK;
+		var ldBG = new FlxSprite(0, 0).loadGraphic(Paths.image('loadyBG'));
+		var loading = new FlxSprite(0, FlxG.height * 0.5).loadGraphic(Paths.image('loadingLoader'));
+		loading.screenCenter(X);
+		var motherfunkers = new FlxSprite(0, 0).loadGraphic(Paths.image('loadingFunkers'));
+		motherfunkers.setGraphicSize(Std.int(FlxG.width * 0.5), Std.int(FlxG.height * 1.1));
+		motherfunkers.screenCenter(Y);
+		loading.x += FlxG.width * 0.14;
+		motherfunkers.x -= FlxG.width * 0.14;
 
+		motherfunkers.antialiasing = true;
+		loading.antialiasing = true;
+		//bgColor = 0xcaff4d;
+		add(ldBG);
+		add(motherfunkers);
+		add(loading);
         super.create();
     }
     override function update(elapsed:Float){

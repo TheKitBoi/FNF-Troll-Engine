@@ -1,5 +1,6 @@
 package online;
 
+import openfl.media.Sound;
 import flixel.util.FlxSave;
 #if desktop
 import Discord.DiscordClient;
@@ -55,6 +56,8 @@ using StringTools;
 class PlayStateOnline extends MusicBeatState
 {
     var coly:Client;
+	var modinst:Sound;
+	var modvoices:Sound;
 	public static var rooms:Room<Stuff>;
 	public static var gimmick:Bool = false;
 	public static var connected:Bool = false;
