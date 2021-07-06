@@ -21,6 +21,28 @@ using StringTools;
 
 class ChooseSong extends MusicBeatSubstate
 {
+	var nmsongs:Array<String> = [
+		'Tutorial',
+		'Test'
+		'Bopeebo',
+		'Fresh',
+		'Dadbattle',
+		'Spookeez',
+		'South',
+		'Monster',
+		'Pico',
+		'Philly',
+		'Blammed',
+		'Satin-Panties',
+		'High',
+		'Milf',
+		'Cocoa',
+		'Eggnog',
+		'Winter-Horrorland',
+		'Senpai',
+		'Roses',
+		'Thorns'
+	];
 	public static var bruh:Bool = false;
 	public static var celsong:String;
 	var songs:Array<SongMetadata> = [];
@@ -229,8 +251,10 @@ class ChooseSong extends MusicBeatSubstate
 		if (accepted)
 		{
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), 2);
-		
-			PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+			if(nmsongs.contains(songs[curSelected].songName))  PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+			else{
+				PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase(), true);
+			}
 			PlayStateOnline.isStoryMode = false;
 			PlayStateOnline.storyDifficulty = curDifficulty;
 

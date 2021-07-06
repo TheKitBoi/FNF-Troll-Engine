@@ -38,20 +38,18 @@ class Song
 		this.bpm = bpm;
 	}
 
-	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
+	public static function loadFromJson(jsonInput:String, ?folder:String, ?modded:Bool):SwagSong
 	{
-        var rawJson:String = "";
-		if(!ConnectingState.modded) var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
-        else rawJson = jsonInput;
-
-        if(!ConnectingState.modded){
-            while (!rawJson.endsWith("}"))
-                {
-                    rawJson = rawJson.substr(0, rawJson.length - 1);
-                    // LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
-                }
-        }
-
+		var rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
+		if(modded){
+			rawJson = jsonInput;
+			while (!rawJson.endsWith("}"))
+			{
+				rawJson = rawJson.substr(0, rawJson.length - 1);
+				// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
+			}
+		}
+		else rawJson = jsonInput;
 		// FIX THE CASTING ON WINDOWS/NATIVE
 		// Windows???
 		// trace(songData);
