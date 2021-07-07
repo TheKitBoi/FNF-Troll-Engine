@@ -1,5 +1,6 @@
 package online;
 
+import haxe.Http;
 import openfl.net.URLRequest;
 import openfl.media.Sound;
 import flixel.FlxSubState;
@@ -45,6 +46,7 @@ class ChooseSong extends MusicBeatSubstate
 		'Roses',
 		'Thorns'
 	];
+	var modlist:Array<String> = [];
 	public static var bruh:Bool = false;
 	public static var celsong:String;
 	var songs:Array<SongMetadata> = [];
@@ -54,6 +56,7 @@ class ChooseSong extends MusicBeatSubstate
 	var curDifficulty:Int = 1;
 	public static var cutscene:Bool = false;
 	public static var gimmick:Bool = false;
+	var modtab:Bool;
 	var scoreText:FlxText;
 	var diffText:FlxText;
 	var cutText:FlxText;
@@ -68,6 +71,16 @@ class ChooseSong extends MusicBeatSubstate
 
 	override function create()
 	{
+		var mdl = new haxe.Http("http://"+Config.data.resourceaddr+"/modlist.txt");
+		mdl.onData = function(data:String){
+			trace(data);
+			modlist = data.trim().split('\n');
+			for (i in 0...modlist.length)
+				{
+					modlist[i] = modlist[i].trim();
+				}
+		}
+		mdl.request();
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
@@ -170,7 +183,6 @@ class ChooseSong extends MusicBeatSubstate
 		selector.size = 40;
 		selector.text = ">";
 		// add(selector);
-
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
 		// JUST DOIN THIS SHIT FOR TESTING!!!
@@ -216,7 +228,34 @@ class ChooseSong extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
+		if(FlxG.keys.justPressed.H){
+			trace('NIGGERS');
+			grpSongs.clear();
+			grpSongs = new FlxTypedGroup<Alphabet>();
+			iconArray=[];
+			songs = [];
+			for (i in 0...modlist.length){
+				addSong(modlist[i], 1, 'face');
+			}
+			for (i in 0...modlist.length)
+				{
+					var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
+					songText.isMenuItem = true;
+					songText.targetY = i;
+					grpSongs.add(songText);
+		
+					var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
+					icon.sprTracker = songText;
+		
+					// using a FlxGroup is too much fuss!
+					iconArray.push(icon);
+					add(icon);
+		
+					// songText.x += 40;
+					// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+					// songText.screenCenter(X);
+				}
+		}
 		if (FlxG.sound.music.volume < 0.7)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
