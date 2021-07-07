@@ -1,5 +1,6 @@
 package online;
 
+import openfl.net.URLRequest;
 import openfl.media.Sound;
 import flixel.util.FlxSave;
 #if desktop
@@ -56,8 +57,8 @@ using StringTools;
 class PlayStateOnline extends MusicBeatState
 {
     var coly:Client;
-	var modinst:Sound;
-	var modvoices:Sound;
+	public static var modinst:Sound;
+	public static var modvoices:Sound;
 	public static var rooms:Room<Stuff>;
 	public static var gimmick:Bool = false;
 	public static var connected:Bool = false;
@@ -169,6 +170,8 @@ class PlayStateOnline extends MusicBeatState
 
 	override public function create()
 	{
+		modinst = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Inst.ogg'));
+		modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Voices.ogg'));
 		p1score = 0;
 		p2score = 0;
 		FlxG.autoPause = false;
@@ -1058,7 +1061,7 @@ class PlayStateOnline extends MusicBeatState
 		lastReportedPlayheadPosition = 0;
 
 		if (!paused)
-			FlxG.sound.playMusic(Paths.inst(SONG.song), 1, false);
+			FlxG.sound.playMusic(modinst, 1, false); //Paths.inst(SONG.song)
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 
@@ -1082,9 +1085,10 @@ class PlayStateOnline extends MusicBeatState
 
 		curSong = songData.song;
 
-		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
-		else
+		if (SONG.needsVoices){
+			if(ConnectingState.modded)vocals = new FlxSound().loadEmbedded(modvoices); //Paths.voices(SONG.song)
+			else vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
+		}else
 			vocals = new FlxSound();
 
 		FlxG.sound.list.add(vocals);

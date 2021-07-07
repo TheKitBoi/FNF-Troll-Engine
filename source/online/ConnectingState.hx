@@ -1,5 +1,7 @@
 package online;
 
+import openfl.net.URLRequest;
+import openfl.media.Sound;
 import flixel.FlxSprite;
 import haxe.display.Protocol.HaxeNotificationMethod;
 import flixel.util.FlxColor;
@@ -10,6 +12,7 @@ import io.colyseus.Room;
 import Config.data;
 import flixel.FlxG;
 
+using StringTools;
 typedef SongData = {
     song:String,
     difficulty:Int,
@@ -23,6 +26,29 @@ class ConnectingState extends MusicBeatState {
     public static var conmode:String;
     public static var rooms:Room<Stuff>;
     public static var coly:Client;
+    var nmsongs:Array<String> = [
+		'Tutorial',
+		'Test',
+		'Bopeebo',
+		'Fresh',
+		'Dadbattle',
+		'Spookeez',
+		'South',
+		'Monster',
+		'Pico',
+		'Philly',
+		'Blammed',
+		'Satin-Panties',
+		'High',
+		'Milf',
+		'Cocoa',
+		'Eggnog',
+		'Winter-Horrorland',
+		'Senpai',
+		'Roses',
+		'Thorns'
+	];
+
     public function new(state:String, type:String, ?code:String){
         super();
         p2name = '';
@@ -151,43 +177,33 @@ class ConnectingState extends MusicBeatState {
                                 p1name = message.p1name;
                                 LobbyState.songdata.song = message.song;
                                 LobbyState.songdata.week = message.week;
-
-                                /*
-                                var http = new haxe.Http("http://192.168.1.100/songs/zavodila/chart.json");
-
-                                http.onData = function (data:String) {
-                                    PlayState.SONG = Song.loadFromJson(data);
-                                }
-                                
-                                http.onError = function (error) {
-                                trace('error: $error');
-                                }
-                                
-                                http.request();
-                                new FlxTimer().start(4, (tmr:FlxTimer) -> {
-                                    PlayState.isStoryMode = false;
-                                    PlayState.storyDifficulty = curDifficulty;
-                        
-                                    PlayState.storyWeek = songs[curSelected].week;
-                                    trace('CUR WEEK' + PlayState.storyWeek);
-                                    if(gimmick) {
-                                        PlayState.gimmick = true;
-                                        FlxG.switchState(new GimmickState());
-                                    }
-                                    else {
-                                        PlayState.gimmick = false;
-                                        LoadingState.loadAndSwitchState(new PlayState());
-                                }
-			                    });*/
-                                var poop:String = Highscore.formatSong(message.song, 2);
-
-                                PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
-                                PlayStateOnline.isStoryMode = false;
-                                PlayStateOnline.storyDifficulty = message.diff;
+                                trace('yes i did recieve it chungusnugget');
+                                if(!nmsongs.contains(message.song)){
+                                    PlayStateOnline.modinst = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Inst.ogg'));
+                                    PlayStateOnline.modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Voices.ogg'));
+                                    var http = new haxe.Http("http://192.168.1.100/songs/zavodila/chart.json");
                     
-                                PlayStateOnline.storyWeek = message.week;
-                                LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
-                                LoadingOnline.loadAndSwitchState(new LobbyState());
+                                    http.onData = function (data:String) {
+                                        PlayStateOnline.SONG = Song.loadFromJson(data, message.song, true);
+                                        PlayStateOnline.isStoryMode = false;
+                                        PlayStateOnline.storyDifficulty = message.diff;
+                            
+                                        PlayStateOnline.storyWeek = message.week;
+                                        LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
+                                        LoadingOnline.loadAndSwitchState(new LobbyState());
+                                    }
+                                    http.request();
+                                }else{
+                                    var poop:String = Highscore.formatSong(message.song, 2);
+
+                                    PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
+                                    PlayStateOnline.isStoryMode = false;
+                                    PlayStateOnline.storyDifficulty = message.diff;
+                        
+                                    PlayStateOnline.storyWeek = message.week;
+                                    LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
+                                    LoadingOnline.loadAndSwitchState(new LobbyState());
+                                }
                             });
 
                             room.onMessage("retscore", function(message){

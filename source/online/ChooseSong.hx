@@ -1,5 +1,7 @@
 package online;
 
+import openfl.net.URLRequest;
+import openfl.media.Sound;
 import flixel.FlxSubState;
 #if desktop
 import Discord.DiscordClient;
@@ -23,7 +25,7 @@ class ChooseSong extends MusicBeatSubstate
 {
 	var nmsongs:Array<String> = [
 		'Tutorial',
-		'Test'
+		'Test',
 		'Bopeebo',
 		'Fresh',
 		'Dadbattle',
@@ -113,7 +115,7 @@ class ChooseSong extends MusicBeatSubstate
 
 		if (StoryMenuState.weekUnlocked[6] || isDebug)
 			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-
+		addSong('Zavodila', 1, 'dad');
 		// LOAD MUSIC
 
 		// LOAD CHARACTERS
@@ -251,21 +253,45 @@ class ChooseSong extends MusicBeatSubstate
 		if (accepted)
 		{
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), 2);
-			if(nmsongs.contains(songs[curSelected].songName))  PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
-			else{
-				PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase(), true);
+			if(nmsongs.contains(songs[curSelected].songName)){
+				PlayStateOnline.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase(), false);
+				PlayStateOnline.isStoryMode = false;
+				PlayStateOnline.storyDifficulty = curDifficulty;
+	
+				PlayStateOnline.storyWeek = songs[curSelected].week;
+				//LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+				rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
+				LobbyState.songdata.song = songs[curSelected].songName;
+				LobbyState.songdata.week = songs[curSelected].week;
+				LobbyState.songdata.difficulty = curDifficulty;
+				LoadingOnline.loadAndSwitchState(new LobbyState());
 			}
-			PlayStateOnline.isStoryMode = false;
-			PlayStateOnline.storyDifficulty = curDifficulty;
+			else{
+				PlayStateOnline.modinst = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/zavodila/Inst.ogg'));
+				PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/zavodila/Voices.ogg'));
+				ConnectingState.modded = true;
+				var http = new haxe.Http('http://'+Config.data.resourceaddr+'/songs/zavodila/chart.json');
 
-			PlayStateOnline.storyWeek = songs[curSelected].week;
-			//LoadingOnline.loadAndSwitchState(new PlayStateOnline());
-			rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
-			LobbyState.songdata.song = songs[curSelected].songName;
-			LobbyState.songdata.week = songs[curSelected].week;
-			LobbyState.songdata.difficulty = curDifficulty;
-			LoadingOnline.loadAndSwitchState(new LobbyState());
+				http.onData = function (data:String) {
+					PlayStateOnline.SONG = Song.loadFromJson(data, songs[curSelected].songName.toLowerCase(), true);
+					PlayStateOnline.isStoryMode = false;
+					PlayStateOnline.storyDifficulty = curDifficulty;
+		
+					PlayStateOnline.storyWeek = songs[curSelected].week;
+					//LoadingOnline.loadAndSwitchState(new PlayStateOnline());
+					rooms.send('songname', {song: songs[curSelected].songName.toLowerCase(), diff: curDifficulty, week: songs[curSelected].week});
+					LobbyState.songdata.song = songs[curSelected].songName;
+					LobbyState.songdata.week = songs[curSelected].week;
+					LobbyState.songdata.difficulty = curDifficulty;
+					LoadingOnline.loadAndSwitchState(new LobbyState());
+				}
 
+				http.onError = function (error) {
+					FlxG.switchState(new FNFNetMenu());
+				}
+
+				http.request();
+			}
 		}
 //		if(bruh){
 //			var poop:String = Highscore.formatSong(celsong, 2);

@@ -8,6 +8,7 @@ typedef ConfigData = {
     var height:Int;
     var fullscreen:Bool;
     var addr:String;
+    var resourceaddr:String;
     var port:Int;
 }
 /**
@@ -32,6 +33,7 @@ class Config {
         "width": 1280,
         "height": 720,
         "addr": "127.0.0.1",
+        "resourceaddr": "127.0.0.1",
         "port": 2567
     }';
     
