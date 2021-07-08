@@ -67,10 +67,11 @@ class ChooseSong extends MusicBeatSubstate
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
-	private var iconArray:Array<HealthIcon> = [];
+	private var iconArray:FlxTypedGroup<HealthIcon>;
 
 	override function create()
 	{
+		iconArray = new FlxTypedGroup<HealthIcon>();
 		var mdl = new haxe.Http("http://"+Config.data.resourceaddr+"/modlist.txt");
 		mdl.onData = function(data:String){
 			trace(data);
@@ -128,7 +129,6 @@ class ChooseSong extends MusicBeatSubstate
 
 		if (StoryMenuState.weekUnlocked[6] || isDebug)
 			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-		addSong('Zavodila', 1, 'dad');
 		// LOAD MUSIC
 
 		// LOAD CHARACTERS
@@ -138,7 +138,7 @@ class ChooseSong extends MusicBeatSubstate
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
-
+		add(iconArray);
 		for (i in 0...songs.length)
 		{
 			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
@@ -150,8 +150,7 @@ class ChooseSong extends MusicBeatSubstate
 			icon.sprTracker = songText;
 
 			// using a FlxGroup is too much fuss!
-			iconArray.push(icon);
-			add(icon);
+			iconArray.add(icon);
 
 			// songText.x += 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -229,14 +228,17 @@ class ChooseSong extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 		if(FlxG.keys.justPressed.H){
-			trace('NIGGERS');
+			remove(grpSongs);
+			remove(iconArray);
 			grpSongs.clear();
+			iconArray.clear();
 			grpSongs = new FlxTypedGroup<Alphabet>();
-			iconArray=[];
+			iconArray= new FlxTypedGroup<HealthIcon>();
 			songs = [];
 			for (i in 0...modlist.length){
 				addSong(modlist[i], 1, 'face');
 			}
+			curSelected = 0;
 			for (i in 0...modlist.length)
 				{
 					var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
@@ -248,13 +250,14 @@ class ChooseSong extends MusicBeatSubstate
 					icon.sprTracker = songText;
 		
 					// using a FlxGroup is too much fuss!
-					iconArray.push(icon);
-					add(icon);
+					iconArray.add(icon);
 		
 					// songText.x += 40;
 					// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 					// songText.screenCenter(X);
 				}
+				add(grpSongs);
+				add(iconArray);
 		}
 		if (FlxG.sound.music.volume < 0.7)
 		{
@@ -344,7 +347,15 @@ class ChooseSong extends MusicBeatSubstate
 //			bruh = false;
 //		}
 	}
-
+	function init(){
+		remove(grpSongs);
+		remove(iconArray);
+		grpSongs.clear();
+		iconArray.clear();
+		grpSongs = new FlxTypedGroup<Alphabet>();
+		iconArray= new FlxTypedGroup<HealthIcon>();
+		songs = [];
+	}
 	function changeDiff(change:Int = 0)
 	{
 		curDifficulty += change;
@@ -371,11 +382,6 @@ class ChooseSong extends MusicBeatSubstate
 
 	function changeSelection(change:Int = 0)
 	{
-		#if !switch
-		NGio.logEvent('Fresh');
-		#end
-
-		// NGio.logEvent('Fresh');
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		curSelected += change;
@@ -394,12 +400,12 @@ class ChooseSong extends MusicBeatSubstate
 
 		var bullShit:Int = 0;
 
-		for (i in 0...iconArray.length)
+		for (i in 0...iconArray.members.length)
 		{
-			iconArray[i].alpha = 0.6;
+			iconArray.members[i].alpha = 0.6;
 		}
 
-		iconArray[curSelected].alpha = 1;
+		iconArray.members[curSelected].alpha = 1;
 
 		for (item in grpSongs.members)
 		{
