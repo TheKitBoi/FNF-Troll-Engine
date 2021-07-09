@@ -78,7 +78,7 @@ class ChooseSong extends MusicBeatSubstate
 	override function create()
 	{
 		iconArray = new FlxTypedGroup<HealthIcon>();
-		var mdl = new haxe.Http("http://"+Config.data.resourceaddr+"/modlist.txt");
+		var mdl = new haxe.Http("http://"+Config.data.resourceaddr+"/modlist.json");
 		mdl.onData = function(data:String){
 			modlist = Json.parse(data);
 			/*
