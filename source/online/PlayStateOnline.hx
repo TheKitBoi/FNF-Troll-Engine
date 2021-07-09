@@ -641,7 +641,8 @@ class PlayStateOnline extends MusicBeatState
 		gf = new Character(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		dad = new Character(100, 100, SONG.player2, false);
+		if(!ConnectingState.modded)dad = new Character(100, 100, SONG.player2, false);
+		else dad = new Character(100, 100, 'dad', 2, false);
 
 		onlinemodetext = new FlxText(0, 0, 0, "Waiting for another player... (1/2)", 60);
 		onlinemodetext.screenCenter(XY);

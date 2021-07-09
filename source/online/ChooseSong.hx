@@ -282,6 +282,9 @@ class ChooseSong extends MusicBeatSubstate
 					add(orgin);
 					add(creator);
 					add(desc);
+					orgin.text = "Origin: " + modlist.orig[curSelected];
+					creator.text = "Made By: " + modlist.madeby[curSelected];
+					desc.text = "Description: " + modlist.desc[curSelected];
 				}else init();
 		}
 		if (FlxG.sound.music.volume < 0.7)
