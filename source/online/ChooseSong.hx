@@ -282,9 +282,9 @@ class ChooseSong extends MusicBeatSubstate
 					add(orgin);
 					add(creator);
 					add(desc);
-					orgin.text = "Origin:" + modlist.orig[curSelected];
-					creator.text = "Made By:" + modlist.madeby[curSelected];
-					desc.text = "Description:\n\n" + modlist.desc[curSelected];
+					orgin.text = "Origin: " + modlist.orig[curSelected];
+					creator.text = "Made By: " + modlist.madeby[curSelected];
+					desc.text = "Description: " + modlist.desc[curSelected];
 				}else init();
 		}
 		if (FlxG.sound.music.volume < 0.7)
@@ -337,8 +337,9 @@ class ChooseSong extends MusicBeatSubstate
 				LoadingOnline.loadAndSwitchState(new LobbyState());
 			}
 			else{
+				trace(songs[curSelected].songName.toLowerCase());
 				PlayStateOnline.modinst = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/Inst.ogg'));
-				PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/zavodila/Voices.ogg'));
+				PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/Voices.ogg'));
 				ConnectingState.modded = true;
 				var http = new haxe.Http('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/chart.json');
 

@@ -177,11 +177,14 @@ class ConnectingState extends MusicBeatState {
                                 p1name = message.p1name;
                                 LobbyState.songdata.song = message.song;
                                 LobbyState.songdata.week = message.week;
+                                var sng = message.song;
+                                var wk = message.week;
+                                var dif = message.diff;
                                 trace('yes i did recieve it chungusnugget');
                                 if(!nmsongs.contains(message.song)){
-                                    PlayStateOnline.modinst = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Inst.ogg'));
-                                    PlayStateOnline.modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Voices.ogg'));
-                                    var http = new haxe.Http("http://192.168.1.100/songs/zavodila/chart.json");
+                                    PlayStateOnline.modinst = new Sound(new URLRequest('http://192.168.1.100/songs/$sng/Inst.ogg'));
+                                    PlayStateOnline.modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/$sng/Voices.ogg'));
+                                    var http = new haxe.Http('http://192.168.1.100/songs/$sng/chart.json');
                     
                                     http.onData = function (data:String) {
                                         PlayStateOnline.SONG = Song.loadFromJson(data, message.song, true);

@@ -170,8 +170,6 @@ class PlayStateOnline extends MusicBeatState
 
 	override public function create()
 	{
-		modinst = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Inst.ogg'));
-		modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/zavodila/Voices.ogg'));
 		p1score = 0;
 		p2score = 0;
 		FlxG.autoPause = false;
@@ -826,7 +824,8 @@ class PlayStateOnline extends MusicBeatState
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 
-		iconP2 = new HealthIcon(SONG.player2, false);
+		if(!ConnectingState.modded)iconP2 = new HealthIcon(SONG.player2, false);
+		else iconP2 = new HealthIcon("dad", false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 
 		healthBar.createFilledBar(dominantColor(iconP2), dominantColor(iconP1)); //0xFFFF0000, 0xFF66FF33

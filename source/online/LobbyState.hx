@@ -18,7 +18,6 @@ import online.ConnectingState.songmeta;
 
 typedef Boolean = Bool; //doing this just to piss off haya :troll:
 class LobbyState extends MusicBeatState{
-    var modinst:Sound;
     public static var rooms:Room<Stuff>;
     var p1:Character;
     public static var p2:Character;
@@ -156,7 +155,6 @@ class LobbyState extends MusicBeatState{
         if(PlayStateOnline.startedMatch){
             LoadingOnline.loadAndSwitchState(new PlayStateOnline());
         }
-        if(FlxG.keys.justPressed.H)modinst.play();
         if(controls.BACK) {
             rooms.leave();
             FlxG.switchState(new FNFNetMenu());
