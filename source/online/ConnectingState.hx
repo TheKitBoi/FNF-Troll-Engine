@@ -182,6 +182,7 @@ class ConnectingState extends MusicBeatState {
                                 var dif = message.diff;
                                 trace('yes i did recieve it chungusnugget');
                                 if(!nmsongs.contains(message.song)){
+                                    modded = true;
                                     PlayStateOnline.modinst = new Sound(new URLRequest('http://192.168.1.100/songs/$sng/Inst.ogg'));
                                     PlayStateOnline.modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/$sng/Voices.ogg'));
                                     var http = new haxe.Http('http://192.168.1.100/songs/$sng/chart.json');
@@ -197,6 +198,7 @@ class ConnectingState extends MusicBeatState {
                                     }
                                     http.request();
                                 }else{
+                                    modded = false;
                                     var poop:String = Highscore.formatSong(message.song, 2);
 
                                     PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
