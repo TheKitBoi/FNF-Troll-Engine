@@ -22,7 +22,7 @@ class BattleResultSubState extends MusicBeatSubstate
     var loseorwin:FlxText;
 	var aktc:Alphabet;
 	var stageSuffix:String = "";
-	var lose:Bool;
+	var lose:Bool = true;
 	public function new(?x:Float, ?y:Float)
 	{
 		var daStage = PlayState.curStage;

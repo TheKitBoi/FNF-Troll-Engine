@@ -183,9 +183,9 @@ class ConnectingState extends MusicBeatState {
                                 trace('yes i did recieve it chungusnugget');
                                 if(!nmsongs.contains(message.song)){
                                     modded = true;
-                                    PlayStateOnline.modinst = new Sound(new URLRequest('http://192.168.1.100/songs/$sng/Inst.ogg'));
-                                    PlayStateOnline.modvoices = new Sound(new URLRequest('http://192.168.1.100/songs/$sng/Voices.ogg'));
-                                    var http = new haxe.Http('http://192.168.1.100/songs/$sng/chart.json');
+                                    PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
+                                    PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Voices.ogg'));
+                                    var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart.json');
                     
                                     http.onData = function (data:String) {
                                         PlayStateOnline.SONG = Song.loadFromJson(data, message.song, true);
