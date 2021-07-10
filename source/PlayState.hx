@@ -1669,6 +1669,8 @@ class PlayState extends MusicBeatState
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
 		FlxG.watch.addQuick("theRNGnumber", holymoly);
+		FlxG.watch.addQuick("notediff", noteDiff);
+		FlxG.watch.addQuick("conductorsafe", Conductor.safeZoneOffset);
 
 		if (curSong == 'Fresh')
 		{

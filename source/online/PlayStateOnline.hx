@@ -698,7 +698,7 @@ class PlayStateOnline extends MusicBeatState
 				dad.y += 100;
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
-
+		if(ConnectingState.modded) camPos.x += 400;
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
 
 		// REPOSITIONING PER STAGE
@@ -1060,8 +1060,10 @@ class PlayStateOnline extends MusicBeatState
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
 
-		if (!paused)
-			FlxG.sound.playMusic(modinst, 1, false); //Paths.inst(SONG.song)
+		if (!paused){
+			if(ConnectingState.modded)FlxG.sound.playMusic(modinst, 1, false); //Paths.inst(SONG.song)
+			else FlxG.sound.playMusic(Paths.inst(SONG.song), 1, false);
+		}
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 

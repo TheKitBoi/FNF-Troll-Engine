@@ -27,26 +27,26 @@ class ConnectingState extends MusicBeatState {
     public static var rooms:Room<Stuff>;
     public static var coly:Client;
     var nmsongs:Array<String> = [
-		'Tutorial',
-		'Test',
-		'Bopeebo',
-		'Fresh',
-		'Dadbattle',
-		'Spookeez',
-		'South',
-		'Monster',
-		'Pico',
-		'Philly',
-		'Blammed',
-		'Satin-Panties',
-		'High',
-		'Milf',
-		'Cocoa',
-		'Eggnog',
-		'Winter-Horrorland',
-		'Senpai',
-		'Roses',
-		'Thorns'
+		'tutorial',
+		'test',
+		'bopeebo',
+		'fresh',
+		'dadbattle',
+		'spookeez',
+		'south',
+		'monster',
+		'pico',
+		'philly',
+		'blammed',
+		'satin-Panties',
+		'high',
+		'milf',
+		'cocoa',
+		'eggnog',
+		'winter-Horrorland',
+		'senpai',
+		'roses',
+		'thorns'
 	];
 
     public function new(state:String, type:String, ?code:String){
@@ -180,7 +180,7 @@ class ConnectingState extends MusicBeatState {
                                 var sng = message.song;
                                 var wk = message.week;
                                 var dif = message.diff;
-                                trace('yes i did recieve it chungusnugget');
+                                trace(nmsongs.contains(message.song));
                                 if(!nmsongs.contains(message.song)){
                                     modded = true;
                                     PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
@@ -188,6 +188,7 @@ class ConnectingState extends MusicBeatState {
                                     var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart.json');
                     
                                     http.onData = function (data:String) {
+                                        trace("bing bong");
                                         PlayStateOnline.SONG = Song.loadFromJson(data, message.song, true);
                                         PlayStateOnline.isStoryMode = false;
                                         PlayStateOnline.storyDifficulty = message.diff;
@@ -231,9 +232,11 @@ class ConnectingState extends MusicBeatState {
                    /// PlayStateOnline.storyWeek = 3;
                     //LoadingOnline.loadAndSwitchState(new PlayStateOnline());
                 }else if(type == "code"){
-                    trace("ass");
+                    conmode = 'join';
+                    if(FlxG.save.data.username != null) p2name = FlxG.save.data.username;
+                    else p2name = "guest" + FlxG.random.int(0, 9999);
                     try{
-                        coly.joinById(code, [], Stuff, function(err, room) { 
+                        coly.join("battle", [], Stuff, function(err, room) { 
                             if (err != null) {
                                 trace("JOIN ERROR: " + err);
                                 FlxG.switchState(new FNFNetMenu());
@@ -276,16 +279,38 @@ class ConnectingState extends MusicBeatState {
                                 p1name = message.p1name;
                                 LobbyState.songdata.song = message.song;
                                 LobbyState.songdata.week = message.week;
-
-                                var poop:String = Highscore.formatSong(message.song, 2);
-
-                                PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
-                                PlayStateOnline.isStoryMode = false;
-                                PlayStateOnline.storyDifficulty = message.diff;
+                                var sng = message.song;
+                                var wk = message.week;
+                                var dif = message.diff;
+                                trace('yes i did recieve it chungusnugget');
+                                if(!nmsongs.contains(message.song)){
+                                    modded = true;
+                                    PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
+                                    PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Voices.ogg'));
+                                    var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart.json');
                     
-                                PlayStateOnline.storyWeek = message.week;
-                                LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
-                                LoadingOnline.loadAndSwitchState(new LobbyState());
+                                    http.onData = function (data:String) {
+                                        PlayStateOnline.SONG = Song.loadFromJson(data, message.song, true);
+                                        PlayStateOnline.isStoryMode = false;
+                                        PlayStateOnline.storyDifficulty = message.diff;
+                            
+                                        PlayStateOnline.storyWeek = message.week;
+                                        LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
+                                        LoadingOnline.loadAndSwitchState(new LobbyState());
+                                    }
+                                    http.request();
+                                }else{
+                                    modded = false;
+                                    var poop:String = Highscore.formatSong(message.song, 2);
+
+                                    PlayStateOnline.SONG = Song.loadFromJson(poop, message.song);
+                                    PlayStateOnline.isStoryMode = false;
+                                    PlayStateOnline.storyDifficulty = message.diff;
+                        
+                                    PlayStateOnline.storyWeek = message.week;
+                                    LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
+                                    LoadingOnline.loadAndSwitchState(new LobbyState());
+                                }
                             });
 
                             room.onMessage("retscore", function(message){
@@ -299,6 +324,7 @@ class ConnectingState extends MusicBeatState {
                     }catch(e:Any){
                         trace(e);
                     }
+                    //var poop:String = Highscore.formatSong("philly", 2);
                 }
                 
         }

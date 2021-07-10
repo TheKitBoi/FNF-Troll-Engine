@@ -59,9 +59,11 @@ class ChooseSong extends MusicBeatSubstate
 	public static var cutscene:Bool = false;
 	public static var gimmick:Bool = false;
 	var modtab:Bool;
+	var loadingtxt:Alphabet;
 	var scoreText:FlxText;
 	var diffText:FlxText;
 	var cutText:FlxText;
+	var dumbText:FlxText;
 	var gimText:FlxText;
 	var orgin:FlxText;
 	var creator:FlxText;
@@ -180,13 +182,20 @@ class ChooseSong extends MusicBeatSubstate
 		desc = new FlxText(scoreText.x, scoreText.y + 136, 0, "Description:", 20);
 		desc.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, RIGHT);
 
-		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), 75, 0xFF000000);
+		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.45), 105, 0xFF000000);
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
 		add(diffText);
+
+		dumbText = new FlxText(scoreText.x, scoreText.y + (36 * 2), 0, "Press M to switch to mods.", 24);
+		dumbText.font = scoreText.font;
+		add(dumbText);
+
+		loadingtxt = new Alphabet(0, 0, "Loading Songs please wait...", true);
+		loadingtxt.screenCenter(XY);
 
 		add(scoreText);
 
@@ -245,7 +254,7 @@ class ChooseSong extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if(FlxG.keys.justPressed.H){
+		if(FlxG.keys.justPressed.M){
 			if(!modtab){
 				modtab = true;
 				scoreBG.setGraphicSize(Std.int(scoreBG.width), Std.int(scoreBG.height + 700));
@@ -256,6 +265,7 @@ class ChooseSong extends MusicBeatSubstate
 				grpSongs = new FlxTypedGroup<Alphabet>();
 				iconArray= new FlxTypedGroup<HealthIcon>();
 				songs = [];
+				remove(dumbText);
 				for (i in 0...modlist.mods.length){
 					addSong(modlist.mods[i], 1, 'face');
 				}
@@ -338,6 +348,7 @@ class ChooseSong extends MusicBeatSubstate
 			}
 			else{
 				trace(songs[curSelected].songName.toLowerCase());
+				add(loadingtxt);
 				PlayStateOnline.modinst = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/Inst.ogg'));
 				PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/Voices.ogg'));
 				ConnectingState.modded = true;
@@ -378,7 +389,8 @@ class ChooseSong extends MusicBeatSubstate
 	}
 	function init(){
 		modtab = false;
-		scoreBG.setGraphicSize(Std.int(scoreBG.width), 75);
+		add(dumbText);
+		scoreBG.setGraphicSize(Std.int(scoreBG.width), 105);
 		songs = [];
 		addWeek(['Tutorial', 'Test'], 1, ['gf', 'bf-pixel']);
 		if (StoryMenuState.weekUnlocked[2])
