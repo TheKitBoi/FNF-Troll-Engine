@@ -1,5 +1,8 @@
 package online;
-
+#if sys
+import Discord.DiscordClient;
+#end
+import flixel.addons.ui.FlxInputText;
 import openfl.net.URLRequest;
 import openfl.media.Sound;
 import flixel.addons.ui.FlxUI;
@@ -44,7 +47,9 @@ class LobbyState extends MusicBeatState{
             default:
                 'Normal';
         };
-        
+        #if sys
+        DiscordClient.changePresence("In the FNFNet Lobby", null);
+        #end
         var info = new FlxText(-140, -55);
         info.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         info.text = '
@@ -114,12 +119,30 @@ class LobbyState extends MusicBeatState{
         var characterdropdown = new FlxUIDropDownMenu(0,0,FlxUIDropDownMenu.makeStrIdLabelArray(characters,true), function(character:String){
             p1 = new Character(p1.x, p1.y, characters[Std.parseInt(character)]); 
         });
+
+        var usnbox = new FlxInputText(250, 50, 120);
+        usnbox.background = true;
+        usnbox.backgroundColor = FlxColor.WHITE;
+        usnbox.borderColor = 0xFFFFFFFF;
+
         readybtn = new FlxButton(50, 50, "Ready", function(){
             ready = !ready;
             if(ready) readybtn.text = "Unready";
             else readybtn.text = "Ready";
             rooms.send("misc", {ready: ready});
         });
+
+        var namebtn = new FlxButton(usnbox.x, usnbox.y + 15, "Change Name", function(){
+            if(usnbox.text != ""){
+                if(ConnectingState.conmode == "host")ConnectingState.p1name = usnbox.text;
+                else ConnectingState.p2name = usnbox.text;
+                usnbox.text = "";
+                usnbox.caretIndex = 0;
+                if(ConnectingState.conmode == "host")rooms.send("chatHist", {name: ConnectingState.p1name});
+                else rooms.send("chatHist", {name: ConnectingState.p2name});
+            }
+        });
+
 		UI_box.resize(400, 200);
 		UI_box.screenCenter(X);
         UI_box.y += 50;
@@ -134,6 +157,8 @@ class LobbyState extends MusicBeatState{
 		//tab_group_song.add(UI_songTitle);
         //tab_group.add(characterdropdown);
         tab_group.add(readybtn);
+        tab_group.add(usnbox);
+        tab_group.add(namebtn);
         tab_info.add(info);
         UI_box.addGroup(tab_group);
         UI_box.addGroup(tab_info);

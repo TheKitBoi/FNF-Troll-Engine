@@ -79,6 +79,13 @@ class ConnectingState extends MusicBeatState {
                                 ChooseSong.celsong = message.song;
                                 ChooseSong.bruh = true;
                             });
+                            room.onError += function(code, message) {
+                                FlxG.switchState(new FNFNetMenu("a strange error has occured"));
+                              };
+                            room.onMessage("chatHist", function(message){
+                                p1name = message.p1name;
+                                p2name = message.p2name;
+                            });
                             room.onMessage('message', function(message){
                                 if(LobbyState.code == message.iden) PlayStateOnline.onlinemodetext.text = "Player Found! Starting...";
                                 LobbyState.code = message.iden;	
@@ -137,7 +144,7 @@ class ConnectingState extends MusicBeatState {
                         coly.join("battle", [], Stuff, function(err, room) { 
                             if (err != null) {
                                 trace("JOIN ERROR: " + err);
-                                FlxG.switchState(new FNFNetMenu());
+                                FlxG.switchState(new FNFNetMenu("Could not find a room"));
                                 return;
                             }
                             LobbyState.rooms = room;
@@ -149,9 +156,13 @@ class ConnectingState extends MusicBeatState {
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
                             });
-                            room.onLeave += function () {
-
-                            };
+                            room.onError += function(code, message) {
+                                FlxG.switchState(new FNFNetMenu("A strange error occured"));
+                              };
+                            room.onMessage("chatHist", function(message){
+                                p1name = message.p1name;
+                                p2name = message.p2name;
+                            });
                             room.onMessage("misc", (message) -> {
                                 if(message.p1) {
                                     LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
@@ -239,7 +250,7 @@ class ConnectingState extends MusicBeatState {
                         coly.join("battle", [], Stuff, function(err, room) { 
                             if (err != null) {
                                 trace("JOIN ERROR: " + err);
-                                FlxG.switchState(new FNFNetMenu());
+                                FlxG.switchState(new FNFNetMenu("Could not find a room"));
                                 return;
                             }
                             LobbyState.rooms = room;
@@ -251,9 +262,13 @@ class ConnectingState extends MusicBeatState {
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
                             });
-                            room.onLeave += function () {
-
-                            };
+                            room.onError += function(code, message) {
+                                FlxG.switchState(new FNFNetMenu("A strange error occured"));
+                              };
+                            room.onMessage("chatHist", function(message){
+                                p1name = message.p1name;
+                                p2name = message.p2name;
+                            });
                             room.onMessage("misc", (message) -> {
                                 if(message.p1) {
                                     LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
@@ -282,7 +297,7 @@ class ConnectingState extends MusicBeatState {
                                 var sng = message.song;
                                 var wk = message.week;
                                 var dif = message.diff;
-                                trace('yes i did recieve it chungusnugget');
+                                trace(nmsongs.contains(message.song));
                                 if(!nmsongs.contains(message.song)){
                                     modded = true;
                                     PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
@@ -290,6 +305,7 @@ class ConnectingState extends MusicBeatState {
                                     var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart.json');
                     
                                     http.onData = function (data:String) {
+                                        trace("bing bong");
                                         PlayStateOnline.SONG = Song.loadFromJson(data, message.song, true);
                                         PlayStateOnline.isStoryMode = false;
                                         PlayStateOnline.storyDifficulty = message.diff;

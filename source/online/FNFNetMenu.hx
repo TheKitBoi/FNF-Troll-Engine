@@ -1,5 +1,9 @@
 package online;
 
+#if desktop
+import sys.io.File;
+import Discord.DiscordClient;
+#end
 import flixel.ui.FlxButton;
 import flixel.addons.ui.FlxInputText;
 import flixel.tweens.FlxTween;
@@ -14,7 +18,7 @@ import flixel.tweens.FlxEase;
 
 class FNFNetMenu extends MusicBeatState{
     var coly:Client;
-
+    var error:String = "";
     var logo:FlxSprite;
     var hand:FlxSprite;
     var curSelected:Int = 0;
@@ -24,8 +28,16 @@ class FNFNetMenu extends MusicBeatState{
 
 	var optionShit:Array<String> = ['matchmaking', 'join from code', 'back', 'login'];
 
+    public function new(error:String = ""){
+        this.error = error;
+        trace("chungus");
+        super();
+    }
     override function create()
         {
+            #if sys
+            DiscordClient.changePresence("In the FNFNet menu", null);
+            #end
             FlxG.mouse.visible = true;
             logo = new FlxSprite().loadGraphic(Paths.image('fnfnet'));
             logo.screenCenter(XY);
@@ -82,6 +94,9 @@ class FNFNetMenu extends MusicBeatState{
             add(assets);   
             add(logo);
             add(hand);
+            var errortxt = new Alphabet(0, FlxG.height * 0.90, error, true);
+            errortxt.screenCenter(X);
+            add(errortxt);
             super.create();
         }
         override function update(elapsed:Float){

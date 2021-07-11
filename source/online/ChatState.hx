@@ -1,5 +1,8 @@
 package online;
 
+#if sys
+import Discord.DiscordClient;
+#end
 import Config.ConfigData;
 import openfl.events.KeyboardEvent;
 import flixel.addons.ui.FlxSlider;
@@ -59,6 +62,10 @@ class ChatState extends MusicBeatState
         menuBG.updateHitbox();
         menuBG.screenCenter();
         menuBG.antialiasing = true;
+        
+        #if sys
+        DiscordClient.changePresence("Chatting in FNFNet", null);
+        #end
         
         var coly = new Client('ws://' + data.addr + ':' + data.port);
         FlxG.sound.music.stop();

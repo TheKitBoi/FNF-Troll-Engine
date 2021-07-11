@@ -114,7 +114,7 @@ class ChooseSong extends MusicBeatSubstate
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("Choosing a song in FNFNet", null);
 		#end
 
 		var isDebug:Bool = false;
