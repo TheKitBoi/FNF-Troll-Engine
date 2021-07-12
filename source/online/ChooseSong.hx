@@ -352,7 +352,15 @@ class ChooseSong extends MusicBeatSubstate
 				PlayStateOnline.modinst = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/Inst.ogg'));
 				PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/Voices.ogg'));
 				ConnectingState.modded = true;
-				var http = new haxe.Http('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/chart.json');
+				var modif = switch(curDifficulty){
+					case 0:
+						"-easy";
+					default:
+						"";
+					case 2:
+						"-hard";
+				}
+				var http = new haxe.Http('http://'+Config.data.resourceaddr+'/songs/'+songs[curSelected].songName.toLowerCase()+'/chart$modif.json');
 
 				http.onData = function (data:String) {
 					PlayStateOnline.SONG = Song.loadFromJson(data, songs[curSelected].songName.toLowerCase(), true);

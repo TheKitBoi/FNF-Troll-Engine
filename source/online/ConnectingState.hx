@@ -191,12 +191,20 @@ class ConnectingState extends MusicBeatState {
                                 var sng = message.song;
                                 var wk = message.week;
                                 var dif = message.diff;
+                                var modif = switch(dif){
+                                    case 0:
+                                        "-easy";
+                                    default:
+                                        "";
+                                    case 2:
+                                        "-hard";
+                                }
                                 trace(nmsongs.contains(message.song));
                                 if(!nmsongs.contains(message.song)){
                                     modded = true;
                                     PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
                                     PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Voices.ogg'));
-                                    var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart.json');
+                                    var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart$modif.json');
                     
                                     http.onData = function (data:String) {
                                         trace("bing bong");
@@ -297,12 +305,20 @@ class ConnectingState extends MusicBeatState {
                                 var sng = message.song;
                                 var wk = message.week;
                                 var dif = message.diff;
+                                var modif = switch(dif){
+                                    case 0:
+                                        "-easy";
+                                    default:
+                                        "";
+                                    case 2:
+                                        "-hard";
+                                }
                                 trace(nmsongs.contains(message.song));
                                 if(!nmsongs.contains(message.song)){
                                     modded = true;
                                     PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
                                     PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Voices.ogg'));
-                                    var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart.json');
+                                    var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart$modif.json');
                     
                                     http.onData = function (data:String) {
                                         trace("bing bong");
