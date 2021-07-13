@@ -40,8 +40,8 @@ class BattleResultSubState extends MusicBeatSubstate
 		}
 
 		super();
-		if(ConnectingState.conmode == "host")if(Math.max(p1score, p2score) == p1score) lose = false;
-		else if(ConnectingState.conmode == "join")if(Math.max(p1score, p2score) == p2score) lose = false;
+		if(ConnectingState.conmode == "host")if(p2score < p1score) lose = false;
+		else if(ConnectingState.conmode == "join")if(p1score < p2score) lose = false;
 
 		var loseorwintext = switch(lose){
 			case false:

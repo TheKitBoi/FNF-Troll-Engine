@@ -35,7 +35,6 @@ class LobbyState extends MusicBeatState{
     public static var playertxt:FlxTypedGroup<FlxText>;
 
     override function create(){
-        ConnectingState.inlobby = true;
         var songname = songdata.song;
         var songweek = songdata.week;
         var songdiff = switch(songdata.difficulty){
@@ -89,7 +88,7 @@ class LobbyState extends MusicBeatState{
 		ptxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         ptxt.applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
         playertxt.add(ptxt);
-
+        ConnectingState.inlobby = true;
 
         var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
         bg.antialiasing = true;

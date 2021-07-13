@@ -19,6 +19,7 @@ typedef SongData = {
     week:Int
 }
 class ConnectingState extends MusicBeatState {
+    var loadprog:Alphabet;
     public static var modded:Bool = false;
     public static var songmeta:SongData;
     public static var p1name:String;
@@ -111,6 +112,7 @@ class ConnectingState extends MusicBeatState {
                                 add(PlayStateOnline.p1scoretext);
                                 add(PlayStateOnline.p2scoretext);
                                 //new PlayStateOnline().starts();
+                                ConnectingState.inlobby = false;
                                 PlayStateOnline.assing = true;
                             });
                             room.onMessage('userjoin', function(message){
@@ -157,6 +159,7 @@ class ConnectingState extends MusicBeatState {
                                 PlayStateOnline.startedMatch = true;
                                 //new PlayStateOnline().starts();
                                 PlayStateOnline.assing = true;
+                                ConnectingState.inlobby = false;
                             });
                             room.onError += function(code, message) {
                                 FlxG.switchState(new FNFNetMenu("A strange error occured"));
@@ -206,8 +209,11 @@ class ConnectingState extends MusicBeatState {
                                 trace(nmsongs.contains(message.song));
                                 if(!nmsongs.contains(message.song)){
                                     modded = true;
+                                    loadprog = new Alphabet(loadprog.x, loadprog.y, "Loading Instrumental...");
                                     PlayStateOnline.modinst = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Inst.ogg'));
+                                    loadprog = new Alphabet(loadprog.x, loadprog.y, "Loading Voices...");
                                     PlayStateOnline.modvoices = new Sound(new URLRequest('http://'+data.resourceaddr+'/songs/$sng/Voices.ogg'));
+                                    loadprog = new Alphabet(loadprog.x, loadprog.y, "Loading Chart...");
                                     var http = new haxe.Http('http://'+data.resourceaddr+'/songs/$sng/chart$modif.json');
                     
                                     http.onData = function (data:String) {
@@ -218,6 +224,7 @@ class ConnectingState extends MusicBeatState {
                             
                                         PlayStateOnline.storyWeek = message.week;
                                         LobbyState.songdata.difficulty = PlayStateOnline.storyDifficulty;
+                                        loadprog = new Alphabet(loadprog.x, loadprog.y, "All Done!");
                                         LoadingOnline.loadAndSwitchState(new LobbyState());
                                     }
                                     http.request();
@@ -383,13 +390,15 @@ class ConnectingState extends MusicBeatState {
 		motherfunkers.screenCenter(Y);
 		loading.x += FlxG.width * 0.14;
 		motherfunkers.x -= FlxG.width * 0.14;
-
+        loadprog = new Alphabet(0, 0, "Loading...");
+        loadprog.screenCenter(XY);
 		motherfunkers.antialiasing = true;
 		loading.antialiasing = true;
 		//bgColor = 0xcaff4d;
 		add(ldBG);
 		add(motherfunkers);
 		add(loading);
+        add(loadprog);
         super.create();
     }
     override function update(elapsed:Float){
