@@ -699,8 +699,8 @@ class PlayStateOnline extends MusicBeatState
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
 		if(ConnectingState.modded) camPos.x += 400;
-		boyfriend = new Boyfriend(770, 450, SONG.player1);
-
+		if(!ConnectingState.modded)boyfriend = new Boyfriend(770, 450, SONG.player1);
+		else boyfriend = new Boyfriend(770, 450, "bf");
 		// REPOSITIONING PER STAGE
 		switch (curStage)
 		{
