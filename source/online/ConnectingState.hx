@@ -22,6 +22,7 @@ class ConnectingState extends MusicBeatState {
     public static var modded:Bool = false;
     public static var songmeta:SongData;
     public static var p1name:String;
+    public static var inlobby:Bool = false;
     public static var p2name:String;
     public static var conmode:String;
     public static var rooms:Room<Stuff>;
@@ -51,6 +52,7 @@ class ConnectingState extends MusicBeatState {
 
     public function new(state:String, type:String, ?code:String){
         super();
+        inlobby = false;
         p2name = '';
         FlxG.autoPause = false;
         PlayStateOnline.assing = false;
@@ -164,15 +166,17 @@ class ConnectingState extends MusicBeatState {
                                 p2name = message.p2name;
                             });
                             room.onMessage("misc", (message) -> {
-                                if(message.p1) {
-                                    LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
-                                }else{
-                                    LobbyState.playertxt.members[0].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
-                                }
-                                if(message.p2) {
-                                    LobbyState.playertxt.members[1].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
-                                }else{
-                                    LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                if(inlobby){
+                                    if(message.p1) {
+                                        LobbyState.playertxt.members[0].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                    }else{
+                                        LobbyState.playertxt.members[0].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                    }
+                                    if(message.p2) {
+                                        LobbyState.playertxt.members[1].applyMarkup("/r/Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.GREEN), "/r/")]);
+                                    }else{
+                                        LobbyState.playertxt.members[1].applyMarkup("/r/Not Ready/r/", [new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED), "/r/")]);
+                                    }
                                 }
                             });
                             room.onMessage('userleft', function(message){

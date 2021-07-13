@@ -35,6 +35,7 @@ class LobbyState extends MusicBeatState{
     public static var playertxt:FlxTypedGroup<FlxText>;
 
     override function create(){
+        ConnectingState.inlobby = true;
         var songname = songdata.song;
         var songweek = songdata.week;
         var songdiff = switch(songdata.difficulty){
