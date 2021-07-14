@@ -57,6 +57,7 @@ class SingleplayerMods extends MusicBeatSubstate
 
 	override function create()
 	{
+        Note.single = true;
 		iconArray = new FlxTypedGroup<HealthIcon>();
 
 		/* 
