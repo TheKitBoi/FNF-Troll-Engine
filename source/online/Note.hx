@@ -49,7 +49,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var daStage:String = online.PlayStateOnline.curStage;
+		var daStage:String = online.PlayStateOffline.curStage;
 
 		switch (daStage)
 		{
@@ -76,7 +76,7 @@ class Note extends FlxSprite
 					animation.add('bluehold', [1]);
 				}
 
-				setGraphicSize(Std.int(width * online.PlayStateOnline.daPixelZoom));
+				setGraphicSize(Std.int(width * online.PlayStateOffline.daPixelZoom));
 				updateHitbox();
 
 			default:
@@ -143,7 +143,7 @@ class Note extends FlxSprite
 
 			x -= width / 2;
 
-			if (online.PlayStateOnline.curStage.startsWith('school'))
+			if (online.PlayStateOffline.curStage.startsWith('school'))
 				x += 30;
 
 			if (prevNote.isSustainNote)
@@ -160,7 +160,7 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * online.PlayStateOnline.SONG.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * online.PlayStateOffline.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}

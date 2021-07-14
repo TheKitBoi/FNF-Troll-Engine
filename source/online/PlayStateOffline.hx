@@ -45,7 +45,6 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
-import PauseSubState.pracMode;
 import CoolUtil.dominantColor;
 import Controls.KeyboardScheme;
 import Config.data;
@@ -747,10 +746,10 @@ class PlayStateOffline extends MusicBeatState
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
 
-		iconP1 = new HealthIcon(SONG.player1, true);
+		iconP1 = new HealthIcon('bf', true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 
-		iconP2 = new HealthIcon(SONG.player2, false);
+		iconP2 = new HealthIcon('dad', false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 
 		healthBar.createFilledBar(dominantColor(iconP2), dominantColor(iconP1)); //0xFFFF0000, 0xFF66FF33
@@ -811,8 +810,8 @@ class PlayStateOffline extends MusicBeatState
 
 		if (isStoryMode || FreeplayState.cutscene)
 		{
-			if(PauseSubState.PauseSubState.skipped) {
-				PauseSubState.skipped = false;
+			if(PauseOfflineSubState.PauseOfflineSubState.skipped) {
+				PauseOfflineSubState.skipped = false;
 				endSong();
 			}
 			startCountdown();
@@ -1359,7 +1358,7 @@ class PlayStateOffline extends MusicBeatState
 				FlxG.switchState(new GitarooPause());
 			}
 			else
-				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new PauseOfflineSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 		
 			#if desktop
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
@@ -1448,14 +1447,14 @@ class PlayStateOffline extends MusicBeatState
 			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
 
-		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null)
+		if (generatedMusic && PlayStateOffline.SONG.notes[Std.int(curStep / 16)] != null)
 		{
 			if (curBeat % 4 == 0)
 			{
 				// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
 			}
 
-			if (camFollow.x != dad.getMidpoint().x + 150 && !PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection)
+			if (camFollow.x != dad.getMidpoint().x + 150 && !PlayStateOffline.SONG.notes[Std.int(curStep / 16)].mustHitSection)
 			{
 				camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 				// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
@@ -1481,7 +1480,7 @@ class PlayStateOffline extends MusicBeatState
 				}
 			}
 
-			if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection && camFollow.x != boyfriend.getMidpoint().x - 100)
+			if (PlayStateOffline.SONG.notes[Std.int(curStep / 16)].mustHitSection && camFollow.x != boyfriend.getMidpoint().x - 100)
 			{
 				camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 
@@ -1569,11 +1568,11 @@ class PlayStateOffline extends MusicBeatState
 			trace("User is cheating!");
 		}
 		if (GimmickState.instantdeath && missedNotes > 0 && gimmick) health = 0;
-		if (health <= 0 && pracMode==false)
+		if (health <= 0 && PauseOfflineSubState.pracMode==false)
 		{
 			if(shouldrun) interp.variables.get('onDeath')();
 			if(FlxG.save.data.instres){
-				LoadingState.loadAndSwitchState(new PlayState());
+				LoadingState.loadAndSwitchState(new PlayStateOffline());
 			}else{
 				boyfriend.stunned = true;
 
@@ -1757,7 +1756,7 @@ class PlayStateOffline extends MusicBeatState
 					difficulty = '-hard';
 
 				trace('LOADING NEXT SONG');
-				trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);
+				trace(PlayStateOffline.storyPlaylist[0].toLowerCase() + difficulty);
 
 				if (SONG.song.toLowerCase() == 'eggnog')
 				{
@@ -1774,7 +1773,7 @@ class PlayStateOffline extends MusicBeatState
 				FlxTransitionableState.skipNextTransOut = true;
 				prevCamFollow = camFollow;
 
-				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
+				PlayStateOffline.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
 				FlxG.sound.music.stop();
 
 				LoadingState.loadAndSwitchState(new PlayState());
@@ -1922,7 +1921,7 @@ class PlayStateOffline extends MusicBeatState
 				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 				#end
 			}
-		if(!pracMode) songScore += score;
+		if(!PauseOfflineSubState.pracMode) songScore += score;
 
 		/* if (combo > 60)
 				daRating = 'sick';
@@ -2250,7 +2249,7 @@ class PlayStateOffline extends MusicBeatState
 			}
 			combo = 0;
 
-			if(!pracMode) songScore -= 10;
+			if(!PauseOfflineSubState.pracMode) songScore -= 10;
 			missedNotes++;
 			accuracyThing("miss");
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
