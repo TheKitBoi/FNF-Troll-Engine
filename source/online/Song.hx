@@ -42,20 +42,15 @@ class Song
 	{
 		if(!modded){
 			rawJson = Assets.getText(Paths.json(folder.toLowerCase() + '/' + jsonInput.toLowerCase())).trim();
-			while (!rawJson.endsWith("}"))
+		}
+		else {
+			rawJson = jsonInput;
+		}
+		while (!rawJson.endsWith("}"))
 			{
 				rawJson = rawJson.substr(0, rawJson.length - 1);
 				// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
 			}
-		}
-		else {
-			rawJson = jsonInput;
-			while (!rawJson.endsWith("}"))
-				{
-					rawJson = rawJson.substr(0, rawJson.length - 1);
-					// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
-				}
-		}
 		// FIX THE CASTING ON WINDOWS/NATIVE
 		// Windows???
 		// trace(songData);
