@@ -58,6 +58,7 @@ class ConnectingState extends MusicBeatState {
         FlxG.autoPause = false;
         PlayStateOnline.assing = false;
         coly = new Client('ws://' + data.addr + ':' + data.port);
+        Note.single = false;
         switch(state){
             case 'battle':
                 if(type == "host")
