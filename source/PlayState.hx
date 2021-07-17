@@ -1836,6 +1836,17 @@ class PlayState extends MusicBeatState
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
 						missedNotes++;
+						switch(daNote.noteData){
+							case 0:
+								boyfriend.playAnim("singLEFTmiss");
+							case 1:
+								boyfriend.playAnim("singDOWNmiss");
+							case 2:
+								boyfriend.playAnim("singUPmiss");
+							case 3:
+								boyfriend.playAnim("singRIGHTmiss");
+						}
+						FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 						accuracyThing("miss");
 						health -= 0.0475;
 						combo = 0;
