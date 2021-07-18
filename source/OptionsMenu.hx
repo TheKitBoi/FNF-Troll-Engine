@@ -33,10 +33,12 @@ class OptionsMenu extends MusicBeatState
 	var curSelected:Int = 0;
 	var controlsStrings:Array<String> = [];
 	var cockjoke:Int = FlxG.updateFramerate;
+	var settings:Map<String, String>;
 	private var grpControls:FlxTypedGroup<Alphabet>;
 
 	override function create()
 	{
+		settings = new Map<String, String>();
 		if(FlxG.save.data.pgbar == null) FlxG.save.data.pgbar = false;
 		switch(FlxG.save.data.ks){
 			case null:
@@ -48,7 +50,30 @@ class OptionsMenu extends MusicBeatState
 		}
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		controlsStrings = ["Framerate", "Pause on Unfocus", "Fullscreen", "Downscroll", "Keyboard Scheme", "Scripts", "Kade Input", "Progress Bar", "Instant Restart", "Click me for funny!"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		controlsStrings = [
+			"Framerate", 
+			"Pause on Unfocus", 
+			"Fullscreen", 
+			"Downscroll", 
+			"Keyboard Scheme", 
+			"Scripts",
+			"Kade Input", 
+			"Progress Bar", 
+			"Instant Restart"];// nop3CoolUtil.coolTextFile(Paths.txt('controls'));
+		var controlsDesc = [
+			"Change your framerate ingame.", 
+			"Pause when you aren't focusing on the game.", 
+			"If the game should run on fullscreen.", 
+			"Downscrolling for arrows.", 
+			"Choose between WASD or DFJK.", 
+			"Scripts that you can run.", 
+			"Activate input similar to Kade Engine.",
+			"A progression bar in-game to see how far you are in a song.",
+			"If you should restart when you die."
+		];
+		for(i in 0...controlsStrings.length){
+			settings.set(controlsStrings[i], controlsDesc[i]);
+		}
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -196,6 +221,13 @@ class OptionsMenu extends MusicBeatState
 	}
 	function initSettings(noreset, ?thingit, ?text):Void
 		{
+			//var dababy = new FlxText(20, 15 + 32, settings.get(controlsStrings[curSelected]), 32);
+			//dababy.scrollFactor.set();
+		//	dababy.setFormat(Paths.font('vcr.ttf'), 32);
+		//	dababy.updateHitbox();
+		//	dababy.x = FlxG.width - (dababy.width + 20);
+		/	dababy.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+			
 			if(!noreset){
 				cockJoke.members[thingit].text = Std.string(text);
 			}
@@ -215,6 +247,7 @@ class OptionsMenu extends MusicBeatState
 				// LESS GOO !!
 				}
 			}
+			
 		}
 	function waitingInput():Void
 	{
