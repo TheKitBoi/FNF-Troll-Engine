@@ -41,7 +41,7 @@ class TitleState extends MusicBeatState
 {
 	static var initialized:Bool = false;
 
-	public static var outdated:Bool = true;
+	public static var outdated:Bool = false;
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
 	var credTextShit:Alphabet;
@@ -67,21 +67,8 @@ class TitleState extends MusicBeatState
 		trace(librarydirs);
 		polymod.Polymod.init({modRoot: "mods", dirs: list, frameworkParams: {assetLibraryPaths: librarydirs}});
 		#end
-
-		#if updatecheck
-		var http = new haxe.Http("https://raw.githubusercontent.com/General-Infinity/TrollEngine/master/version.txt");
-		http.onData = function (data:String) {
-			if(data == Application.current.meta.get('version')) outdated = false; 
-		}
-
-		http.onError = function (error) {
-		trace('error: $error');
-		}
-
-		http.request();	
-		#end
 		PlayerSettings.init();
-
+		
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT

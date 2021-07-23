@@ -27,11 +27,7 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	#if fnfnet
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'fnfnet', 'options'];
-	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
-	#end
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
@@ -138,12 +134,6 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if(online.ChatState.beentoChat){
-			online.ChatState.beentoChat = false;
-			FlxG.mouse.visible = false;
-			if(FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
-			else FlxG.autoPause = true;
-		}
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
@@ -222,16 +212,6 @@ class MainMenuState extends MusicBeatState
 										FlxG.switchState(new FreeplayState());
 
 										trace("Freeplay Menu Selected");
-									#if fnfnet
-									case 'fnfnet':
-										#if updatecheck
-										if(!TitleState.outdated) FlxG.switchState(new online.FNFNetMenu());
-										else FlxG.resetState();
-										#else
-										FlxG.switchState(new online.FNFNetMenu());
-										#end
-									#end
-										
 									case 'options':
 										FlxG.switchState(new OptionsMenu());
 								}
@@ -271,10 +251,6 @@ class MainMenuState extends MusicBeatState
 				
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
-				#if fnfnet 
-				if(optionShit[curSelected] == "fnfnet") spr.y = 155;
-				else menuItems.members[2].y = 212;
-				#end
 			}
 
 			spr.updateHitbox();

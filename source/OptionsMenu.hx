@@ -153,7 +153,7 @@ class OptionsMenu extends MusicBeatState
 			valueDescriptor.setBorderStyle(OUTLINE, FlxColor.BLACK, 5);
 			valueDescriptor.antialiasing = true;
 			add(valueDescriptor);
-		bar = new FlxSprite(-250, -70).makeGraphic(75, 10, FlxColor.BLACK);
+		bar = new FlxSprite(-250, -50).makeGraphic(75, 10, FlxColor.BLACK);
 
 		tabtext = new FlxTypedGroup<FlxText>();
 		var tabbies = ['Gen', 'Game', 'SFX', 'Data'];

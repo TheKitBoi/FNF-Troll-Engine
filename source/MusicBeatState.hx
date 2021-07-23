@@ -1,4 +1,5 @@
 package;
+import lime.utils.Assets;
 #if sys
 import sys.io.File;
 #end
@@ -81,7 +82,15 @@ class MusicBeatState extends FlxUIState
 
 		super.update(elapsed);
 	}
-
+	public function clearCache()
+		{
+			//thanks haya for making this mindblowing discovery haha
+			Assets.cache.clear();
+		}
+	override function add(Object:FlxBasic):FlxBasic{
+		clearCache();
+		return super.add(Object);
+	}
 	private function updateBeat():Void
 	{
 		curBeat = Math.floor(curStep / 4);
