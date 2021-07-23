@@ -1,5 +1,6 @@
 package;
 
+import openfl.net.URLRequest;
 import polymod.Polymod.Framework;
 import lime.utils.AssetCache;
 import Controls;
@@ -52,19 +53,23 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		if( FlxG.save.data.pauseonunfocus != null) FlxG.autoPause = FlxG.save.data.pauseonunfocus;
 		#if desktop
 		var list = File.getContent("./mods/modList.txt").trim().split('\n');
 		for (i in 0...list.length)
 			{
 				list[i] = list[i].trim();
 			}
-		polymod.Polymod.init({modRoot: "./mods", dirs: list, framework: Framework.LIME});
+		var librarydirs = new Map<String, String>();
+		var direcs = ['shared', 'tutorial', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'characters'];
+		for (i in 0...direcs.length){
+			librarydirs.set(direcs[i], direcs[i]);
+		}
+		trace(librarydirs);
+		polymod.Polymod.init({modRoot: "mods", dirs: list, frameworkParams: {assetLibraryPaths: librarydirs}});
 		#end
 
 		#if updatecheck
 		var http = new haxe.Http("https://raw.githubusercontent.com/General-Infinity/TrollEngine/master/version.txt");
-
 		http.onData = function (data:String) {
 			if(data == Application.current.meta.get('version')) outdated = false; 
 		}
@@ -92,7 +97,7 @@ class TitleState extends MusicBeatState
 		#end
 
 		FlxG.save.bind('funkin', 'ninjamuffin99');
-
+		Config.initsave();
 		Highscore.load();
 
 		if (FlxG.save.data.weekUnlocked != null)

@@ -28,6 +28,7 @@ You must have a bit of knowledge about haxeflixel and haxe to make modcharts for
 I will write examples soon.
 ## Declared objects
 These are the objects that are declared (currently):
+* game (same as PlayState)
 * PlayState
 * FlxG
 * Sys

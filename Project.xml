@@ -135,6 +135,7 @@
 	<haxedef name="charselection" /> <!-- Character Selection -->
 	<haxedef name="gimmick" /> <!-- Gimmicks in the freeplay menu -->
 	<haxedef name="skipsong"/>
+	<!--<haxedef name="antifnfbot"/> ONLY UNCHECK THIS IF YOU ARE SURE YOU DO NOT WANT PEOPLE DOING NAUGHTY HACKS IN YOUR MOD-->
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 
 	<!-- <haxelib name="markdown" /> -->

@@ -5,7 +5,6 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 
-using StringTools;
 class Paths
 {
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
@@ -24,7 +23,6 @@ class Paths
 
 		if (currentLevel != null)
 		{
-			
 			var levelPath = getLibraryPathForce(file, currentLevel);
 			if (OpenFlAssets.exists(levelPath, type))
 				return levelPath;
@@ -32,10 +30,9 @@ class Paths
 			levelPath = getLibraryPathForce(file, "shared");
 			if (OpenFlAssets.exists(levelPath, type))
 				return levelPath;
-			
 		}
 
-		return getPreloadPath(file, type);
+		return getPreloadPath(file);
 	}
 
 	static public function getLibraryPath(file:String, library = "preload")
@@ -48,12 +45,9 @@ class Paths
 		return '$library:assets/$library/$file';
 	}
 
-	inline static function getPreloadPath(file:String, ?type:AssetType)
+	inline static function getPreloadPath(file:String)
 	{
-		if (OpenFlAssets.exists(file, type))
-			return '$file';
-		else 
-			return 'assets/$file';
+		return 'assets/$file';
 	}
 
 	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)

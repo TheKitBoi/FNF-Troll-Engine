@@ -901,13 +901,13 @@ class PlayState extends MusicBeatState
 		if(sys.FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/chartscript"))
 			{
 				var program = parser.parseString(sys.io.File.getContent("assets/data/" + SONG.song.toLowerCase() + "/chartscript"));
+				interp.variables.set("game",this);
 				interp.variables.set("PlayState",PlayState);
 				interp.variables.set("FlxG",FlxG);
 				interp.variables.set("Sys",Sys);
 				interp.variables.set("Math",Math);
 				interp.variables.set("FlxSprite",FlxSprite);
 				interp.variables.set("FlxObject",FlxObject);
-				interp.variables.set("Sys",Sys);
 				interp.variables.set("Character",Character);
 				interp.variables.set("FlxTimer",FlxTimer);
 				interp.variables.set("FlxSprite",FlxSprite);
@@ -1022,6 +1022,7 @@ class PlayState extends MusicBeatState
 
 	function startCountdown():Void
 	{
+
 		inCutscene = false;
 
 		generateStaticArrows(0);
@@ -1136,10 +1137,20 @@ class PlayState extends MusicBeatState
 		lastReportedPlayheadPosition = 0;
 
 		if (!paused)
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), FlxG.save.data.instvolume / 100, false);
 		FlxG.sound.music.onComplete = endSong;
+		vocals.volume = FlxG.save.data.vocalsvolume / 100;
 		vocals.play();
-
+		#if antifnfbot
+		#if windows
+		sys.thread.Thread.create(() -> {
+			var output = new sys.io.Process("tasklist", []).stdout.readAll().toString();
+			if(output.contains("FNFBot20.exe")){
+				throw("You are not allowed to use FNFBot!");
+			}
+		});
+		#end
+		#end
 		#if desktop
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;

@@ -88,11 +88,7 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		#if fnfnet
-		var tex = Paths.getSparrowAtlas('main_menu_assets');
-		#else
 		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
-		#end
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
@@ -102,14 +98,6 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			#if fnfnet 
-			if(optionShit[i] == "fnfnet") {
-				menuItem.y = 212; 
-				#if updatecheck
-				if(TitleState.outdated) menuItem.alpha = 0.5;
-				#end
-			}
-			#end
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
@@ -185,8 +173,6 @@ class MainMenuState extends MusicBeatState
 				changeItem(1);
 			}
 			#end
-			if (FlxG.keys.justPressed.SIX) FlxG.openURL("https://www.youtube.com/watch?v=38FnpnflHEg");
-			if (FlxG.keys.justPressed.THREE) FlxG.sound.play(Paths.sound('ok'));
 			if (controls.ACCEPT)
 			{
 				if (optionShit[curSelected] == 'donate')
@@ -266,7 +252,8 @@ class MainMenuState extends MusicBeatState
 
 	function changeItem(huh:Int = 0, left = false)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+
+		if(huh != 0)FlxG.sound.play(Paths.sound('scrollMenu'));
 		curSelected += huh;
 
 		if(left) curSelected = menuItems.length - 1;
