@@ -125,7 +125,6 @@
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
 	<haxelib name="hxcpp-debug-server" if="debug" unless="html5" />
-	<haxelib name="colyseus"/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="flixel-studio" if="debug"/>
 	<!-- TOGGLES FOR COMPILATION! REMOVE ONE IF YOU DON"T WANT ONE COMPILED -->
