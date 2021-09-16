@@ -157,6 +157,7 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		clearCache();
 		accuracy = 0.00;
 		downscroll = FlxG.save.data.downscroll;
 
@@ -1912,6 +1913,8 @@ class PlayState extends MusicBeatState
 
 	public function endSong():Void
 	{
+		trace(openfl.utils.Assets.cache.removeSound(Paths.inst(SONG.song.toLowerCase())));
+		trace(openfl.utils.Assets.cache.removeSound(Paths.voices(SONG.song.toLowerCase())));
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;

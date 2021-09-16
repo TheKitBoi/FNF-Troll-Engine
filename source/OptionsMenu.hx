@@ -41,7 +41,7 @@ class OptionsMenu extends MusicBeatState
 	var cockjoke:Int = FlxG.updateFramerate;
 	var settings:Map<String, String>;
 	private var grpControls:FlxTypedGroup<Alphabet>;
-
+	//todo: overhaul the system
 	override function create()
 	{
 		FlxG.camera.zoom = 0.7;

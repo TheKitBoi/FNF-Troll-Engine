@@ -1,5 +1,6 @@
 package;
-import lime.utils.Assets;
+import openfl.utils.AssetType;
+import openfl.utils.Assets;
 #if sys
 import sys.io.File;
 #end
@@ -34,6 +35,19 @@ class MusicBeatState extends FlxUIState
 
 	override function create()
 	{
+		for (id in Assets.list(AssetType.SOUND))
+			{
+				Assets.cache.removeSound(id);
+			}
+		@:privateAccess
+		for (id in Assets.list(AssetType.IMAGE))
+			{
+				Assets.cache.removeBitmapData(id);
+				FlxG.bitmap._cache.remove(id);
+			}
+		
+		 //lol huge shoutouts to haya btw
+		
 		topCam = new FlxCamera();
 		topCam.bgColor.alpha = 0;
 		FlxG.cameras.add(topCam, false);
@@ -82,13 +96,13 @@ class MusicBeatState extends FlxUIState
 
 		super.update(elapsed);
 	}
-	public function clearCache()
+	public function ccache()
 		{
-			//thanks haya for making this mindblowing discovery haha
+			//thanks haya for making this mindblowing discovery haha (it actually doesn't work lmao)
 			Assets.cache.clear();
 		}
 	override function add(Object:FlxBasic):FlxBasic{
-		clearCache();
+		ccache();
 		return super.add(Object);
 	}
 	private function updateBeat():Void
@@ -110,6 +124,18 @@ class MusicBeatState extends FlxUIState
 		}
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
+	}
+
+	public function clearCache(){
+		@:privateAccess
+		for(key in FlxG.bitmap._cache.keys()){
+			var bitmap = FlxG.bitmap._cache.get(key);
+			if(bitmap != null){
+				Assets.cache.removeBitmapData(key);
+				FlxG.bitmap._cache.remove(key);
+				bitmap.destroy();
+			}
+		}
 	}
 
 	public function stepHit():Void

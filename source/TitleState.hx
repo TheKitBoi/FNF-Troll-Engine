@@ -65,7 +65,7 @@ class TitleState extends MusicBeatState
 			librarydirs.set(direcs[i], direcs[i]);
 		}
 		trace(librarydirs);
-		polymod.Polymod.init({modRoot: "mods", dirs: list, frameworkParams: {assetLibraryPaths: librarydirs}});
+		//polymod.Polymod.init({modRoot: "mods", dirs: ['introMod', 'characters']});
 		#end
 		PlayerSettings.init();
 		

@@ -37,6 +37,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		clearCache();
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
@@ -291,7 +292,7 @@ class FreeplayState extends MusicBeatState
 		#if !switch
 		NGio.logEvent('Fresh');
 		#end
-
+		trace(openfl.Assets.cache.removeSound(Paths.inst(songs[curSelected].songName.toLowerCase()))); //did le cache get removed?
 		// NGio.logEvent('Fresh');
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
